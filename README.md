@@ -51,9 +51,9 @@ Attendees are expected to have R and RStudio installed on their own computers.
 
 Download R: 
 
-for windows click [here](https://cran.r-project.org/bin/windows/base/)
+  for windows click [here](https://cran.r-project.org/bin/windows/base/)
 
-for Mac OS click [here](https://cran.r-project.org/bin/macosx/)
+  for Mac OS click [here](https://cran.r-project.org/bin/macosx/)
 
 Download Rstudio IDE: [here](https://rstudio.com/products/rstudio/download/)
 
