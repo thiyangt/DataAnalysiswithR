@@ -3,16 +3,23 @@
 ## Organizer - [SLAAS](https://www.slaas.lk/) Section C
 
 
-:spiral_calendar: TBA
-:alarm_clock:     TBA
-:hotel:           Online via Zoom
-:writing_hand:    TBA
+:spiral_calendar: Date: TBA
+
+:alarm_clock: Time: TBA
+
+:hotel: Venue: Online via Zoom
+
+:writing_hand: Website: TBA
 
 
 
 -----
 
 ## Why R?
+
+R is a language and environment for statistical computing and graphics. **R is a free, open-source programming language** that runs on a wide variety of UNIX platforms, Linux, Windows and Mac OS. R is also among the [top-10](https://www.northeastern.edu/graduate/blog/most-popular-programming-languages/) most popular and powerful programming languages.
+
+R provides a wide variety of statistical (linear and nonlinear modelling, classical statistical tests, time-series analysis, classification, clustering, multivariate data analysis, spatial data aanalysis, machine learning, ect.) and graphical techniques, and is highly extensible.
 
 
 ## Topics
