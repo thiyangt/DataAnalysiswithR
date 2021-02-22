@@ -19,7 +19,7 @@
 
 R is a language and environment for statistical computing and graphics. **R is a free, open-source programming language** that runs on a wide variety of UNIX platforms, Linux, Windows and Mac OS. R is also among the [top-10](https://www.northeastern.edu/graduate/blog/most-popular-programming-languages/) most popular and powerful programming languages.
 
-R provides a wide variety of statistical (linear and nonlinear modelling, classical statistical tests, time-series analysis, classification, clustering, multivariate data analysis, spatial data aanalysis, machine learning, ect.) and graphical techniques, and is highly extensible.
+R provides a wide variety of statistical (linear and nonlinear modelling, classical statistical tests, time-series analysis, classification, clustering, multivariate data analysis, spatial data aanalysis, machine learning, etc.) and graphical techniques, and is highly extensible.
 
 
 ## Topics
@@ -48,15 +48,9 @@ None
 
 Attendees are expected to have R and RStudio installed on their own computers.
 
-Download R: 
+## Install R and Rstudio
 
-  for windows click [here](https://cran.r-project.org/bin/windows/base/)
-
-  for Mac OS click [here](https://cran.r-project.org/bin/macosx/)
-
-Download Rstudio IDE: [here](https://rstudio.com/products/rstudio/download/)
-
-Installation guide: TBA
+Help guide: [here](https://edify-thiyanga.netlify.app/installation/)
 
 ## Schedule
 
@@ -66,17 +60,18 @@ Installation guide: TBA
 
 2. R programming basics
 
-3. Data wrangling (also known as data pre-processing)
+3. Reproducible reporting with RMarkdown
 
-4. Data Visualisation
+4. Data wrangling (also known as data pre-processing)
+
+5. Data Visualisation
+
 
 **Day 2**
 
 1. Data Visualisation (cont.)
 
-2. Reproducible reporting with RMarkdown
-
-3. Statistical modelling (Regression Analysis)
+2. Introduction to statistical modelling 
 
 
 ## Textbook
@@ -90,6 +85,7 @@ This book is available online for free. Visit https://r4ds.had.co.nz/
 [Dr Thiyanga S. Talagala](https://thiyanga.netlify.app/)
 
 [Dr Priyanga D. Talagala](https://prital.netlify.app/)
+
 
 
 -----
