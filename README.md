@@ -29,21 +29,20 @@ R provides a wide variety of statistical (linear and nonlinear modelling, classi
 
 2. R programming basics
 
-3. Data import and export
+3. Reproducible reporting with RMarkdown
 
-4. Data wrangling (also known as data pre-processing)
+4. Data import and export
 
-4. Data visualization 
+5. Data wrangling (also known as data pre-processing)
 
-5. Statistical modelling
+6. Data visualization 
 
-6. Reproducible reporting with RMarkdown
+7. Introduction to Statistical modelling
 
 
 ## Prerequisite
 
 None
-
 
 ## Prework
 
