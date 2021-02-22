@@ -31,6 +31,8 @@ R provides a wide variety of statistical (linear and nonlinear modelling, classi
 
 3. Data import and export
 
+4. Data wrangling (also known as data pre-processing)
+
 4. Data visualization 
 
 5. Statistical modelling
@@ -56,6 +58,26 @@ for Mac OS click [here](https://cran.r-project.org/bin/macosx/)
 Download Rstudio IDE: [here](https://rstudio.com/products/rstudio/download/)
 
 Installation guide: TBA
+
+## Schedule
+
+**Day 1**
+
+1. Introduction to R and Rstudio
+
+2. R programming basics
+
+3. Data wrangling (also known as data pre-processing)
+
+4. Data Visualisation
+
+**Day 2**
+
+1. Data Visualisation (cont.)
+
+2. Reproducible reporting with RMarkdown
+
+3. Statistical modelling (Regression Analysis)
 
 
 ## Textbook
