@@ -3,7 +3,7 @@
 ## Organizer - [SLAAS](https://www.slaas.lk/) Section C
 
 
-:spiral_calendar: Date: TBA
+:spiral_calendar: Date: 28-29 August, 2021
 
 :alarm_clock: Time: TBA
 
