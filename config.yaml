@@ -1,22 +1,45 @@
-baseURL: ''
+baseURL: https://example.com/
 languageCode: en-us
-theme: SimpleIntro
-title: Theme Demo
-publishDir: public
+title: Mediumish
+theme: mediumish-gohugo-theme
+summaryLength: 25
+copyright: John Doe - All rights reserved
+enableEmoji: yes
+publishDir: docs
 params:
-  mainText: Just simple intro theme for hugo
-  mainTitle: Simple-intro
-  mainbg: https://picsum.photos/1920/1080
-  name: John Doe
-menus: {}
+  author:
+    description: Creator of this blog.
+    name: John Doe
+    thumbnail: /images/author.png
+  description: the clean blog!
+  index:
+    alertbar: no
+    mdtext: |
+      Currently trying to get this blog running, still don't know what the blog will be about!\
+      **This textblock is a demonstration of the mdtext-param.**\
+      ### This is a markdown heading
+    picture: /images/author.png
+    subtitle: I'm a unique placeholder. Working here and there!
+    title: John Doe
+  logo: /images/logo.png
+  social:
+    github: <username>
+    instagram: <username>
+    linkedin: <username>
+    medium: <username>
+    twitter: <username>
+    xing: <username>
 menu:
   main:
+    - identifier: blog
+      name: Blog
+      url: /blog
+      weight: 100
     - identifier: about
-      name: About
-      url: '#about'
-    - identifier: skills
-      name: Skills
-      url: '#skills'
-    - identifier: projects
-      name: Projects
-      url: '#projects'
+      name: About Me
+      url: /
+      weight: 200
+    - identifier: imprint
+      name: Imprint
+      url: /static/imprint
+      weight: 200
