@@ -1,0 +1,22 @@
+baseURL: ''
+languageCode: en-us
+theme: SimpleIntro
+title: Theme Demo
+publishDir: public
+params:
+  mainText: Just simple intro theme for hugo
+  mainTitle: Simple-intro
+  mainbg: https://picsum.photos/1920/1080
+  name: John Doe
+menus: {}
+menu:
+  main:
+    - identifier: about
+      name: About
+      url: '#about'
+    - identifier: skills
+      name: Skills
+      url: '#skills'
+    - identifier: projects
+      name: Projects
+      url: '#projects'
