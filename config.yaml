@@ -3,24 +3,22 @@ languageCode: en-us
 title: Mediumish
 theme: mediumish-gohugo-theme
 summaryLength: 25
-copyright: John Doe - All rights reserved
+copyright: Thiyanga S. Talagala and Priyanga D. Talagala - All rights reserved
 enableEmoji: yes
 publishDir: docs
 params:
   author:
-    description: Creator of this blog.
-    name: John Doe
+    description: xx
+    name: Data Analysis with R
     thumbnail: /images/author.png
   description: the clean blog!
   index:
     alertbar: no
     mdtext: |
-      Currently trying to get this blog running, still don't know what the blog will be about!\
-      **This textblock is a demonstration of the mdtext-param.**\
-      ### This is a markdown heading
+      R is a free software environment for statistical computing and graphics. The R programming language is widely used in academia and industry for data mining and data analysis. R is also among the top-10 most popular and powerful programming languages. R offers a variety of methods for statistical modelling, computing and data visualization. In this workshop you will learn about the tidyverse R packages, a powerful set of tools for making stunning data visualizations and a useful way of statistical modelling.
     picture: /images/author.png
-    subtitle: I'm a unique placeholder. Working here and there!
-    title: John Doe
+    subtitle: Dr Thiyanga S. Talagala and Dr Priyanga D. Talagala
+    title: Data Analysis with R
   logo: /images/logo.png
   social:
     github: <username>
@@ -32,14 +30,14 @@ params:
 menu:
   main:
     - identifier: blog
-      name: Blog
+      name: Workshop Materials
       url: /blog
       weight: 100
     - identifier: about
-      name: About Me
+      name: Home
       url: /
       weight: 200
     - identifier: imprint
-      name: Imprint
+      name: Workshops
       url: /static/imprint
       weight: 200

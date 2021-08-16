@@ -1,0 +1,12 @@
+---
+output: 
+  html_document:
+    toc: true
+    toc_float: true 
+    theme: darkly
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+

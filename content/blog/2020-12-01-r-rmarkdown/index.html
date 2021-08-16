@@ -1,6 +1,6 @@
 ---
 title: "Install R and RStudio"
-author: "Frida Gomam"
+author: "Dr Thiyanga S. Talagala"
 date: 2020-12-01T21:13:14-05:00
 categories: ["R"]
 tags: ["R Markdown", "plot", "regression"]
@@ -9,42 +9,38 @@ tags: ["R Markdown", "plot", "regression"]
 <script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
 
 
-<div id="r-markdown" class="section level1">
-<h1>R Markdown</h1>
-<p>This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a>.</p>
-<p>You can embed an R code chunk like this:</p>
-<pre class="r"><code>summary(cars)
-##      speed           dist       
-##  Min.   : 4.0   Min.   :  2.00  
-##  1st Qu.:12.0   1st Qu.: 26.00  
-##  Median :15.0   Median : 36.00  
-##  Mean   :15.4   Mean   : 42.98  
-##  3rd Qu.:19.0   3rd Qu.: 56.00  
-##  Max.   :25.0   Max.   :120.00
-fit &lt;- lm(dist ~ speed, data = cars)
-fit
-## 
-## Call:
-## lm(formula = dist ~ speed, data = cars)
-## 
-## Coefficients:
-## (Intercept)        speed  
-##     -17.579        3.932</code></pre>
+<p>The first thing you need to do to get started with R and RStudio is to install them on your computer. R works on pretty much every platform available, including the widely available Windows, Mac OS X, and Linux systems.</p>
+<div id="install-r-and-rstudio-on-windows" class="section level2">
+<h2>Install R and RStudio on Windows</h2>
+<div id="step-1" class="section level4">
+<h4>Step 1</h4>
+<p>Go to <a href="https://cran.r-project.org/">here</a> and click on the <strong>Download R for Windows</strong> link.</p>
+<p><img src="/images/install/i1.png" /></p>
 </div>
-<div id="including-plots" class="section level1">
-<h1>Including Plots</h1>
-<p>You can also embed plots. See Figure <a href="#fig:pie">1</a> for example:</p>
-<pre class="r"><code>par(mar = c(0, 1, 0, 1))
-pie(
-  c(280, 60, 20),
-  c(&#39;Sky&#39;, &#39;Sunny side of pyramid&#39;, &#39;Shady side of pyramid&#39;),
-  col = c(&#39;#0292D8&#39;, &#39;#F7EA39&#39;, &#39;#C4B632&#39;),
-  init.angle = -50, border = NA
-)</code></pre>
-<div class="figure"><span style="display:block;" id="fig:pie"></span>
-<img src="{{< blogdown/postref >}}index_files/figure-html/pie-1.png" alt="A fancy pie chart." width="672" />
-<p class="caption">
-Figure 1: A fancy pie chart.
-</p>
+<div id="step-2" class="section level4">
+<h4>Step 2</h4>
+<p>Click on the base subdirectory link or install R for the first time link.</p>
+<p><img src="/images/install/i2.png" /></p>
+</div>
+<div id="step-3" class="section level4">
+<h4>Step 3</h4>
+<p>Click Download R X.X.X for Windows (X.X.X stand for the latest version of R. eg: 4.1.1). At the moment of writing (16 August 2021), R 4.1.1 is the latest version. Choose the most recent one.</p>
+<p>This save the executable .exe file.</p>
+<p><img src="/images/install/i3.png" /></p>
+</div>
+<div id="step-2-1" class="section level3">
+<h3>Step 2</h3>
+<p>Run the installer. Default settings are fine. Without this, you will not be able to install RStudio and additional packages later.</p>
+</div>
+</div>
+<div id="install-r-studio" class="section level2">
+<h2>Install R Studio</h2>
+<div id="step-3-1" class="section level3">
+<h3>Step 3</h3>
+<p>Download RStudio: <a href="https://www.rstudio.com/products/rstudio/download/" class="uri">https://www.rstudio.com/products/rstudio/download/</a></p>
+</div>
+<div id="step-4" class="section level3">
+<h3>Step 4</h3>
+<p>Remember, you must have R already installed before installing Rstudio.</p>
 </div>
 </div>
