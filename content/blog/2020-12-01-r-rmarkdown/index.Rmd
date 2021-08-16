@@ -1,5 +1,5 @@
 ---
-title: "Hello R Markdown"
+title: "Install R and RStudio"
 author: "Frida Gomam"
 date: 2020-12-01T21:13:14-05:00
 categories: ["R"]

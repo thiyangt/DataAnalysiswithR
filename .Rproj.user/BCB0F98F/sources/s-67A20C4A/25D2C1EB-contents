@@ -1,3 +1,0 @@
-lgaida/mediumish-gohugo-theme
-
-blogdown::new_site(theme = "lgaida/mediumish-gohugo-theme")
