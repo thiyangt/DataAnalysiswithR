@@ -8,10 +8,10 @@ enableEmoji: yes
 publishDir: docs
 params:
   author:
-    description: xx
+    description: Dr Thiyanga S. Talagala and Dr Priyanga D. Talagala
     name: Data Analysis with R
     thumbnail: /images/author.png
-  description: the clean blog!
+  description: 
   index:
     alertbar: no
     mdtext: |
@@ -20,13 +20,6 @@ params:
     subtitle: Dr Thiyanga S. Talagala and Dr Priyanga D. Talagala
     title: Data Analysis with R
   logo: /images/logo.png
-  social:
-    github: <username>
-    instagram: <username>
-    linkedin: <username>
-    medium: <username>
-    twitter: <username>
-    xing: <username>
 menu:
   main:
     - identifier: blog
