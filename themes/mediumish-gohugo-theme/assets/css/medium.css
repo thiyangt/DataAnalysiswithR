@@ -173,9 +173,9 @@ section.recent-posts {
 }
 
 .author-thumb {
-    width: 100px;
-    height: 100px;
-    border-radius: 100%;
+    width: 40px;
+    height: 40px;
+    border-radius: 150%;
 }
 
 .post-top-meta {
