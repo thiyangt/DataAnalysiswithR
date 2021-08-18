@@ -67,27 +67,34 @@ Click, **Download R X.X.X for Windows** (X.X.X stand for the latest version of R
 
 ### Step 1.4
 
-Run the `.exe` file and follow the installation instructions on the screen. Run the `.exe` file with the default settings by clicking 'Next'. Without	installing R,	you	will	not	be	able	to	install RStudio and additional packages	later.
+Run the `.exe` file and follow the installation instructions on the screen. Run the `.exe` file with the default settings by clicking 'Next'. 
 
-If you want to watch a step-by-step tutorial on how to install R for Windows, you can watch these video here: https://www.youtube.com/watch?v=Ohnk9hcxf9M
+Without	installing R,	you	will	not	be	able	to	install RStudio and additional packages	later. If you want to watch a step-by-step tutorial on how to install R for Windows, you can watch the video here: https://www.youtube.com/watch?v=Ohnk9hcxf9M
 
 ## 2.Download and install R Studio
 
 ### Step 2.1
 
-Go to: https://www.rstudio.com/products/rstudio/download/
+Go to: https://www.rstudio.com/products/rstudio/download/ and click	on	the	“DOWNLOAD”	button.
+
+![](install/r1.png)
+
+
 
 ### Step 2.2
 
-Remember, you must have R already installed before installing Rstudio. 
+Click	on	“DOWNLOAD RSTUDIO FOR WINDOWS”.
+
+![](install/r2.png)
 
 
+### Step 2.3
 
-#### Step 2.3
+Next, double click the downloaded file. This will start the install process.  Click next to continue when the install wizard opens. Continue next until the installation process takes place:
 
-Double click the downloaded file and follow installation instructions on the screen.
 
-If you want to watch a step-by-step tutorial on how to install R for Windows, you can watch these video here: https://www.youtube.com/watch?v=uxuuWXU-7UQ
+![](install/finish.png)
+
 
 
 

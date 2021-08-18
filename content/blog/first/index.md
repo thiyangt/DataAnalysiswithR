@@ -7,9 +7,15 @@ tags: ["R", "RStudio"]
 comments: true
 ---
 
-For this course, we will be using the free and open-source program R, along a user interface called RStudio. R works on pretty much every platform available, including the widely available Windows, Mac OS X, and Linux systems. 
+In this workshop, we will be using the free and open-source program R, along with a user interface called RStudio. R works on pretty much every platform available, including the widely available Windows, Mac OS X, and Linux systems. 
 
-The first thing you need to do to get started with R and RStudio is to install them on your computer. You must first download the latest version of R and install it. After that, you can download and install RStudio.
+The first thing you need to do to get started with R and RStudio is to install them on your computer. You must first download the latest version of **R** and install it. After that, you can download and install **RStudio**.
+
+<div class="alert alert-info">
+  <strong>Info!</strong> Participants are expected to have their own computers, with R and Rstudio installed. 
+</div>
+
+
 
 ## Installation guides
 
