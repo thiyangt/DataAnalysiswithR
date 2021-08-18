@@ -13,7 +13,7 @@ The first thing you need to do to get started with R and RStudio is to install t
 
 ## Installation guides
 
-🖥️  Windows users:[ Click here to view the guide.](/images/mac.html)
+🖥️  Windows users:[ Click here to view the guide.](/images/windows.html)
 
 🍏 macOS users: [Click here to view the guide.](/images/mac.html)
 
