@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Blogs on Data Analysis with R</title>
+    <link>https://r4fun.netlify.app/blog/</link>
+    <description>Recent content in Blogs on Data Analysis with R</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Thiyanga S. Talagala and Priyanga D. Talagala - All rights reserved</copyright>
+    <lastBuildDate>Tue, 01 Dec 2020 21:13:14 -0500</lastBuildDate><atom:link href="https://r4fun.netlify.app/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Install R and RStudio</title>
+      <link>https://r4fun.netlify.app/blog/2020-12-01-r-rmarkdown/</link>
+      <pubDate>Tue, 01 Dec 2020 21:13:14 -0500</pubDate>
+      
+      <guid>https://r4fun.netlify.app/blog/2020-12-01-r-rmarkdown/</guid>
+      <description>For this course, we will be using the free and open-source program R, along a user interface called RStudio.
+R works on pretty much every platform available, including the widely available Windows, Mac OS X, and Linux systems.</description>
+    </item>
+    
+    <item>
+      <title>Introduction to R and RStudio</title>
+      <link>https://r4fun.netlify.app/blog/ninth/</link>
+      <pubDate>Sun, 07 Oct 2018 11:40:14 +0200</pubDate>
+      
+      <guid>https://r4fun.netlify.app/blog/ninth/</guid>
+      <description>Slides</description>
+    </item>
+    
+    <item>
+      <title>Reproducible Reporting with RMarkdown</title>
+      <link>https://r4fun.netlify.app/blog/eighth/</link>
+      <pubDate>Sun, 07 Oct 2018 11:40:11 +0200</pubDate>
+      
+      <guid>https://r4fun.netlify.app/blog/eighth/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Data Import and Export</title>
+      <link>https://r4fun.netlify.app/blog/seventh/</link>
+      <pubDate>Sun, 07 Oct 2018 11:39:29 +0200</pubDate>
+      
+      <guid>https://r4fun.netlify.app/blog/seventh/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Sixth</title>
+      <link>https://r4fun.netlify.app/blog/sixth/</link>
+      <pubDate>Sun, 07 Oct 2018 11:39:25 +0200</pubDate>
+      
+      <guid>https://r4fun.netlify.app/blog/sixth/</guid>
+      <description>This is another post Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean semper libero quis dictum dapibus. Nulla egestas vitae augue eu rutrum. Duis ullamcorper dictum ipsum.</description>
+    </item>
+    
+    <item>
+      <title>Fifth</title>
+      <link>https://r4fun.netlify.app/blog/fifth/</link>
+      <pubDate>Sun, 07 Oct 2018 11:39:22 +0200</pubDate>
+      
+      <guid>https://r4fun.netlify.app/blog/fifth/</guid>
+      <description>This is another post Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean semper libero quis dictum dapibus. Nulla egestas vitae augue eu rutrum. Duis ullamcorper dictum ipsum.</description>
+    </item>
+    
+    <item>
+      <title>Fourth</title>
+      <link>https://r4fun.netlify.app/blog/fourth/</link>
+      <pubDate>Sun, 07 Oct 2018 11:39:16 +0200</pubDate>
+      
+      <guid>https://r4fun.netlify.app/blog/fourth/</guid>
+      <description>This is another post Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean semper libero quis dictum dapibus. Nulla egestas vitae augue eu rutrum. Duis ullamcorper dictum ipsum.</description>
+    </item>
+    
+    <item>
+      <title>Third</title>
+      <link>https://r4fun.netlify.app/blog/third/</link>
+      <pubDate>Sun, 07 Oct 2018 11:39:13 +0200</pubDate>
+      
+      <guid>https://r4fun.netlify.app/blog/third/</guid>
+      <description>This is another post Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean semper libero quis dictum dapibus. Nulla egestas vitae augue eu rutrum. Duis ullamcorper dictum ipsum.</description>
+    </item>
+    
+    <item>
+      <title>Second</title>
+      <link>https://r4fun.netlify.app/blog/second/</link>
+      <pubDate>Sun, 07 Oct 2018 11:39:10 +0200</pubDate>
+      
+      <guid>https://r4fun.netlify.app/blog/second/</guid>
+      <description>This is another post Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean semper libero quis dictum dapibus. Nulla egestas vitae augue eu rutrum. Duis ullamcorper dictum ipsum.</description>
+    </item>
+    
+    <item>
+      <title>My First Post</title>
+      <link>https://r4fun.netlify.app/blog/my-first-post/</link>
+      <pubDate>Sun, 07 Oct 2018 11:17:14 +0200</pubDate>
+      
+      <guid>https://r4fun.netlify.app/blog/my-first-post/</guid>
+      <description>This is my first post Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean semper libero quis dictum dapibus. Nulla egestas vitae augue eu rutrum. Duis ullamcorper dictum ipsum.</description>
+    </item>
+    
+  </channel>
+</rss>

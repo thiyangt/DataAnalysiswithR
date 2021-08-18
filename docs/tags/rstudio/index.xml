@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rstudio on Data Analysis with R</title>
+    <link>https://r4fun.netlify.app/tags/rstudio/</link>
+    <description>Recent content in Rstudio on Data Analysis with R</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Thiyanga S. Talagala and Priyanga D. Talagala - All rights reserved</copyright>
+    <lastBuildDate>Tue, 01 Dec 2020 21:13:14 -0500</lastBuildDate><atom:link href="https://r4fun.netlify.app/tags/rstudio/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Install R and RStudio</title>
+      <link>https://r4fun.netlify.app/blog/2020-12-01-r-rmarkdown/</link>
+      <pubDate>Tue, 01 Dec 2020 21:13:14 -0500</pubDate>
+      
+      <guid>https://r4fun.netlify.app/blog/2020-12-01-r-rmarkdown/</guid>
+      <description>For this course, we will be using the free and open-source program R, along a user interface called RStudio.
+R works on pretty much every platform available, including the widely available Windows, Mac OS X, and Linux systems.</description>
+    </item>
+    
+  </channel>
+</rss>

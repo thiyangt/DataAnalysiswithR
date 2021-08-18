@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>drink on Data Analysis with R</title>
+    <link>https://r4fun.netlify.app/tags/drink/</link>
+    <description>Recent content in drink on Data Analysis with R</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Thiyanga S. Talagala and Priyanga D. Talagala - All rights reserved</copyright>
+    <lastBuildDate>Sun, 07 Oct 2018 11:40:14 +0200</lastBuildDate><atom:link href="https://r4fun.netlify.app/tags/drink/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Introduction to R and RStudio</title>
+      <link>https://r4fun.netlify.app/blog/ninth/</link>
+      <pubDate>Sun, 07 Oct 2018 11:40:14 +0200</pubDate>
+      
+      <guid>https://r4fun.netlify.app/blog/ninth/</guid>
+      <description>Slides</description>
+    </item>
+    
+    <item>
+      <title>Sixth</title>
+      <link>https://r4fun.netlify.app/blog/sixth/</link>
+      <pubDate>Sun, 07 Oct 2018 11:39:25 +0200</pubDate>
+      
+      <guid>https://r4fun.netlify.app/blog/sixth/</guid>
+      <description>This is another post Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean semper libero quis dictum dapibus. Nulla egestas vitae augue eu rutrum. Duis ullamcorper dictum ipsum.</description>
+    </item>
+    
+    <item>
+      <title>Fifth</title>
+      <link>https://r4fun.netlify.app/blog/fifth/</link>
+      <pubDate>Sun, 07 Oct 2018 11:39:22 +0200</pubDate>
+      
+      <guid>https://r4fun.netlify.app/blog/fifth/</guid>
+      <description>This is another post Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean semper libero quis dictum dapibus. Nulla egestas vitae augue eu rutrum. Duis ullamcorper dictum ipsum.</description>
+    </item>
+    
+  </channel>
+</rss>
