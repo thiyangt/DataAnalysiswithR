@@ -13,8 +13,12 @@ The first thing you need to do to get started with R and RStudio is to install t
 
 ## Installation guides
 
-🖥️  Windows users: Click here to view the guide.
+🖥️  Windows users:[ Click here to view the guide.](/images/mac.html)
 
 🍏 macOS users: [Click here to view the guide.](/images/mac.html)
 
-🐧 Linux users: Click here to view the guide.
+🐧 Linux users: [Click here to view the guide.](https://www.datacamp.com/community/tutorials/installing-R-windows-mac-ubuntu)
+
+## Additional resources for reading
+
+[Datacamp: How to Install R on Windows, Mac OS X, and Ubuntu](https://www.datacamp.com/community/tutorials/installing-R-windows-mac-ubuntu)
