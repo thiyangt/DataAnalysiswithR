@@ -25,11 +25,11 @@ menu:
     - identifier: blog
       name: Workshop Materials
       url: /blog
-      weight: 100
+      weight: 200
     - identifier: about
       name: Home
       url: /
-      weight: 200
+      weight: 100
     - identifier: imprint
       name: Workshops
       url: /static/imprint
