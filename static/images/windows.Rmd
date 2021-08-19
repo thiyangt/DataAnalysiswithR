@@ -95,7 +95,7 @@ Next, double click the downloaded file. This will start the install process.  Cl
 
 ![](install/finish.png)
 
-## Step 3: Check that R and RStudio are working
+## 3. To check if the installation is successful
 
 ### Step 3.1
 

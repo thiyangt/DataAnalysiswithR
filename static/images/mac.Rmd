@@ -82,7 +82,7 @@ Save the .dmg file on your computer, double-click it, and then drag and drop it 
 Remember, you must have R already installed before installing Rstudio. 
 
 
-## Step 3: Check that R and RStudio are working
+## 3. To check if the installation is successful
 
 ### Step 3.1
 
