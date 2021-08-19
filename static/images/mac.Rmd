@@ -80,3 +80,17 @@ Click	on	“DOWNLOAD RSTUDIO FOR MAC”.
 Save the .dmg file on your computer, double-click it, and then drag and drop it to your applications folder.
 
 Remember, you must have R already installed before installing Rstudio. 
+
+
+## Step 3: Check that R and RStudio are working
+
+### Step 3.1
+
+Open	RStudio by clicking the RStudio icon. Once you have RStudio opened, there should be several “windows”.
+
+### Step 3.2
+
+Go to the window named “Console” and type `1+3` and press enter as shown below. An	output line	reading	`[1]	3` should	appear.	This	means	that	R	and	RStudio	are	working.
+
+
+![](install/console.png)
