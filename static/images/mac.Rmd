@@ -57,7 +57,7 @@ Click on the link for the pkg file of the latest R version and save it.
 
 Double click the downloaded file and follow installation instructions on the screen. When installing, you can probably just accept the default settings by clicking 'Next'.
 
-If you want to watch a step-by-step tutorial on how to install R for Windows, you can watch these video here: https://www.youtube.com/watch?v=uxuuWXU-7UQ
+Note that without	installing R,	you	will	not	be	able	to	install RStudio and additional packages	later. If you want to watch a step-by-step tutorial on how to install R for macOS, you can watch these video here: https://www.youtube.com/watch?v=uxuuWXU-7UQ
 
 
 ## 2. Download and install R Studio
@@ -90,7 +90,7 @@ Open	RStudio by clicking the RStudio icon. Once you have RStudio opened, there s
 
 ### Step 3.2
 
-Go to the window named “Console” and type `1+3` and press enter as shown below. An	output line	reading	`[1]	3` should	appear.	This	means	that	R	and	RStudio	are	working.
+Go to the window named “Console” and type `1+3` and press enter as shown below. An	output line	reading	**`[1] 3`** should	appear.	This	means	that	R	and	RStudio	are	working.
 
 
 ![](install/console.png)
