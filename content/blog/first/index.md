@@ -1,5 +1,5 @@
 ---
-title: "Install R and RStudio"
+title: "1. Install R and RStudio"
 date: 2021-08-17T11:17:14+02:00
 publishdate: 2021-08-17T11:17:14+02:00
 image: "/images/blog/1.jpg"
