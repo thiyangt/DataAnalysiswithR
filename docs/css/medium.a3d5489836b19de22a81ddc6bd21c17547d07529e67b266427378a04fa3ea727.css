@@ -113,7 +113,7 @@ section.recent-posts {
 }
 
 .maxthumb {
-    max-height: 300px;
+    max-height: 100px;
     overflow: hidden;
 }
 
@@ -840,7 +840,7 @@ iframe {
 }
 
 .card .img-fluid {
-    width: 60%;
+    width: 100%;
 }
 
 .sticky-top-80 {
