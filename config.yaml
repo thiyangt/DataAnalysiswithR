@@ -42,5 +42,5 @@ menu:
       weight: 300
     - identifier: imprint3
       name: Additional Resources
-      url: /static/imprint
+      url: /static/imprint3
       weight: 400
