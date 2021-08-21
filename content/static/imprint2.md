@@ -3,7 +3,7 @@ date: "2018-10-07T11:12:00+02:00"
 title: Code of Conduct
 ---
 
-![](/images/CoC.jpeg)
+![](/images/CoC.jpg)
 
 
 This workshop series is dedicated to providing a harassment-free experience for everyone. 

@@ -1,5 +1,5 @@
 ---
-date: "2018-10-07T11:12:00+02:00"
+date: "2020-10-07T11:12:00+02:00"
 title: Additional Resources
 ---
 **Online Books to Learn R and Data Science**
