@@ -40,3 +40,7 @@ menu:
       name: Code of Conduct
       url: /static/imprint2
       weight: 300
+    - identifier: imprint3
+      name: Additional Resources
+      url: /static/imprint
+      weight: 400
