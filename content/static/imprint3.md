@@ -20,4 +20,4 @@ title: Additional Resources
 
 - [RStudio Cheatsheets](https://www.rstudio.com/resources/cheatsheets/#)
 
-The RStudio Cheatsheets  make it easy to use some of our favorite packages. 
+   The RStudio Cheatsheets  make it easy to use some of our favorite packages. 
