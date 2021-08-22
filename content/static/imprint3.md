@@ -17,3 +17,7 @@ title: Additional Resources
   This book gives  details on the basics of ggplot2 and Grammar of Graphics that ggplot2 uses.
   
 - [R Markdown: The Definitive Guide by Yihui Xie, J.J. Allaire and Garrett Grolemund.](https://bookdown.org/yihui/rmarkdown/)
+
+- [RStudio Cheatsheets](https://www.rstudio.com/resources/cheatsheets/#)
+
+The RStudio Cheatsheets  make it easy to use some of our favorite packages. 
