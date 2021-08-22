@@ -5,7 +5,7 @@ title: Data Analysis with R Programming Language
 
 ![](/images/author1.jpeg)
 
-[Dr. Thiyanga S. Talagala](https://thiyanga.netlify.app/) and [Dr. Priyanga D. Talagala](https://prital.netlify.app/)
+By [Dr. Thiyanga S. Talagala](https://thiyanga.netlify.app/) and [Dr. Priyanga D. Talagala](https://prital.netlify.app/)
 
 
 
