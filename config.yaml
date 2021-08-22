@@ -10,14 +10,14 @@ params:
   author:
     description: Dr. Thiyanga S. Talagala and Dr Priyanga D. Talagala
     name: Data Analysis with R
-    thumbnail: /images/author.png
+    thumbnail: /images/author1.jpeg
   description: 
   index:
     alertbar: no
     mdtext: |
       [Dr Thiyanga S. Talagala](https://thiyanga.netlify.app/) and [Dr Priyanga D. Talagala](https://prital.netlify.app/) 
       
-    picture: /images/author.png
+    picture: /images/author1.jpeg
     subtitle: 
     title: Data Analysis with R Programming 
   logo: /images/logo.png
