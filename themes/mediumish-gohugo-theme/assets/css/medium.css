@@ -113,8 +113,8 @@ section.recent-posts {
 }
 
 .maxthumb {
-    max-height: 300px;
-    overflow: hidden;
+    max-height: 400px;
+    overflow: visible;
 }
 
 .listfeaturedtag .card,
@@ -124,7 +124,7 @@ section.recent-posts {
 
 .listfeaturedtag .thumbnail {
     background-size: cover;
-    height: 100%;
+    height: 200%;
     display: block;
     background-position: 38% 22% !important;
     background-origin: border-box !important;
@@ -285,6 +285,7 @@ span.post-read-more a:hover {
 .mediumnavigation .nav-item,
 .dropdown-menu {
     font-size: 0.9rem;
+
 }
 
 .mediumnavigation .search-icon {
@@ -840,7 +841,7 @@ iframe {
 }
 
 .card .img-fluid {
-    width: 100%;
+    width: 85%;
 }
 
 .sticky-top-80 {
