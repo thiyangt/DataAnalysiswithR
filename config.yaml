@@ -15,11 +15,11 @@ params:
   index:
     alertbar: no
     mdtext: |
-      [Dr Thiyanga S. Talagala](https://thiyanga.netlify.app/) and [Dr Priyanga D. Talagala](https://prital.netlify.app/) 
+      [Dr. Thiyanga S. Talagala](https://thiyanga.netlify.app/) and [Dr. Priyanga D. Talagala](https://prital.netlify.app/) 
       
     picture: /images/author1.jpeg
     subtitle: 
-    title: Data Analysis with R Programming 
+    title: Data Analysis with R Programming Language
   logo: /images/logo.png
 menu:
   main:
