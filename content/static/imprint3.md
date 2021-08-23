@@ -31,6 +31,12 @@ title: Additional Resources
     ![](/images/rmarkdown.png)  
     
     This book contains a large number of technical details related to rmarkdown.
+    
+- [Forecasting: Principles and Practice by Rob J Hyndman and George Athanasopoulos](https://otexts.com/fpp3/)
+
+    ![](/images/fpp3.jpeg) 
+    
+    This textbook provides a comprehensive introduction to forecasting method.
 
 - [RStudio Cheatsheets](https://www.rstudio.com/resources/cheatsheets/#)
 
