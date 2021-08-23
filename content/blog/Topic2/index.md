@@ -6,9 +6,14 @@ tags: ["R", "RStudio", "Rpackages"]
 comments: false
 ---
 
+
 Now you have successfully installed R and R studio as give in [1. Install R and RStudio](https://r4fun.netlify.app/blog/topic1/).
 
 *Note: Without completing Step 1 ([1. Install R and RStudio](https://r4fun.netlify.app/blog/topic1/)) you will not be able to follow the steps given below.*
+
+
+> ### Help 
+> Step-by-step illustration video clip of the below steps is ALSO available at https://www.youtube.com/watch?v=7nzsW-lhb14
 
 
 # Installing an R Package
@@ -104,6 +109,14 @@ installed.packages()
 If you have successfully installed packages, you should see a list of “TRUE” repeated once for each package listed inside the c( ), as below:
 
 ![](/images/Rpackages/4_check.png)
+
+
+
+> ### Help 
+> Step-by-step illustration video clip of the above steps is also available at https://www.youtube.com/watch?v=7nzsW-lhb14
+
+
+
 
 
 
