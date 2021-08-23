@@ -21,7 +21,7 @@ Now you have successfully installed R and R studio as give in [1. Install R and 
 <!--- The primary location for obtaining R packages is CRAN. -->
 
 
-<!--- In order to install packages after R and Rstudio are installed, you will need either Administrative Access to your machine or a personal library on your desktop where you can install pakcages on the fly.-->
+<!--- In order to install packages after R and Rstudio are installed, you will need either Administrative Access to your machine or a personal library on your desktop where you can install packages on the fly.-->
 
 - To install an R package from CRAN, follow the steps given below.
 
@@ -36,7 +36,7 @@ Now you have successfully installed R and R studio as give in [1. Install R and 
 
 ## Step 2
 
-- Find “Files/Plot/Packges/Help” window: By default the “Files/Plot/Packges/Help” window will be on the right side of RStudio. Find that window. 
+- Find “Files/Plot/Packages/Help” window: By default the “Files/Plot/Packages/Help” window will be on the right side of RStudio. Find that window. 
 
 - Select "Packages" tab  and then click on "Install". It will look something like this:
 
@@ -68,7 +68,7 @@ Now you have successfully installed R and R studio as give in [1. Install R and 
    
    - Installing the `tidyverse` package could take several minutes. **You only need to do this once.**
 
-3. Successful installation  should return  a message similar to below in the console. (Sometimes your screen output mesage will probably look different and lengthy, if you install this for the first time!! However, it should not be an ERROR message). 
+3. Successful installation  should return  a message similar to below in the console. (Sometimes your screen output message will probably look different and lengthy, if you install this for the first time!! However, it should not be an ERROR message). 
 
 ![](/images/Rpackages/3_tidyverse.png)
 
