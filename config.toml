@@ -1,13 +1,13 @@
 baseURL = "https://r4fun.netlify.app/"
 languageCode = "en-us"
-title = "Mediumish"
+#title = "Mediumish"
 theme = "mediumish-gohugo-theme"
 summaryLength = 25
-copyright = "John Doe - All rights reserved"
+#copyright = "John Doe - All rights reserved"
 enableEmoji = true
-publishDir = "docs"
+#publishDir = "docs"
 #disqusShortname = "your-shortname-here"
-#googleAnalytics = "UA-1XXXXXXX1-1"
+googleAnalytics = "UA-283764358-1"
 
 [params]
   logo = "/images/logo.png"
