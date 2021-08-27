@@ -95,6 +95,7 @@ style_solarized_light(text_font_google   = google_font("Josefin Sans", "400", "4
 #)
 ```
 
+
 ## Packages
 
 ```{r, warning=TRUE, message=TRUE, comment=NA}
@@ -105,6 +106,12 @@ library(tidyverse)
 ```r
 library(here) # output the current path
 ```
+
+---
+background-image:url('readr.png')
+background-size:contain
+
+
 ---
 class: inverse, middle, center
 
