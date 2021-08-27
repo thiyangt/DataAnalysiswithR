@@ -14,4 +14,4 @@ public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostat
 
 ## Resourses
 
-Slides: TBA
+Slides: [Click here](/slides/7dataimport_export/7_import_export.html)
