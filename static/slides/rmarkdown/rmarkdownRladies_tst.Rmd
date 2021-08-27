@@ -3,7 +3,7 @@ title: <span style="color:#ffc403">Reproducible reporting with RMarkdown</span>
 subtitle: 
 author: <span style="color:#ffc403"><br/>Dr Thiyanga S. Talagala</span>
 institute: <span style="color:#ffc403">University of Sri Jayewardenepura</span>
-date: <span style="color:#ffc403">SLASS - 28/ 29 August, 2021</span>
+date: <span style="color:#ffc403">SLASS Workshop- 28/ 29 August, 2021</span>
 output:
   xaringan::moon_reader:
     css: [default, rladies, chocolate-fonts]
