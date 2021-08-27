@@ -13,4 +13,4 @@ public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostat
 
 ## Resourses
 
-Slides: TBA
+Slides: [Click here](/slides/5Basics_of_Rprogramming/5_basics.html)

@@ -501,13 +501,43 @@ length(hwdata$Weight)
 
 ---
 
+## Pipe operator (`%>%`)
+
+.pull-left[
+
+```{r}
+mean(hwdata$Weight) 
+mean(hwdata$Height, na.rm=TRUE)
+```
+
+]
+
+.pull-right[
+```{r}
+library(magrittr)
+hwdata$Weight %>% mean() 
+hwdata$Height %>% mean(na.rm=TRUE)
+```
+
+
+]
+
+
+---
+
+## Pipe operator (`%>%`)
+
+![](pipeillustration.png)
+
+---
+
 class: inverse, cover, middle
 
 # Recap
 
  ✅ Data structures and functions
  
- ✅ Creating factors
+ ✅ CFctors
  
  ✅ Working with packages
  

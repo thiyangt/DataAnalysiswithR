@@ -424,7 +424,7 @@ summary(final)
 
 &lt;img src="excel2.png" width="40%" /&gt;
 
-<div class="countdown" id="timer_6128718f" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_6128774d" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">01</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -763,13 +763,67 @@ length(hwdata$Weight)
 
 ---
 
+## Pipe operator (`%&gt;%`)
+
+.pull-left[
+
+
+```r
+mean(hwdata$Weight) 
+```
+
+```
+[1] 56.6
+```
+
+```r
+mean(hwdata$Height, na.rm=TRUE)
+```
+
+```
+[1] 113.25
+```
+
+]
+
+.pull-right[
+
+```r
+library(magrittr)
+hwdata$Weight %&gt;% mean() 
+```
+
+```
+[1] 56.6
+```
+
+```r
+hwdata$Height %&gt;% mean(na.rm=TRUE)
+```
+
+```
+[1] 113.25
+```
+
+
+]
+
+
+---
+
+## Pipe operator (`%&gt;%`)
+
+![](pipeillustration.png)
+
+---
+
 class: inverse, cover, middle
 
 # Recap
 
  ✅ Data structures and functions
  
- ✅ Creating factors
+ ✅ CFctors
  
  ✅ Working with packages
  
