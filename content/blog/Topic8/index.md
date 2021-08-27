@@ -9,4 +9,4 @@ comments: false
 
 ## Resourses
 
-Slides: TBA
+Slides: [Click here](/slides/datawrangling/datawrangling.html)
