@@ -14,4 +14,4 @@ public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostat
 
 ## Resourses
 
-Slides: TBA
+Slides: [Click here](/slides/rmarkdown/rmarkdownRladies_tst.html)
