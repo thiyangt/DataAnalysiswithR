@@ -3,7 +3,7 @@ title: "Basics of R Programming"
 subtitle: ""
 author: 
   - "<br><br>Thiyanga S. Talagala, University of Sri Jayewardenepura"
-date: 'SLASS - Aug 28/29, 2021 '
+date: 'SLAAS - Aug 28/29, 2021 '
 output:
   xaringan::moon_reader:
     css: [ xaringan-themer.css]
