@@ -1,5 +1,5 @@
 ---
-title: "Introduction to statistical modelling"
+title: "Introduction to statistical modelling in R"
 subtitle:  <span style="color:#06c280">Online Workshop - Section C - SLAAS </span>
 author: <span style="color:#06c280">Priyanga Dilini Talagala </span>
 #institute: "RStudio, PBC"
