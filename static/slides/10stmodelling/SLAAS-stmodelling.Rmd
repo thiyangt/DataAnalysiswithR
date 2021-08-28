@@ -172,16 +172,16 @@ class: inverse, center, middle
 new_penguins <- penguins %>%
     filter(complete.cases(flipper_length_mm, body_mass_g, species, sex))
 
-ggplot(new_penguins, aes(x = body_mass_g, y = flipper_length_mm)) +
+p<- ggplot(new_penguins, aes(x = body_mass_g, y = flipper_length_mm)) +
     geom_point() +
     geom_smooth(method = "lm", formula = y ~ x,
                 col = "red", se = FALSE)
-
+print(p)
 ```
 ].pull-right[
 
 ```{r}
-ggplot(new_penguins, aes(x = body_mass_g, y = flipper_length_mm, 
+p<- ggplot(new_penguins, aes(x = body_mass_g, y = flipper_length_mm, 
                          col = species)) +
     geom_point(size = 2, alpha = 0.5) + 
     geom_smooth(method = "loess", formula = y ~ x, 
@@ -192,6 +192,8 @@ ggplot(new_penguins, aes(x = body_mass_g, y = flipper_length_mm,
          subtitle = paste0(nrow(new_penguins), " of the Palmer Penguins"),
          x = "Body Mass (g)", 
          y = "Flipper Length (mm)")
+
+print(p)
 ```
 
 ]
@@ -256,6 +258,7 @@ p <- ggplot(data1, aes(x,y))+
   ggtitle(paste("Correlation =", cor_xy, ")"))+
     xlim(-17,16) +
   ylim(-733.30199  , 150.10519)
+
 print(p) 
 
 ```
