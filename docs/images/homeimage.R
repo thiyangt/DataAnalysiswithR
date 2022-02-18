@@ -45,4 +45,9 @@ library(patchwork)
   title = '',
   caption = 'Copyrights Thiyanga S. Talagala and Priyanga D. Talagala',
   theme = theme(plot.title = element_text(size = 16))
-)
+  
+  
+  ggplot(penguins, aes(x = flipper_length_mm, y = body_mass_g)) +
+    geom_point(aes(color=species)) + geom_smooth(aes(color=species)) +
+    scale_color_manual(values = c("darkorange","purple","cyan4"))
+

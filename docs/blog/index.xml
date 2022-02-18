@@ -7,96 +7,95 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Thiyanga S. Talagala and Priyanga D. Talagala - All rights reserved</copyright>
-    <lastBuildDate>Tue, 01 Dec 2020 21:13:14 -0500</lastBuildDate><atom:link href="https://r4fun.netlify.app/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 21 Aug 2021 11:17:14 +0200</lastBuildDate><atom:link href="https://r4fun.netlify.app/blog/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Install R and RStudio</title>
-      <link>https://r4fun.netlify.app/blog/2020-12-01-r-rmarkdown/</link>
-      <pubDate>Tue, 01 Dec 2020 21:13:14 -0500</pubDate>
+      <title>1. Install R and RStudio</title>
+      <link>https://r4fun.netlify.app/blog/topic1/</link>
+      <pubDate>Sat, 21 Aug 2021 11:17:14 +0200</pubDate>
       
-      <guid>https://r4fun.netlify.app/blog/2020-12-01-r-rmarkdown/</guid>
-      <description>For this course, we will be using the free and open-source program R, along a user interface called RStudio.
-R works on pretty much every platform available, including the widely available Windows, Mac OS X, and Linux systems.</description>
+      <guid>https://r4fun.netlify.app/blog/topic1/</guid>
+      <description>In this workshop, we will be using the free and open-source program R, along with a user interface called RStudio.</description>
     </item>
     
     <item>
-      <title>Introduction to R and RStudio</title>
-      <link>https://r4fun.netlify.app/blog/ninth/</link>
-      <pubDate>Sun, 07 Oct 2018 11:40:14 +0200</pubDate>
+      <title>2. Install R packages</title>
+      <link>https://r4fun.netlify.app/blog/topic2/</link>
+      <pubDate>Fri, 20 Aug 2021 11:40:14 +0200</pubDate>
       
-      <guid>https://r4fun.netlify.app/blog/ninth/</guid>
-      <description>Slides</description>
+      <guid>https://r4fun.netlify.app/blog/topic2/</guid>
+      <description>Now you have successfully installed R and R studio as give in 1. Install R and RStudio.</description>
     </item>
     
     <item>
-      <title>Reproducible Reporting with RMarkdown</title>
-      <link>https://r4fun.netlify.app/blog/eighth/</link>
-      <pubDate>Sun, 07 Oct 2018 11:40:11 +0200</pubDate>
+      <title>3. Data</title>
+      <link>https://r4fun.netlify.app/blog/topic3/</link>
+      <pubDate>Thu, 19 Aug 2021 11:40:14 +0200</pubDate>
       
-      <guid>https://r4fun.netlify.app/blog/eighth/</guid>
-      <description></description>
+      <guid>https://r4fun.netlify.app/blog/topic3/</guid>
+      <description>In this workshop we will use palmerpenguins dataset to get a better understanding of the concepts of exploration, visualization, and potential analyses.</description>
     </item>
     
     <item>
-      <title>Data Import and Export</title>
-      <link>https://r4fun.netlify.app/blog/seventh/</link>
-      <pubDate>Sun, 07 Oct 2018 11:39:29 +0200</pubDate>
+      <title>4. Introduction to R and RStudio</title>
+      <link>https://r4fun.netlify.app/blog/topic4/</link>
+      <pubDate>Wed, 18 Aug 2021 11:39:10 +0200</pubDate>
       
-      <guid>https://r4fun.netlify.app/blog/seventh/</guid>
-      <description></description>
+      <guid>https://r4fun.netlify.app/blog/topic4/</guid>
+      <description>Resourses Slides: Click here</description>
     </item>
     
     <item>
-      <title>Sixth</title>
-      <link>https://r4fun.netlify.app/blog/sixth/</link>
-      <pubDate>Sun, 07 Oct 2018 11:39:25 +0200</pubDate>
+      <title>5. R programming basics</title>
+      <link>https://r4fun.netlify.app/blog/topic5/</link>
+      <pubDate>Tue, 17 Aug 2021 11:39:13 +0200</pubDate>
       
-      <guid>https://r4fun.netlify.app/blog/sixth/</guid>
-      <description>This is another post Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean semper libero quis dictum dapibus. Nulla egestas vitae augue eu rutrum. Duis ullamcorper dictum ipsum.</description>
+      <guid>https://r4fun.netlify.app/blog/topic5/</guid>
+      <description>Resourses Slides: Click here</description>
     </item>
     
     <item>
-      <title>Fifth</title>
-      <link>https://r4fun.netlify.app/blog/fifth/</link>
-      <pubDate>Sun, 07 Oct 2018 11:39:22 +0200</pubDate>
+      <title>6. Reproducible reporting with RMarkdown</title>
+      <link>https://r4fun.netlify.app/blog/topic6/</link>
+      <pubDate>Mon, 16 Aug 2021 11:39:16 +0200</pubDate>
       
-      <guid>https://r4fun.netlify.app/blog/fifth/</guid>
-      <description>This is another post Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean semper libero quis dictum dapibus. Nulla egestas vitae augue eu rutrum. Duis ullamcorper dictum ipsum.</description>
+      <guid>https://r4fun.netlify.app/blog/topic6/</guid>
+      <description>Resourses Slides: Click here</description>
     </item>
     
     <item>
-      <title>Fourth</title>
-      <link>https://r4fun.netlify.app/blog/fourth/</link>
-      <pubDate>Sun, 07 Oct 2018 11:39:16 +0200</pubDate>
+      <title>7. Data import and export</title>
+      <link>https://r4fun.netlify.app/blog/topic7/</link>
+      <pubDate>Sun, 15 Aug 2021 11:39:22 +0200</pubDate>
       
-      <guid>https://r4fun.netlify.app/blog/fourth/</guid>
-      <description>This is another post Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean semper libero quis dictum dapibus. Nulla egestas vitae augue eu rutrum. Duis ullamcorper dictum ipsum.</description>
+      <guid>https://r4fun.netlify.app/blog/topic7/</guid>
+      <description>Resourses Slides: Click here</description>
     </item>
     
     <item>
-      <title>Third</title>
-      <link>https://r4fun.netlify.app/blog/third/</link>
-      <pubDate>Sun, 07 Oct 2018 11:39:13 +0200</pubDate>
+      <title>8. Data wrangling</title>
+      <link>https://r4fun.netlify.app/blog/topic8/</link>
+      <pubDate>Sat, 14 Aug 2021 11:39:25 +0200</pubDate>
       
-      <guid>https://r4fun.netlify.app/blog/third/</guid>
-      <description>This is another post Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean semper libero quis dictum dapibus. Nulla egestas vitae augue eu rutrum. Duis ullamcorper dictum ipsum.</description>
+      <guid>https://r4fun.netlify.app/blog/topic8/</guid>
+      <description>Resourses Slides: Click here</description>
     </item>
     
     <item>
-      <title>Second</title>
-      <link>https://r4fun.netlify.app/blog/second/</link>
-      <pubDate>Sun, 07 Oct 2018 11:39:10 +0200</pubDate>
+      <title>9. Data visualization</title>
+      <link>https://r4fun.netlify.app/blog/topic9/</link>
+      <pubDate>Fri, 13 Aug 2021 11:39:29 +0200</pubDate>
       
-      <guid>https://r4fun.netlify.app/blog/second/</guid>
-      <description>This is another post Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean semper libero quis dictum dapibus. Nulla egestas vitae augue eu rutrum. Duis ullamcorper dictum ipsum.</description>
+      <guid>https://r4fun.netlify.app/blog/topic9/</guid>
+      <description>👷Slides: Click here</description>
     </item>
     
     <item>
-      <title>My First Post</title>
-      <link>https://r4fun.netlify.app/blog/my-first-post/</link>
-      <pubDate>Sun, 07 Oct 2018 11:17:14 +0200</pubDate>
+      <title>10. Introduction to statistical modelling in R</title>
+      <link>https://r4fun.netlify.app/blog/topic10/</link>
+      <pubDate>Thu, 12 Aug 2021 11:40:11 +0200</pubDate>
       
-      <guid>https://r4fun.netlify.app/blog/my-first-post/</guid>
-      <description>This is my first post Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean semper libero quis dictum dapibus. Nulla egestas vitae augue eu rutrum. Duis ullamcorper dictum ipsum.</description>
+      <guid>https://r4fun.netlify.app/blog/topic10/</guid>
+      <description>👷Slides: Click here</description>
     </item>
     
   </channel>
