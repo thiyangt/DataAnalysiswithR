@@ -5,6 +5,8 @@ title: Code of Conduct
 
 ![](/images/CoC.jpg)
 
+We cannot make a workshop recording available.
+
 
 This workshop series is dedicated to providing a harassment-free experience for everyone. 
 
