@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>tidyr on Data Analysis with R</title>
+    <link>https://r4fun.netlify.app/tags/tidyr/</link>
+    <description>Recent content in tidyr on Data Analysis with R</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Thiyanga S. Talagala and Priyanga D. Talagala - All rights reserved</copyright>
+    <lastBuildDate>Sat, 14 Aug 2021 11:39:25 +0200</lastBuildDate><atom:link href="https://r4fun.netlify.app/tags/tidyr/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>8. Data wrangling</title>
+      <link>https://r4fun.netlify.app/blog/topic8/</link>
+      <pubDate>Sat, 14 Aug 2021 11:39:25 +0200</pubDate>
+      
+      <guid>https://r4fun.netlify.app/blog/topic8/</guid>
+      <description>Resourses Slides: Click here</description>
+    </item>
+    
+  </channel>
+</rss>

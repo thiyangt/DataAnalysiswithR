@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rpackages on Data Analysis with R</title>
+    <link>https://r4fun.netlify.app/tags/rpackages/</link>
+    <description>Recent content in Rpackages on Data Analysis with R</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Thiyanga S. Talagala and Priyanga D. Talagala - All rights reserved</copyright>
+    <lastBuildDate>Fri, 20 Aug 2021 11:40:14 +0200</lastBuildDate><atom:link href="https://r4fun.netlify.app/tags/rpackages/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>2. Install R packages</title>
+      <link>https://r4fun.netlify.app/blog/topic2/</link>
+      <pubDate>Fri, 20 Aug 2021 11:40:14 +0200</pubDate>
+      
+      <guid>https://r4fun.netlify.app/blog/topic2/</guid>
+      <description>Now you have successfully installed R and R studio as give in 1. Install R and RStudio.</description>
+    </item>
+    
+  </channel>
+</rss>

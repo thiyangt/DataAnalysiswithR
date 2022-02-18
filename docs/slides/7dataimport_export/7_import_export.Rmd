@@ -1,0 +1,175 @@
+---
+title: "Data Import and Export"
+subtitle: ""
+author: 
+  - "<br><br>Thiyanga S. Talagala, University of Sri Jayewardenepura"
+date: 'SLAAS - Aug 28/29, 2021 <br> Slides: [https://r4fun.netlify.app/](https://r4fun.netlify.app/)'
+output:
+  xaringan::moon_reader:
+    css: [ xaringan-themer.css]
+    nature:
+      slideNumberFormat: "%current%"
+      highlightStyle: github
+      highlightLines: true
+      ratio: 16:9
+      countIncrementalSlides: true
+---
+
+
+
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(
+  fig.width=9, fig.height=3.5, fig.retina=3,
+  out.width = "100%",
+  cache = FALSE,
+  echo = TRUE,
+  message = FALSE, 
+  warning = FALSE,
+  fig.show = TRUE,
+  hiline = TRUE
+)
+```
+
+<style type="text/css">
+.remark-slide-content {
+    font-size: 35px;
+}
+</style>
+
+
+<style type="text/css">
+.remark-slide-content {
+    font-size: 35px;
+}
+</style>
+
+<style>
+p.comment {
+background-color: #DBDBDB;
+padding: 10px;
+border: 1px solid black;
+margin-left: 25px;
+border-radius: 5px;
+font-style: italic;
+}
+
+</style>
+
+
+
+```{css, echo = FALSE}
+h1, #TOC>ul>li {
+  color: #3f007d;
+  font-weight: bold;
+}
+h2, #TOC>ul>ul>li {
+  color:  #006837;
+  #font-family:  "Times";
+  font-weight: bold;
+}
+h3, #TOC>ul>ul>li {
+  color: #ce1256;
+  #font-family:  "Times";
+  font-weight: bold;
+}
+```
+
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+#style_duo_accent(
+#  primary_color = "#1381B0",
+#  secondary_color = "#FF961C",
+#  inverse_header_color = "#FFFFFF"
+#)
+style_solarized_light(text_font_google   = google_font("Josefin Sans", "400", "400i", "800i", "800"),
+ title_slide_background_color = "#49006a",
+ text_color = "#000",
+  text_font_size = "1em")
+#style_mono_light(
+#  base_color = "#1c5253",
+#  header_font_google = google_font("Josefin Sans"),
+#  text_font_google   = google_font("Josefin Sans", "400", "400i", "800i", "800"),
+#  code_font_google   = google_font("Fira Mono")
+#)
+```
+
+
+## Packages
+
+```{r, warning=TRUE, message=TRUE, comment=NA}
+library(tidyverse)
+
+```
+
+```r
+library(here) # output the current path
+```
+
+---
+background-image:url('readr.png')
+background-size:contain
+
+
+---
+class: inverse, middle, center
+
+# Import data
+
+---
+background-image: url('csv1.png')
+background-size: contain
+
+
+
+---
+background-image: url('csv2.png')
+background-size: contain
+
+
+
+---
+background-image: url('csv3.png')
+background-size: contain
+
+
+
+---
+background-image: url('csv4.png')
+background-size: contain
+
+
+
+---
+background-image: url('csv5.png')
+background-size: contain
+
+---
+class: inverse, middle, center
+
+# Export data
+
+---
+background-image: url('csv6.png')
+background-size: contain
+
+---
+background-image: url('csv7.png')
+background-size: contain
+
+---
+background-image: url('csv8.png')
+background-size: contain
+
+---
+# Recap
+
+✅  Export data
+
+✅  Import data
+---
+
+All rights reserved by Thiyanga S. Talagala and Priyanga D. Talagala
+
+

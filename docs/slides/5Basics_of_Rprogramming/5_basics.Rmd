@@ -1,0 +1,554 @@
+---
+title: "Basics of R Programming"
+subtitle: ""
+author: 
+  - "<br><br>Thiyanga S. Talagala, University of Sri Jayewardenepura"
+date: 'SLAAS - Aug 28/29, 2021 '
+output:
+  xaringan::moon_reader:
+    css: [ xaringan-themer.css]
+    nature:
+      slideNumberFormat: "%current%"
+      highlightStyle: github
+      highlightLines: true
+      ratio: 16:9
+      countIncrementalSlides: true
+---
+
+
+
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(
+  fig.width=9, fig.height=3.5, fig.retina=3,
+  out.width = "100%",
+  cache = FALSE,
+  echo = TRUE,
+  message = FALSE, 
+  warning = FALSE,
+  fig.show = TRUE,
+  hiline = TRUE,
+  comment = NA
+)
+```
+
+<style type="text/css">
+.remark-slide-content {
+    font-size: 35px;
+}
+</style>
+
+
+<style type="text/css">
+.remark-slide-content {
+    font-size: 35px;
+}
+</style>
+
+<style>
+p.comment {
+background-color: #DBDBDB;
+padding: 10px;
+border: 1px solid black;
+margin-left: 25px;
+border-radius: 5px;
+font-style: italic;
+}
+
+</style>
+
+
+
+```{css, echo = FALSE}
+h1, #TOC>ul>li {
+  color: #1b9e77;
+  font-weight: bold;
+}
+h2, #TOC>ul>ul>li {
+  color:  #1b9e77;
+  #font-family:  "Times";
+  font-weight: bold;
+}
+h3, #TOC>ul>ul>li {
+  color: #00441b;
+  #font-family:  "Times";
+  font-weight: bold;
+}
+```
+
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+style_duo_accent(
+  primary_color = "#081d58",
+  title_slide_text_color = "#edf8b1",
+  secondary_color = "#FF961C",
+  inverse_header_color = "#081d58",
+  text_font_size = "1em",
+  text_color = "#000",
+  text_bold_color = "#fd8d3c",
+
+  
+)
+#style_solarized_light(text_font_google   = google_font("Josefin Sans", "400", "400i", "800i", "800"),
+# text_color = "#000",
+#  text_font_size = "1em")
+#style_mono_light(
+#  base_color = "#1c5253",
+#  header_font_google = google_font("Josefin Sans"),
+#  text_font_google   = google_font("Josefin Sans", "400", "400i", "800i", "800"),
+#  code_font_google   = google_font("Fira Mono")
+#)
+```
+
+
+.pull-left[
+
+## Data structures
+
+Way to **store and organize data** so that it can be used efficiently.
+
+```{r, comment=NA}
+marks <- c(100, 40, 34, 97, 98)
+marks
+```
+
+
+
+
+]
+
+--
+.pull-right[
+
+## Functions 
+
+Tell R to **do something**
+
+```{r, comment=NA}
+mean(marks)
+summary(marks)
+```
+
+
+
+]
+
+
+---
+
+## Data structures
+
+```{r, comment=NA, echo=FALSE, out.width="80%"}
+knitr::include_graphics("ds.png")
+
+```
+
+Source: Ceballos and Cardiel, 2013
+
+
+---
+
+## Creating vectors
+
+
+Syntax
+
+```r
+vector_name <- c(element1, element2, element3)
+
+```
+
+Example
+
+```{r, comment=NA}
+x <- c(5, 6, 3, 1, 100)
+x
+```
+
+
+
+---
+
+## Combine two vectors
+
+```{r}
+p <- c(1, 2, 3)
+p
+q <- c(10, 20, 30)
+q
+r <- c(p, q)
+r
+
+```
+
+---
+
+## Vector with charactor elements
+
+```{r}
+names <- c("USJ", "UM", "UC", "UJ")
+names
+
+```
+
+## Logical vector
+
+```{r}
+result <- c(TRUE, FALSE, FALSE, TRUE, FALSE)
+result
+```
+
+---
+
+## Simplifying vector creation
+
+```{r}
+id <- 1:10
+id
+treatment <- rep(1:3, each=2)
+treatment
+```
+
+Additional resources: https://hellor.netlify.app/2021/week1/l12021.html#62
+
+---
+
+## Vector operations
+
+```{r}
+x <- c(1, 2, 3)
+y <- c(10, 20, 30)
+x+y
+p <- c(100, 1000)
+x+p
+```
+
+---
+
+## Data set
+
+```{r, comment=NA, echo=FALSE, out.width="50%"}
+knitr::include_graphics("excel.png")
+```
+
+
+
+---
+
+## Required R package
+
+```{r, comment=NA, message=TRUE, warning=TRUE}
+library(tidyverse)
+```
+
+
+---
+
+## Create a tibble
+
+.pull-left[
+
+```{r, comment=NA, echo=FALSE, out.width="80%"}
+knitr::include_graphics("excel.png")
+```
+
+
+
+
+]
+
+.pull-right[
+
+```{r, comment=NA, message=FALSE}
+marks <- c(90, 50, 20, 60)
+grade <- factor(c("A+", "C", "E", "B"))
+
+final <- tibble(Marks = marks, Grade = grade)
+final
+```
+
+]
+
+---
+
+## Create a tibble
+
+
+
+```{r, comment=NA, message=FALSE, eval=FALSE}
+marks <- c(90, 50, 20, 60)
+grade <- factor(c("A+", "C", "E", "B"),
+*                level = c("A+", "A", "B+", "B", "C", "D", "E"))
+final <- tibble(Marks = marks, Grade = grade)
+final
+```
+
+```{r, comment=NA, message=FALSE, echo=FALSE}
+marks <- c(90, 50, 20, 60)
+grade <- factor(c("A+", "C", "E", "B"),
+                level = c("A+", "A", "B+", "B", "C", "D", "E"))
+final <- tibble(Marks = marks, Grade = grade)
+final
+```
+
+
+
+---
+class: inverse, middle, center
+
+# Functions in R
+
+
+---
+
+.pull-left[
+
+# Data set: tibble
+
+```{r, comment=NA, message=FALSE}
+final
+```
+
+
+]
+
+.pull-right[
+
+## Functions
+
+```{r, comment=NA, message=FALSE}
+summary(final)
+```
+
+]
+
+
+---
+
+## Your Turn
+
+
+```{r, comment=NA, echo=FALSE, out.width="40%"}
+knitr::include_graphics("excel2.png")
+```
+
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 1L, seconds = 00)
+```
+
+---
+
+.pull-left[
+
+```{r, comment=NA, echo=FALSE, out.width="70%"}
+knitr::include_graphics("excel2.png")
+```
+
+
+
+]
+
+.pull-right[
+
+```{r, comment=NA}
+h <- c(100, 101, 102, 150, NA)
+w <- c(50, 60, 80, 43, 50)
+hwdata <- tibble(Height=h, Weight=w)
+hwdata
+```
+
+
+
+
+]
+
+---
+
+.pull-left[
+
+```{r, comment=NA}
+hwdata
+```
+
+]
+
+.pull-right[
+```{r, comment=NA}
+summary(hwdata)
+```
+
+]
+
+---
+
+
+
+.pull-left[
+
+# Subsetting
+
+```{r, comment=NA}
+hwdata
+
+hwdata[1, 1]
+```
+]
+
+.pull-right[
+
+```{r, comment=NA}
+
+hwdata[, 1]
+hwdata[1, ]
+hwdata$Height
+```
+
+]
+
+
+---
+
+# Help file
+.pull-left[
+```{r}
+hwdata$Weight
+mean(hwdata$Weight)
+```
+
+]
+
+.pull-right[
+```{r}
+hwdata$Height
+mean(hwdata$Height)
+```
+]
+---
+
+# Help file
+.pull-left[
+```{r}
+hwdata$Weight
+mean(hwdata$Weight)
+```
+
+]
+
+.pull-right[
+```{r}
+hwdata$Height
+mean(hwdata$Height)
+mean(hwdata$Height, na.rm=TRUE)
+```
+]
+
+---
+
+
+.pull-left[
+
+# Help file
+
+```r
+?mean
+help(mean)
+```
+
+]
+
+.pull-right[
+
+```{r, comment=NA, out.width="170%", echo=FALSE}
+knitr::include_graphics("help.png")
+```
+]
+---
+
+# Commenting
+
+```{r}
+mean(hwdata$Height, na.rm=TRUE) # compute mean of height
+```
+
+
+---
+
+# Some useful functions
+
+.pull-left[
+
+```{r}
+mean(hwdata$Weight) 
+median(hwdata$Weight)
+sd(hwdata$Weight) 
+```
+
+
+]
+
+.pull-right[
+
+```{r}
+sum(hwdata$Weight)
+length(hwdata$Weight) 
+```
+
+
+
+]
+
+---
+
+## Pipe operator (`%>%`)
+
+.pull-left[
+
+```{r}
+mean(hwdata$Weight) 
+mean(hwdata$Height, na.rm=TRUE)
+```
+
+]
+
+.pull-right[
+```{r}
+library(magrittr)
+hwdata$Weight %>% mean() 
+hwdata$Height %>% mean(na.rm=TRUE)
+```
+
+
+]
+
+
+---
+
+## Pipe operator (`%>%`)
+
+![](pipeillustration.png)
+
+---
+
+class: inverse, cover, middle
+
+# Recap
+
+ ✅ Data structures and functions
+ 
+ ✅  Factors
+ 
+ ✅ Working with packages
+ 
+ ✅ Create a tibble
+ 
+ ✅ Help file
+ 
+ ✅ Commenting
+ 
+
+ 
+ 
+ 
+ 

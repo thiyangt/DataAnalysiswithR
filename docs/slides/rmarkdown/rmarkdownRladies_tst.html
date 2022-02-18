@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Reproducible reporting with RMarkdown</title>
+    <meta charset="utf-8" />
+    <meta name="author" content=" Dr Thiyanga S. Talagala" />
+    <script src="libs/header-attrs-2.10/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/rladies.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/chocolate-fonts.css" rel="stylesheet" />
+    <link href="libs/font-awesome-animation-1.0/font-awesome-animation-emi.css" rel="stylesheet" />
+    <script src="libs/fontawesome-5.0.13/js/fontawesome-all.min.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# <span style="color:#ffc403">Reproducible reporting with RMarkdown</span>
+### <span style="color:#ffc403"><br/>Dr Thiyanga S. Talagala</span>
+### <span style="color:#ffc403">University of Sri Jayewardenepura</span>
+### <span style="color:#ffc403">SLAAS Workshop- 28/ 29 August, 2021</span>
+
+---
+
+class:inverse, middle center bg-main1
+
+# &lt;span style="color:#ffc403"&gt;Packages&lt;/span&gt; 
+
+## `install.packages("rmarkdown")`
+
+## `install.packages("knitr")`
+
+
+--
+
+<span>&lt;i class="fas  fa-bell fa-5x faa-ring animated "&gt;&lt;/i&gt;</span>
+
+## &lt;span style="color:#ffc403"&gt;Additional packages&lt;/span&gt;
+
+## `install.packages("tidyverse")`
+
+---
+background-image:url("communicate.png")
+background-size: contain
+---
+background-image:url("screenshots/1img.png")
+background-size: contain
+
+---
+background-image:url("screenshots/2img.png")
+background-size: contain
+
+---
+background-image:url("screenshots/3img.png")
+background-size: contain
+
+---
+background-image:url("screenshots/4img.png")
+background-size: contain
+---
+background-image:url("screenshots/5img.png")
+background-size: contain
+---
+background-image:url("screenshots/6img.png")
+background-size: contain
+---
+background-image:url("screenshots/7img.png")
+background-size: contain
+---
+background-image:url("screenshots/8img.png")
+background-size: contain
+---
+background-image:url("screenshots/9img.png")
+background-size: contain
+
+---
+background-image:url("screenshots/10img.png")
+background-size: contain
+
+---
+background-image:url("screenshots/11img.png")
+background-size: contain
+
+---
+background-image:url("screenshots/12img.png")
+background-size: contain
+
+---
+background-image:url("screenshots/13img.png")
+background-size: contain
+
+---
+background-image:url("screenshots/14img.png")
+background-size: contain
+
+---
+
+class: middle center bg-main1
+
+<span>&lt;i class="fas  fa-wrench fa-5x faa-flash animated "&gt;&lt;/i&gt;</span>
+
+# Creating an R Markdown document
+
+---
+
+background-image: url(rmarkdown_step1.png)
+background-position: center
+background-size: contain
+
+
+---
+background-image: url(rmarkdown_step2.png)
+background-position: center
+background-size: contain
+
+---
+
+background-image: url(rmarkdown_step2_1.png)
+background-position: center
+background-size: contain
+---
+class: inverse, center, middle
+
+# Demonstration
+
+---
+
+&lt;iframe width="1100" height="580" src="https://www.youtube.com/embed/I7gBVvnm2Xg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen&gt;&lt;/iframe&gt;
+
+---
+
+
+class: middle center bg-main1
+
+<span>&lt;i class="fas  fa-leaf fa-5x faa-spin animated "&gt;&lt;/i&gt;</span>
+
+# Customizing your R Markdown document: text
+
+
+---
+background-image:url("sc1/c1.png")
+background-size:contain
+
+---
+
+background-image:url("sc1/c2.png")
+background-size:contain
+
+---
+
+background-image:url("sc1/c3.png")
+background-size:contain
+
+---
+
+background-image:url("sc1/c4.png")
+background-size:contain
+
+---
+background-image:url("sc1/c5.png")
+background-size:contain
+
+---
+
+background-image:url("sc1/c6.png")
+background-size:contain
+
+---
+
+background-image:url("sc1/c7.png")
+background-size:contain
+
+---
+
+background-image:url("sc1/c8.png")
+background-size:contain
+
+---
+
+background-image:url("sc1/c9.png")
+background-size:contain
+
+---
+
+background-image:url("sc1/c13.png")
+background-size:contain
+
+---
+
+background-image:url("sc1/c14.png")
+background-size:contain
+
+---
+
+background-image:url("sc1/c15.png")
+background-size:contain
+
+
+---
+
+# Change Header
+
+.pull-left[
+
+**Code**
+
+```r
+
+# Header 1
+
+## Header 2
+
+### Header 3
+
+```
+
+]
+
+.pull-right[
+
+**Output**
+
+
+# Header 1
+
+## Header 2
+
+### Header 3
+
+
+
+]
+
+---
+
+# Add content
+
+.pull-left[
+
+**Code**
+
+```r
+
+# Header 1
+
+This is section 1.
+
+## Header 2
+
+This is section 1.2
+
+### Header 3
+
+This is section 1.2.1
+
+```
+
+]
+
+.pull-right[
+
+**Output**
+
+
+# Header 1
+
+This is section 1.
+
+## Header 2
+
+This is section 1.2
+
+### Header 3
+
+This is section 1.2.1
+
+
+
+
+]
+
+---
+
+# Text formatting
+
+.pull-left[
+
+## Code
+
+&lt;img src="sc1/text.png" alt="text" width="300"/&gt;
+
+
+]
+
+.pull-right[
+
+## Output
+
+*M1: This text is in italics.*
+
+_M2: This is also italics._
+
+**M3: This text is in bold.**
+
+__M4: This is also bold.__
+
+
+~~This text is strikethrough.~~
+
+]
+
+
+---
+
+class: middle center bg-main1
+
+<span>&lt;i class="fas  fa-align-center fa-5x faa-pulse animated "&gt;&lt;/i&gt;</span>
+
+# Include R codes
+
+---
+
+background-image:url("sc1/c17.png")
+background-size:contain
+
+
+---
+class: middle center bg-main1
+
+<span>&lt;i class="fas  fa-exclamation-triangle fa-7x faa-flash animated "&gt;&lt;/i&gt;</span>
+
+# Anatomy of R Markdown
+
+
+
+---
+
+class: middle center bg-main1
+
+
+
+# Anatomy of R Markdown
+
+## code chunk
+
+---
+
+
+background-image:url("sc1/c18.png")
+background-size:contain
+
+---
+
+class: middle center bg-main1
+
+
+
+# Anatomy of R Markdown
+
+## Text
+
+---
+
+background-image:url("sc1/c20.png")
+background-size:contain
+
+---
+
+class: middle center bg-main1
+
+# Anatomy of R Markdown
+
+## YAML
+
+### HTML Document
+
+---
+
+background-image:url("sc1/c19.png")
+background-size:contain
+
+---
+
+class: middle center bg-main1
+
+# Anatomy of R Markdown
+
+## YAML
+
+### PDF Document
+
+
+---
+
+background-image:url("sc1/SC/s1.png")
+background-size:contain
+
+---
+
+background-image:url("sc1/SC/s2.png")
+background-size:contain
+
+---
+
+class: middle center bg-main1
+
+# Anatomy of R Markdown
+
+## YAML
+
+### Word Document
+
+
+
+---
+
+background-image:url("sc1/SC/s3.png")
+background-size:contain
+
+---
+
+background-image:url("sc1/SC/s4.png")
+background-size:contain
+
+---
+
+class: middle center bg-main1
+
+<span>&lt;i class="fas  fa-exclamation-circle fa-7x faa-bounce animated "&gt;&lt;/i&gt;</span>
+
+# Chunk options
+
+---
+
+background-image:url("sc1/SC/s5.png")
+background-size:contain
+
+## fig.width/ fig.height
+
+---
+background-image:url("sc1/SC/s7.png")
+background-size:contain
+
+## fig.width/ fig.height
+
+---
+
+background-image:url("sc1/SC/s6.png")
+background-size:contain
+
+## echo [TRUE/ FALSE]
+
+
+---
+
+background-image:url("sc1/SC/s8.png")
+background-size:contain
+
+## eval [TRUE/ FALSE]
+
+---
+class: bg-main1
+
+# Chunk options
+
+* `eval = FALSE` - prevent the code from being evaluated
+
+* `include = FALSE` - run the code but doesn't show it in the final document
+
+* `echo = FALSE` - prevent the code but not the results from appearing
+
+* `message = FALSE` - prevent messages from appearing in the finished file
+
+* `results = "hide"` - hide the printed output
+
+* `error = TRUE` - cause the render to continue even if the code returns an error
+
+* `comment=NA` - remove # from the  output
+
+--
+
+.pull-left[
+
+Without `comment=NA`
+
+
+```r
+a &lt;- 1:5; a
+```
+
+```
+## [1] 1 2 3 4 5
+```
+
+]
+
+.pull-right[
+
+With `comment=NA`
+
+
+```r
+a &lt;- 1:5; a
+```
+
+```
+[1] 1 2 3 4 5
+```
+
+
+]
+
+---
+
+class: middle center bg-main1
+
+# Thank you
+
+
+<span>&lt;i class="fab  fa-angellist fa-5x faa-shake animated "&gt;&lt;/i&gt;</span>
+
+## <span class=" faa-flash animated " style=" display: -moz-inline-stack; display: inline-block; transform: rotate(0deg);">Make some VOICE using R Makrkdown!</span>
+
+Additional Resources [https://talks-thiyanga.netlify.app/rmarkdown_rladies/rmarkdownrladies_tst#1](https://talks-thiyanga.netlify.app/rmarkdown_rladies/rmarkdownrladies_tst#1) 
+
+&lt;a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"&gt;&lt;img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /&gt;&lt;/a&gt;&lt;br /&gt;This work is licensed under a &lt;a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"&gt;Creative Commons Attribution-ShareAlike 4.0 International License&lt;/a&gt;.
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

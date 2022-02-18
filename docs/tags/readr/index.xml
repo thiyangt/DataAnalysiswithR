@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>readr on Data Analysis with R</title>
+    <link>https://r4fun.netlify.app/tags/readr/</link>
+    <description>Recent content in readr on Data Analysis with R</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Thiyanga S. Talagala and Priyanga D. Talagala - All rights reserved</copyright>
+    <lastBuildDate>Sun, 15 Aug 2021 11:39:22 +0200</lastBuildDate><atom:link href="https://r4fun.netlify.app/tags/readr/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>7. Data import and export</title>
+      <link>https://r4fun.netlify.app/blog/topic7/</link>
+      <pubDate>Sun, 15 Aug 2021 11:39:22 +0200</pubDate>
+      
+      <guid>https://r4fun.netlify.app/blog/topic7/</guid>
+      <description>Resourses Slides: Click here</description>
+    </item>
+    
+  </channel>
+</rss>

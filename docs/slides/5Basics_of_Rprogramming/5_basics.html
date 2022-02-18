@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Basics of R Programming</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="  Thiyanga S. Talagala, University of Sri Jayewardenepura" />
+    <script src="5_basics_files/header-attrs/header-attrs.js"></script>
+    <link href="5_basics_files/countdown/countdown.css" rel="stylesheet" />
+    <script src="5_basics_files/countdown/countdown.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Basics of R Programming
+### <br><br>Thiyanga S. Talagala, University of Sri Jayewardenepura
+### SLAAS - Aug 28/29, 2021
+
+---
+
+
+
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-slide-content {
+    font-size: 35px;
+}
+&lt;/style&gt;
+
+
+&lt;style type="text/css"&gt;
+.remark-slide-content {
+    font-size: 35px;
+}
+&lt;/style&gt;
+
+&lt;style&gt;
+p.comment {
+background-color: #DBDBDB;
+padding: 10px;
+border: 1px solid black;
+margin-left: 25px;
+border-radius: 5px;
+font-style: italic;
+}
+
+&lt;/style&gt;
+
+
+
+&lt;style type="text/css"&gt;
+h1, #TOC&gt;ul&gt;li {
+  color: #1b9e77;
+  font-weight: bold;
+}
+h2, #TOC&gt;ul&gt;ul&gt;li {
+  color:  #1b9e77;
+  #font-family:  "Times";
+  font-weight: bold;
+}
+h3, #TOC&gt;ul&gt;ul&gt;li {
+  color: #00441b;
+  #font-family:  "Times";
+  font-weight: bold;
+}
+&lt;/style&gt;
+
+
+
+
+.pull-left[
+
+## Data structures
+
+Way to **store and organize data** so that it can be used efficiently.
+
+
+```r
+marks &lt;- c(100, 40, 34, 97, 98)
+marks
+```
+
+```
+[1] 100  40  34  97  98
+```
+
+
+
+
+]
+
+--
+.pull-right[
+
+## Functions 
+
+Tell R to **do something**
+
+
+```r
+mean(marks)
+```
+
+```
+[1] 73.8
+```
+
+```r
+summary(marks)
+```
+
+```
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   34.0    40.0    97.0    73.8    98.0   100.0 
+```
+
+
+
+]
+
+
+---
+
+## Data structures
+
+&lt;img src="ds.png" width="80%" /&gt;
+
+Source: Ceballos and Cardiel, 2013
+
+
+---
+
+## Creating vectors
+
+
+Syntax
+
+```r
+vector_name &lt;- c(element1, element2, element3)
+
+```
+
+Example
+
+
+```r
+x &lt;- c(5, 6, 3, 1, 100)
+x
+```
+
+```
+[1]   5   6   3   1 100
+```
+
+
+
+---
+
+## Combine two vectors
+
+
+```r
+p &lt;- c(1, 2, 3)
+p
+```
+
+```
+[1] 1 2 3
+```
+
+```r
+q &lt;- c(10, 20, 30)
+q
+```
+
+```
+[1] 10 20 30
+```
+
+```r
+r &lt;- c(p, q)
+r
+```
+
+```
+[1]  1  2  3 10 20 30
+```
+
+---
+
+## Vector with charactor elements
+
+
+```r
+names &lt;- c("USJ", "UM", "UC", "UJ")
+names
+```
+
+```
+[1] "USJ" "UM"  "UC"  "UJ" 
+```
+
+## Logical vector
+
+
+```r
+result &lt;- c(TRUE, FALSE, FALSE, TRUE, FALSE)
+result
+```
+
+```
+[1]  TRUE FALSE FALSE  TRUE FALSE
+```
+
+---
+
+## Simplifying vector creation
+
+
+```r
+id &lt;- 1:10
+id
+```
+
+```
+ [1]  1  2  3  4  5  6  7  8  9 10
+```
+
+```r
+treatment &lt;- rep(1:3, each=2)
+treatment
+```
+
+```
+[1] 1 1 2 2 3 3
+```
+
+Additional resources: https://hellor.netlify.app/2021/week1/l12021.html#62
+
+---
+
+## Vector operations
+
+
+```r
+x &lt;- c(1, 2, 3)
+y &lt;- c(10, 20, 30)
+x+y
+```
+
+```
+[1] 11 22 33
+```
+
+```r
+p &lt;- c(100, 1000)
+x+p
+```
+
+```
+[1]  101 1002  103
+```
+
+---
+
+## Data set
+
+&lt;img src="excel.png" width="50%" /&gt;
+
+
+
+---
+
+## Required R package
+
+
+```r
+library(tidyverse)
+```
+
+```
+── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
+```
+
+```
+✓ ggplot2 3.3.5     ✓ purrr   0.3.4
+✓ tibble  3.1.2     ✓ dplyr   1.0.7
+✓ tidyr   1.1.3     ✓ stringr 1.4.0
+✓ readr   1.4.0     ✓ forcats 0.5.1
+```
+
+```
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+x dplyr::filter() masks stats::filter()
+x dplyr::lag()    masks stats::lag()
+```
+
+
+---
+
+## Create a tibble
+
+.pull-left[
+
+&lt;img src="excel.png" width="80%" /&gt;
+
+
+
+
+]
+
+.pull-right[
+
+
+```r
+marks &lt;- c(90, 50, 20, 60)
+grade &lt;- factor(c("A+", "C", "E", "B"))
+
+final &lt;- tibble(Marks = marks, Grade = grade)
+final
+```
+
+```
+# A tibble: 4 x 2
+  Marks Grade
+  &lt;dbl&gt; &lt;fct&gt;
+1    90 A+   
+2    50 C    
+3    20 E    
+4    60 B    
+```
+
+]
+
+---
+
+## Create a tibble
+
+
+
+
+```r
+marks &lt;- c(90, 50, 20, 60)
+grade &lt;- factor(c("A+", "C", "E", "B"),
+*                level = c("A+", "A", "B+", "B", "C", "D", "E"))
+final &lt;- tibble(Marks = marks, Grade = grade)
+final
+```
+
+
+```
+# A tibble: 4 x 2
+  Marks Grade
+  &lt;dbl&gt; &lt;fct&gt;
+1    90 A+   
+2    50 C    
+3    20 E    
+4    60 B    
+```
+
+
+
+---
+class: inverse, middle, center
+
+# Functions in R
+
+
+---
+
+.pull-left[
+
+# Data set: tibble
+
+
+```r
+final
+```
+
+```
+# A tibble: 4 x 2
+  Marks Grade
+  &lt;dbl&gt; &lt;fct&gt;
+1    90 A+   
+2    50 C    
+3    20 E    
+4    60 B    
+```
+
+
+]
+
+.pull-right[
+
+## Functions
+
+
+```r
+summary(final)
+```
+
+```
+     Marks      Grade 
+ Min.   :20.0   A+:1  
+ 1st Qu.:42.5   A :0  
+ Median :55.0   B+:0  
+ Mean   :55.0   B :1  
+ 3rd Qu.:67.5   C :1  
+ Max.   :90.0   D :0  
+                E :1  
+```
+
+]
+
+
+---
+
+## Your Turn
+
+
+&lt;img src="excel2.png" width="40%" /&gt;
+
+<div class="countdown" id="timer_61296e5a" style="right:0;bottom:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">01</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+
+.pull-left[
+
+&lt;img src="excel2.png" width="70%" /&gt;
+
+
+
+]
+
+.pull-right[
+
+
+```r
+h &lt;- c(100, 101, 102, 150, NA)
+w &lt;- c(50, 60, 80, 43, 50)
+hwdata &lt;- tibble(Height=h, Weight=w)
+hwdata
+```
+
+```
+# A tibble: 5 x 2
+  Height Weight
+   &lt;dbl&gt;  &lt;dbl&gt;
+1    100     50
+2    101     60
+3    102     80
+4    150     43
+5     NA     50
+```
+
+
+
+
+]
+
+---
+
+.pull-left[
+
+
+```r
+hwdata
+```
+
+```
+# A tibble: 5 x 2
+  Height Weight
+   &lt;dbl&gt;  &lt;dbl&gt;
+1    100     50
+2    101     60
+3    102     80
+4    150     43
+5     NA     50
+```
+
+]
+
+.pull-right[
+
+```r
+summary(hwdata)
+```
+
+```
+     Height          Weight    
+ Min.   :100.0   Min.   :43.0  
+ 1st Qu.:100.8   1st Qu.:50.0  
+ Median :101.5   Median :50.0  
+ Mean   :113.2   Mean   :56.6  
+ 3rd Qu.:114.0   3rd Qu.:60.0  
+ Max.   :150.0   Max.   :80.0  
+ NA's   :1                     
+```
+
+]
+
+---
+
+
+
+.pull-left[
+
+# Subsetting
+
+
+```r
+hwdata
+```
+
+```
+# A tibble: 5 x 2
+  Height Weight
+   &lt;dbl&gt;  &lt;dbl&gt;
+1    100     50
+2    101     60
+3    102     80
+4    150     43
+5     NA     50
+```
+
+```r
+hwdata[1, 1]
+```
+
+```
+# A tibble: 1 x 1
+  Height
+   &lt;dbl&gt;
+1    100
+```
+]
+
+.pull-right[
+
+
+```r
+hwdata[, 1]
+```
+
+```
+# A tibble: 5 x 1
+  Height
+   &lt;dbl&gt;
+1    100
+2    101
+3    102
+4    150
+5     NA
+```
+
+```r
+hwdata[1, ]
+```
+
+```
+# A tibble: 1 x 2
+  Height Weight
+   &lt;dbl&gt;  &lt;dbl&gt;
+1    100     50
+```
+
+```r
+hwdata$Height
+```
+
+```
+[1] 100 101 102 150  NA
+```
+
+]
+
+
+---
+
+# Help file
+.pull-left[
+
+```r
+hwdata$Weight
+```
+
+```
+[1] 50 60 80 43 50
+```
+
+```r
+mean(hwdata$Weight)
+```
+
+```
+[1] 56.6
+```
+
+]
+
+.pull-right[
+
+```r
+hwdata$Height
+```
+
+```
+[1] 100 101 102 150  NA
+```
+
+```r
+mean(hwdata$Height)
+```
+
+```
+[1] NA
+```
+]
+---
+
+# Help file
+.pull-left[
+
+```r
+hwdata$Weight
+```
+
+```
+[1] 50 60 80 43 50
+```
+
+```r
+mean(hwdata$Weight)
+```
+
+```
+[1] 56.6
+```
+
+]
+
+.pull-right[
+
+```r
+hwdata$Height
+```
+
+```
+[1] 100 101 102 150  NA
+```
+
+```r
+mean(hwdata$Height)
+```
+
+```
+[1] NA
+```
+
+```r
+mean(hwdata$Height, na.rm=TRUE)
+```
+
+```
+[1] 113.25
+```
+]
+
+---
+
+
+.pull-left[
+
+# Help file
+
+```r
+?mean
+help(mean)
+```
+
+]
+
+.pull-right[
+
+&lt;img src="help.png" width="170%" /&gt;
+]
+---
+
+# Commenting
+
+
+```r
+mean(hwdata$Height, na.rm=TRUE) # compute mean of height
+```
+
+```
+[1] 113.25
+```
+
+
+---
+
+# Some useful functions
+
+.pull-left[
+
+
+```r
+mean(hwdata$Weight) 
+```
+
+```
+[1] 56.6
+```
+
+```r
+median(hwdata$Weight)
+```
+
+```
+[1] 50
+```
+
+```r
+sd(hwdata$Weight) 
+```
+
+```
+[1] 14.41527
+```
+
+
+]
+
+.pull-right[
+
+
+```r
+sum(hwdata$Weight)
+```
+
+```
+[1] 283
+```
+
+```r
+length(hwdata$Weight) 
+```
+
+```
+[1] 5
+```
+
+
+
+]
+
+---
+
+## Pipe operator (`%&gt;%`)
+
+.pull-left[
+
+
+```r
+mean(hwdata$Weight) 
+```
+
+```
+[1] 56.6
+```
+
+```r
+mean(hwdata$Height, na.rm=TRUE)
+```
+
+```
+[1] 113.25
+```
+
+]
+
+.pull-right[
+
+```r
+library(magrittr)
+hwdata$Weight %&gt;% mean() 
+```
+
+```
+[1] 56.6
+```
+
+```r
+hwdata$Height %&gt;% mean(na.rm=TRUE)
+```
+
+```
+[1] 113.25
+```
+
+
+]
+
+
+---
+
+## Pipe operator (`%&gt;%`)
+
+![](pipeillustration.png)
+
+---
+
+class: inverse, cover, middle
+
+# Recap
+
+ ✅ Data structures and functions
+ 
+ ✅  Factors
+ 
+ ✅ Working with packages
+ 
+ ✅ Create a tibble
+ 
+ ✅ Help file
+ 
+ ✅ Commenting
+ 
+
+ 
+ 
+ 
+ 
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"slideNumberFormat": "%current%",
+"highlightStyle": "github",
+"highlightLines": true,
+"ratio": "16:9",
+"countIncrementalSlides": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

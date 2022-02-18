@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>data on Data Analysis with R</title>
+    <link>https://r4fun.netlify.app/tags/data/</link>
+    <description>Recent content in data on Data Analysis with R</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Thiyanga S. Talagala and Priyanga D. Talagala - All rights reserved</copyright>
+    <lastBuildDate>Thu, 19 Aug 2021 11:40:14 +0200</lastBuildDate><atom:link href="https://r4fun.netlify.app/tags/data/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>3. Data</title>
+      <link>https://r4fun.netlify.app/blog/topic3/</link>
+      <pubDate>Thu, 19 Aug 2021 11:40:14 +0200</pubDate>
+      
+      <guid>https://r4fun.netlify.app/blog/topic3/</guid>
+      <description>In this workshop we will use palmerpenguins dataset to get a better understanding of the concepts of exploration, visualization, and potential analyses.</description>
+    </item>
+    
+  </channel>
+</rss>

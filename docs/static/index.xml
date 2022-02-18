@@ -7,14 +7,45 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Thiyanga S. Talagala and Priyanga D. Talagala - All rights reserved</copyright>
-    <lastBuildDate>Sun, 07 Oct 2018 11:12:00 +0200</lastBuildDate><atom:link href="https://r4fun.netlify.app/static/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 07 Oct 2020 11:12:00 +0200</lastBuildDate><atom:link href="https://r4fun.netlify.app/static/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Additional Resources</title>
+      <link>https://r4fun.netlify.app/static/imprint3/</link>
+      <pubDate>Wed, 07 Oct 2020 11:12:00 +0200</pubDate>
+      
+      <guid>https://r4fun.netlify.app/static/imprint3/</guid>
+      <description>Online Books to Learn R and Data Science
+  R for Data Science by by Hadley Wickham and Garrett Grolemund</description>
+    </item>
+    
+    <item>
+      <title>Code of Conduct</title>
+      <link>https://r4fun.netlify.app/static/imprint2/</link>
+      <pubDate>Sun, 07 Oct 2018 11:12:00 +0200</pubDate>
+      
+      <guid>https://r4fun.netlify.app/static/imprint2/</guid>
+      <description>This workshop series is dedicated to providing a harassment-free experience for everyone.
+This code of conduct applies to all the spaces, including online workshops, Twitter, mailing lists, both online and offline.</description>
+    </item>
+    
+    <item>
+      <title>Data Analysis with R Programming Language</title>
+      <link>https://r4fun.netlify.app/static/author/</link>
+      <pubDate>Sun, 07 Oct 2018 11:12:00 +0200</pubDate>
+      
+      <guid>https://r4fun.netlify.app/static/author/</guid>
+      <description>Resource persons Dr. Thiyanga S. Talagala
+Dr. Priyanga D. Talagala
+Why R? R is a free software environment for statistical computing and graphics.</description>
+    </item>
+    
     <item>
       <title>Workshops</title>
       <link>https://r4fun.netlify.app/static/imprint/</link>
       <pubDate>Sun, 07 Oct 2018 11:12:00 +0200</pubDate>
       
       <guid>https://r4fun.netlify.app/static/imprint/</guid>
-      <description>SLASS - Section c The Sri Lanka Association for the Advancement of Science (SLAAS), the premier scientific body in the country was founded in 1944 and incorporated by Act of Parliament No 11 of 1966.</description>
+      <description>IASSL Workshop Institute of Applied Statistics, Sri Lanka (IASSL) is the only professional organization committed to promote and assist the advancement of Statistics for the furtherance of research, planning, development, education, and training in Sri Lanka.</description>
     </item>
     
   </channel>
