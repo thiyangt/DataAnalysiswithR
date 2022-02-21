@@ -10,4 +10,4 @@ comments: false
 
 ## Resourses
 
-Slides: [Click here](/slides/5Basics_of_Rprogramming/5_basics.html)
+Slides: [Click here](/slides/5Basics_of_Rprogramming/5_basics_IASSL.html)
