@@ -9,4 +9,4 @@ comments: false
 
 ## Resourses
 
-Slides: [Click here](/slides/rmarkdown/rmarkdownRladies_tst.html)
+Slides: [Click here](/slides/rmarkdown/rmarkdownRladies_tst_IASSL.html)
