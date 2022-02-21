@@ -5,7 +5,6 @@ title: Code of Conduct
 
 ![](/images/CoC.jpg)
 
-We cannot make a workshop recording available.
 
 
 This workshop series is dedicated to providing a harassment-free experience for everyone. 
@@ -26,6 +25,8 @@ Harassment includes:
 
 
 Do not publish video recordings of the workshop session without explicit consent from the authors.
+
+Due to guarantee everyone's privacy, we cannot make a recording available.
 
 
 This policy is licensed under the Creative Commons Zero license.
