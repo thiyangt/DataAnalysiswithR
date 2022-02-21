@@ -1,7 +1,7 @@
 ---
 title: "4. Introduction to R and RStudio"
-date: 2022-02-21T11:39:10+02:00
-publishdate: 2022-02-21T11:39:10+02:00
+date: 2022-02-20T11:39:10+02:00
+publishdate: 2022-02-20T11:39:10+02:00
 image: "/images/blog/2.jpg"
 tags: ["R", "RStudio"]
 comments: false
