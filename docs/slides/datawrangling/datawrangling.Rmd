@@ -283,6 +283,150 @@ corona_wide_format
 
 ![](tidyr/longer_wider.png)
 
+class: duke-orange, center, middle
+
+# `separate`
+---
+
+# `separate()`
+
+- Separate one column into several columns.
+
+
+```{r, comment=NA, message=FALSE}
+Melbourne <- 
+  tibble(Date = c("10-5-2020", "11-5-2020", "12-5-2020","13-5-2020"),
+         Tmin = c(5, 9, 9, 7), Tmax = c(18, 16, 16, 17),
+         Rainfall= c(30, 40, 10, 5)); Melbourne
+```
+
+---
+
+`separate()`: Separate one column into several columns.
+
+
+```{r, comment=NA, message=FALSE, echo=FALSE}
+Melbourne <- 
+  tibble(Date = c("10-5-2020", "11-5-2020", "12-5-2020","13-5-2020"),
+         Tmin = c(5, 9, 9, 7), Tmax = c(18, 16, 16, 17),
+         Rainfall= c(30, 40, 10, 5)); Melbourne
+```
+
+
+
+
+```{r, comment=NA, message=FALSE}
+Melbourne %>% separate(Date, into=c("day", "month", "year"), sep="-")
+```
+
+
+---
+
+ `separate()`
+
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+df <- data.frame(x = c(NA, "a.b", "a.d", "b.c"))
+df
+df %>% separate(x, c("Text1", "Text2"))
+```
+
+---
+`separate()`
+
+.pull-left[
+```{r, comment=NA}
+tbl <- tibble(input = c("a", "a b", "a-b c", NA))
+tbl
+```
+]
+
+--
+.pull-right[
+```{r, comment=NA}
+tbl %>% 
+  separate(input, c("Input1", "Input2"))
+```
+]
+---
+ `separate()`
+
+
+```{r, comment=NA}
+tbl <- tibble(input = c("a", "a b", "a-b c", NA)); tbl
+```
+
+--
+
+```r
+tbl %>% separate(input, c("Input1", "Input2", "Input3"))
+```
+
+```{r, comment=NA, echo=FALSE}
+tbl %>% separate(input, c("Input1", "Input2", "Input3"))
+```
+
+---
+
+class: duke-orange, center, middle
+
+# `unite`
+
+---
+# `unite()`
+
+- Unite several columns into one.
+
+.pull-left[
+```{r, comment=NA, warning=FALSE, message=FALSE}
+projects <- tibble(
+  Country = c("USA", "USA", "AUS", "AUS"),
+  State = c("LA", "CO", "VIC", "NSW"),
+  Cost = c(1000, 11000, 20000,30000)
+)
+projects
+```
+]
+
+
+
+
+---
+ `unite()`
+
+
+
+```{r, echo=FALSE, comment=NA}
+projects
+```
+
+```{r, comment=NA, warning=FALSE, message=FALSE}
+
+projects %>% unite("Location", c("State", "Country"))
+```
+
+---
+ `unite()`
+
+```{r, echo=FALSE, comment=NA}
+projects
+```
+
+
+```r
+projects %>% unite("Location", c("State", "Country"),
+*                   sep="-")
+```
+
+```{r, comment=NA, warning=FALSE, message=FALSE, echo=FALSE}
+projects %>% unite("Location", c("State", "Country"),
+                   sep="-")
+```
+
+
+---
+
+
 ---
 background-image:url(dplyr.png)
 background-size:contain
