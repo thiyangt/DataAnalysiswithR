@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Data Wrangling with R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr Thiyanga Talagala" />
+    <script src="datawrangling_iassl_files/header-attrs/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="custom2.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Data Wrangling with R
+### 
+### Dr Thiyanga Talagala
+### SLAAS - 28/ 29 August, 2021
+
+---
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-slide-content {
+    font-size: 35px;
+}
+&lt;/style&gt;
+
+
+&lt;style type="text/css"&gt;
+h1, #TOC&gt;ul&gt;li {
+  color: #006837;
+  font-weight: bold;
+}
+h2, #TOC&gt;ul&gt;ul&gt;li {
+  color:  #006837;
+  #font-family:  "Times";
+  font-weight: bold;
+}
+h3, #TOC&gt;ul&gt;ul&gt;li {
+  color: #ce1256;
+  #font-family:  "Times";
+  font-weight: bold;
+}
+&lt;/style&gt;
+
+
+
+
+## Data Wrangling/ Data Munging
+
+![](dplyrillustration.png)
+
+---
+background-image:url('tidy.png')
+background-size:contain
+
+---
+.pull-left[
+
+#Reshaping data
+
+- pivot_wider
+
+- pivot_longer
+
+- seperate
+
+- unite
+
+]
+
+
+
+
+
+---
+## Tidy Data
+
+&lt;img src="tidy-1.png" width="80%" /&gt;
+
+
+- Each **variable** is placed in its column
+
+- Each **observation** is placed in its own row
+
+- Each **value** is placed in its own cell
+
+
+---
+
+# packages
+
+
+
+```r
+library(tidyverse) #or library(tidyr)
+library(magrittr)
+```
+
+![](tidyr.jpeg) ![](magrittrlogo.png)
+---
+
+# `tidyr` package
+
+
+.pull-left[
+
+&lt;img src="tidyr/tidyrhadley.JPG" alt="knitrhex" width="550"/&gt;
+]
+
+.pull-right[
+Hadley Wickham, Chief Scientist at RStudio  explaining tidyr at WOMBAT organized by Monash University, Australia.
+
+
+Image taken by [Thiyanga S Talagala](https://thiyanga.netlify.app/) at WOMBAT Melbourne, Australia, December-2019
+
+]
+---
+
+background-image: url(tidyr.jpeg)
+background-size: 100px
+background-position: 98% 6%
+
+# tidyr verbs
+.pull-left[
+
+### Main verbs
+
+- `pivot_longer` (gather)
+
+- `pivot_wider` (spread)
+]
+
+
+#### Input and Output 
+
+Main input: `data frame` or `tibble`.
+
+Output: `tibble`
+
+---
+class: duke-orange, center, middle
+
+# `pivot_longer`
+---
+## `pivot_longer()`
+
+- Turns columns into rows.
+
+- From wide format to long format.
+
+&lt;img src="tidyr/pivot_longer.png" width="72%" /&gt;
+
+
+---
+## `pivot_longer()`
+.pull-left[
+
+```r
+dengue &lt;- tibble( dist = c("Colombo", "Gampaha", "Kalutara"), 
+                  '2017' = c(20718, 10258, 34274), 
+                  '2018' = c(16573, 5857, 31647), 
+                  '2019' = c(8395, 3155, 10961)); 
+dengue
+```
+
+```
+# A tibble: 3 × 4
+  dist     `2017` `2018` `2019`
+  &lt;chr&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+1 Colombo   20718  16573   8395
+2 Gampaha   10258   5857   3155
+3 Kalutara  34274  31647  10961
+```
+
+]
+
+.pull-right[
+
+
+```r
+dengue %&gt;% 
+  pivot_longer(2:4,
+               names_to="Year", 
+               values_to = "Dengue counts")
+```
+
+```
+# A tibble: 9 × 3
+  dist     Year  `Dengue counts`
+  &lt;chr&gt;    &lt;chr&gt;           &lt;dbl&gt;
+1 Colombo  2017            20718
+2 Colombo  2018            16573
+3 Colombo  2019             8395
+4 Gampaha  2017            10258
+5 Gampaha  2018             5857
+6 Gampaha  2019             3155
+7 Kalutara 2017            34274
+8 Kalutara 2018            31647
+9 Kalutara 2019            10961
+```
+]
+---
+class: duke-orange, center, middle
+
+# `pivot_wider`
+
+---
+
+# `pivot_wider()` 
+
+- From long to wide format.
+
+![](tidyr/pivot_wider.png)
+
+---
+
+# `pivot_wider()` 
+
+
+
+```r
+Corona &lt;- tibble(
+country = rep(c("USA", "Brazil", "Russia"), each=2),
+status = rep(c("Death", "Recovered"), 3),
+count = c(99381, 451745, 22746, 149911, 3633, 118798))
+```
+
+
+
+```r
+Corona 
+```
+
+```
+# A tibble: 6 × 3
+  country status     count
+  &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt;
+1 USA     Death      99381
+2 USA     Recovered 451745
+3 Brazil  Death      22746
+4 Brazil  Recovered 149911
+5 Russia  Death       3633
+6 Russia  Recovered 118798
+```
+
+---
+
+# `pivot_wider()` 
+
+.pull-left[
+
+```r
+Corona 
+```
+
+```
+# A tibble: 6 × 3
+  country status     count
+  &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt;
+1 USA     Death      99381
+2 USA     Recovered 451745
+3 Brazil  Death      22746
+4 Brazil  Recovered 149911
+5 Russia  Death       3633
+6 Russia  Recovered 118798
+```
+]
+
+.pull-right[
+
+
+```r
+Corona %&gt;% 
+  pivot_wider(names_from=status, 
+              values_from=count)
+```
+
+```
+# A tibble: 3 × 3
+  country Death Recovered
+  &lt;chr&gt;   &lt;dbl&gt;     &lt;dbl&gt;
+1 USA     99381    451745
+2 Brazil  22746    149911
+3 Russia   3633    118798
+```
+
+
+]
+
+
+---
+
+# Assign a name:
+
+```r
+*corona_wide_format &lt;- Corona %&gt;% 
+  pivot_wider(names_from=status, 
+  values_from=count)
+*corona_wide_format
+
+```
+
+
+
+```
+# A tibble: 3 × 3
+  country Death Recovered
+  &lt;chr&gt;   &lt;dbl&gt;     &lt;dbl&gt;
+1 USA     99381    451745
+2 Brazil  22746    149911
+3 Russia   3633    118798
+```
+
+---
+
+# `pivot_longer` vs `pivot_wider`
+
+![](tidyr/longer_wider.png)
+
+class: duke-orange, center, middle
+
+# `separate`
+---
+
+# `separate()`
+
+- Separate one column into several columns.
+
+
+
+```r
+Melbourne &lt;- 
+  tibble(Date = c("10-5-2020", "11-5-2020", "12-5-2020","13-5-2020"),
+         Tmin = c(5, 9, 9, 7), Tmax = c(18, 16, 16, 17),
+         Rainfall= c(30, 40, 10, 5)); Melbourne
+```
+
+```
+# A tibble: 4 × 4
+  Date       Tmin  Tmax Rainfall
+  &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
+1 10-5-2020     5    18       30
+2 11-5-2020     9    16       40
+3 12-5-2020     9    16       10
+4 13-5-2020     7    17        5
+```
+
+---
+
+`separate()`: Separate one column into several columns.
+
+
+
+```
+# A tibble: 4 × 4
+  Date       Tmin  Tmax Rainfall
+  &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
+1 10-5-2020     5    18       30
+2 11-5-2020     9    16       40
+3 12-5-2020     9    16       10
+4 13-5-2020     7    17        5
+```
+
+
+
+
+
+```r
+Melbourne %&gt;% separate(Date, into=c("day", "month", "year"), sep="-")
+```
+
+```
+# A tibble: 4 × 6
+  day   month year   Tmin  Tmax Rainfall
+  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
+1 10    5     2020      5    18       30
+2 11    5     2020      9    16       40
+3 12    5     2020      9    16       10
+4 13    5     2020      7    17        5
+```
+
+
+---
+
+ `separate()`
+
+
+
+```r
+df &lt;- data.frame(x = c(NA, "a.b", "a.d", "b.c"))
+df
+```
+
+```
+     x
+1 &lt;NA&gt;
+2  a.b
+3  a.d
+4  b.c
+```
+
+```r
+df %&gt;% separate(x, c("Text1", "Text2"))
+```
+
+```
+  Text1 Text2
+1  &lt;NA&gt;  &lt;NA&gt;
+2     a     b
+3     a     d
+4     b     c
+```
+
+---
+`separate()`
+
+.pull-left[
+
+```r
+tbl &lt;- tibble(input = c("a", "a b", "a-b c", NA))
+tbl
+```
+
+```
+# A tibble: 4 × 1
+  input
+  &lt;chr&gt;
+1 a    
+2 a b  
+3 a-b c
+4 &lt;NA&gt; 
+```
+]
+
+--
+.pull-right[
+
+```r
+tbl %&gt;% 
+  separate(input, c("Input1", "Input2"))
+```
+
+```
+# A tibble: 4 × 2
+  Input1 Input2
+  &lt;chr&gt;  &lt;chr&gt; 
+1 a      &lt;NA&gt;  
+2 a      b     
+3 a      b     
+4 &lt;NA&gt;   &lt;NA&gt;  
+```
+]
+---
+ `separate()`
+
+
+
+```r
+tbl &lt;- tibble(input = c("a", "a b", "a-b c", NA)); tbl
+```
+
+```
+# A tibble: 4 × 1
+  input
+  &lt;chr&gt;
+1 a    
+2 a b  
+3 a-b c
+4 &lt;NA&gt; 
+```
+
+--
+
+```r
+tbl %&gt;% separate(input, c("Input1", "Input2", "Input3"))
+```
+
+
+```
+# A tibble: 4 × 3
+  Input1 Input2 Input3
+  &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt; 
+1 a      &lt;NA&gt;   &lt;NA&gt;  
+2 a      b      &lt;NA&gt;  
+3 a      b      c     
+4 &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;  
+```
+
+---
+
+class: duke-orange, center, middle
+
+# `unite`
+
+---
+# `unite()`
+
+- Unite several columns into one.
+
+.pull-left[
+
+```r
+projects &lt;- tibble(
+  Country = c("USA", "USA", "AUS", "AUS"),
+  State = c("LA", "CO", "VIC", "NSW"),
+  Cost = c(1000, 11000, 20000,30000)
+)
+projects
+```
+
+```
+# A tibble: 4 × 3
+  Country State  Cost
+  &lt;chr&gt;   &lt;chr&gt; &lt;dbl&gt;
+1 USA     LA     1000
+2 USA     CO    11000
+3 AUS     VIC   20000
+4 AUS     NSW   30000
+```
+]
+
+
+
+
+---
+ `unite()`
+
+
+
+
+```
+# A tibble: 4 × 3
+  Country State  Cost
+  &lt;chr&gt;   &lt;chr&gt; &lt;dbl&gt;
+1 USA     LA     1000
+2 USA     CO    11000
+3 AUS     VIC   20000
+4 AUS     NSW   30000
+```
+
+
+```r
+projects %&gt;% unite("Location", c("State", "Country"))
+```
+
+```
+# A tibble: 4 × 2
+  Location  Cost
+  &lt;chr&gt;    &lt;dbl&gt;
+1 LA_USA    1000
+2 CO_USA   11000
+3 VIC_AUS  20000
+4 NSW_AUS  30000
+```
+
+---
+ `unite()`
+
+
+```
+# A tibble: 4 × 3
+  Country State  Cost
+  &lt;chr&gt;   &lt;chr&gt; &lt;dbl&gt;
+1 USA     LA     1000
+2 USA     CO    11000
+3 AUS     VIC   20000
+4 AUS     NSW   30000
+```
+
+
+```r
+projects %&gt;% unite("Location", c("State", "Country"),
+*                   sep="-")
+```
+
+
+```
+# A tibble: 4 × 2
+  Location  Cost
+  &lt;chr&gt;    &lt;dbl&gt;
+1 LA-USA    1000
+2 CO-USA   11000
+3 VIC-AUS  20000
+4 NSW-AUS  30000
+```
+
+
+---
+
+
+---
+background-image:url(dplyr.png)
+background-size:contain
+
+
+---
+
+.pull-left[
+
+
+- `filter`
+
+- `select`
+
+- `mutate`
+
+- `summarise`
+
+- `arrange`
+
+- `group_by`
+
+- `rename`
+
+]
+
+
+
+---
+background-image:url(dplyrillustration.png)
+background-size: contain
+
+---
+# packages
+
+
+
+```r
+library(tidyverse) # To obtain dplyr
+library(magrittr)
+```
+
+&lt;img src="dplyr2.png" alt="knitrhex" width="250"/&gt; &lt;img src="magrittrlogo.png" alt="rmarkdown" width="250"/&gt;
+
+---
+
+# Dataset
+
+
+```r
+library(palmerpenguins)
+data(penguins)
+head(penguins)
+```
+
+```
+# A tibble: 6 × 8
+  species island bill_length_mm bill_depth_mm flipper_length_… body_mass_g sex  
+  &lt;fct&gt;   &lt;fct&gt;           &lt;dbl&gt;         &lt;dbl&gt;            &lt;int&gt;       &lt;int&gt; &lt;fct&gt;
+1 Adelie  Torge…           39.1          18.7              181        3750 male 
+2 Adelie  Torge…           39.5          17.4              186        3800 fema…
+3 Adelie  Torge…           40.3          18                195        3250 fema…
+4 Adelie  Torge…           NA            NA                 NA          NA &lt;NA&gt; 
+5 Adelie  Torge…           36.7          19.3              193        3450 fema…
+6 Adelie  Torge…           39.3          20.6              190        3650 male 
+# … with 1 more variable: year &lt;int&gt;
+```
+
+---
+background-image: url(penguins.png)
+background-size: contain
+
+---
+
+```r
+summary(penguins)
+```
+
+```
+      species          island    bill_length_mm  bill_depth_mm  
+ Adelie   :152   Biscoe   :168   Min.   :32.10   Min.   :13.10  
+ Chinstrap: 68   Dream    :124   1st Qu.:39.23   1st Qu.:15.60  
+ Gentoo   :124   Torgersen: 52   Median :44.45   Median :17.30  
+                                 Mean   :43.92   Mean   :17.15  
+                                 3rd Qu.:48.50   3rd Qu.:18.70  
+                                 Max.   :59.60   Max.   :21.50  
+                                 NA's   :2       NA's   :2      
+ flipper_length_mm  body_mass_g       sex           year     
+ Min.   :172.0     Min.   :2700   female:165   Min.   :2007  
+ 1st Qu.:190.0     1st Qu.:3550   male  :168   1st Qu.:2007  
+ Median :197.0     Median :4050   NA's  : 11   Median :2008  
+ Mean   :200.9     Mean   :4202                Mean   :2008  
+ 3rd Qu.:213.0     3rd Qu.:4750                3rd Qu.:2009  
+ Max.   :231.0     Max.   :6300                Max.   :2009  
+ NA's   :2         NA's   :2                                 
+```
+---
+background-image: url(dplyr2.png)
+background-size: 100px
+background-position: 98% 6%
+
+
+# `dplyr` verbs
+
+.pull-left[
+- `filter`
+
+- `select`
+
+- `mutate`
+
+- `summarise`
+]
+
+.pull-right[
+
+- `arrange`
+
+- `group_by`
+
+- `rename`
+
+]
+
+
+---
+
+
+
+background-image: url(dplyr2.png)
+background-size: 70px
+background-position: 98% 6%
+
+
+# `filter`: Picks observations by their values.
+
+- Takes logical expressions and returns the rows for which all are `TRUE`.
+
+
+```r
+filter(penguins, flipper_length_mm &gt; 180)
+```
+
+```
+# A tibble: 329 × 8
+   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7               181        3750
+ 2 Adelie  Torgersen           39.5          17.4               186        3800
+ 3 Adelie  Torgersen           40.3          18                 195        3250
+ 4 Adelie  Torgersen           36.7          19.3               193        3450
+ 5 Adelie  Torgersen           39.3          20.6               190        3650
+ 6 Adelie  Torgersen           38.9          17.8               181        3625
+ 7 Adelie  Torgersen           39.2          19.6               195        4675
+ 8 Adelie  Torgersen           34.1          18.1               193        3475
+ 9 Adelie  Torgersen           42            20.2               190        4250
+10 Adelie  Torgersen           37.8          17.1               186        3300
+# … with 319 more rows, and 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;
+```
+
+---
+background-image: url(dplyr2.png)
+background-size: 70px
+background-position: 98% 6%
+
+# `filter` (cont)
+
+
+
+```r
+# penguins %&gt;% filter(species == "Chinstrap")
+filter(penguins,  species == "Chinstrap")
+```
+
+```
+# A tibble: 68 × 8
+   species   island bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+   &lt;fct&gt;     &lt;fct&gt;           &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+ 1 Chinstrap Dream            46.5          17.9               192        3500
+ 2 Chinstrap Dream            50            19.5               196        3900
+ 3 Chinstrap Dream            51.3          19.2               193        3650
+ 4 Chinstrap Dream            45.4          18.7               188        3525
+ 5 Chinstrap Dream            52.7          19.8               197        3725
+ 6 Chinstrap Dream            45.2          17.8               198        3950
+ 7 Chinstrap Dream            46.1          18.2               178        3250
+ 8 Chinstrap Dream            51.3          18.2               197        3750
+ 9 Chinstrap Dream            46            18.9               195        4150
+10 Chinstrap Dream            51.3          19.9               198        3700
+# … with 58 more rows, and 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;
+```
+
+
+---
+background-image: url(dplyr2.png)
+background-size: 70px
+background-position: 98% 6%
+
+# `select`: Picks variables by their names.
+
+
+
+```r
+head(penguins, 3)
+```
+
+```
+# A tibble: 3 × 8
+  species island bill_length_mm bill_depth_mm flipper_length_… body_mass_g sex  
+  &lt;fct&gt;   &lt;fct&gt;           &lt;dbl&gt;         &lt;dbl&gt;            &lt;int&gt;       &lt;int&gt; &lt;fct&gt;
+1 Adelie  Torge…           39.1          18.7              181        3750 male 
+2 Adelie  Torge…           39.5          17.4              186        3800 fema…
+3 Adelie  Torge…           40.3          18                195        3250 fema…
+# … with 1 more variable: year &lt;int&gt;
+```
+
+
+```r
+select(penguins, bill_length_mm:body_mass_g)
+```
+
+```
+# A tibble: 344 × 4
+   bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+            &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+ 1           39.1          18.7               181        3750
+ 2           39.5          17.4               186        3800
+ 3           40.3          18                 195        3250
+ 4           NA            NA                  NA          NA
+ 5           36.7          19.3               193        3450
+ 6           39.3          20.6               190        3650
+ 7           38.9          17.8               181        3625
+ 8           39.2          19.6               195        4675
+ 9           34.1          18.1               193        3475
+10           42            20.2               190        4250
+# … with 334 more rows
+```
+
+---
+background-image: url(dplyr2.png)
+background-size: 70px
+background-position: 98% 6%
+
+# `select` (cont.)
+
+
+
+```r
+head(penguins, 3)
+```
+
+```
+# A tibble: 3 × 8
+  species island bill_length_mm bill_depth_mm flipper_length_… body_mass_g sex  
+  &lt;fct&gt;   &lt;fct&gt;           &lt;dbl&gt;         &lt;dbl&gt;            &lt;int&gt;       &lt;int&gt; &lt;fct&gt;
+1 Adelie  Torge…           39.1          18.7              181        3750 male 
+2 Adelie  Torge…           39.5          17.4              186        3800 fema…
+3 Adelie  Torge…           40.3          18                195        3250 fema…
+# … with 1 more variable: year &lt;int&gt;
+```
+
+
+```r
+select(penguins, species, body_mass_g)
+```
+
+```
+# A tibble: 344 × 2
+   species body_mass_g
+   &lt;fct&gt;         &lt;int&gt;
+ 1 Adelie         3750
+ 2 Adelie         3800
+ 3 Adelie         3250
+ 4 Adelie           NA
+ 5 Adelie         3450
+ 6 Adelie         3650
+ 7 Adelie         3625
+ 8 Adelie         4675
+ 9 Adelie         3475
+10 Adelie         4250
+# … with 334 more rows
+```
+
+---
+background-image: url(dplyr2.png)
+background-size: 70px
+background-position: 98% 6%
+
+# `select` (cont.)
+
+
+
+```r
+head(penguins, 3)
+```
+
+```
+# A tibble: 3 × 8
+  species island bill_length_mm bill_depth_mm flipper_length_… body_mass_g sex  
+  &lt;fct&gt;   &lt;fct&gt;           &lt;dbl&gt;         &lt;dbl&gt;            &lt;int&gt;       &lt;int&gt; &lt;fct&gt;
+1 Adelie  Torge…           39.1          18.7              181        3750 male 
+2 Adelie  Torge…           39.5          17.4              186        3800 fema…
+3 Adelie  Torge…           40.3          18                195        3250 fema…
+# … with 1 more variable: year &lt;int&gt;
+```
+
+
+```r
+select(penguins, -c(island, year))
+```
+
+```
+# A tibble: 344 × 6
+   species bill_length_mm bill_depth_mm flipper_length_mm body_mass_g sex   
+   &lt;fct&gt;            &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt; &lt;fct&gt; 
+ 1 Adelie            39.1          18.7               181        3750 male  
+ 2 Adelie            39.5          17.4               186        3800 female
+ 3 Adelie            40.3          18                 195        3250 female
+ 4 Adelie            NA            NA                  NA          NA &lt;NA&gt;  
+ 5 Adelie            36.7          19.3               193        3450 female
+ 6 Adelie            39.3          20.6               190        3650 male  
+ 7 Adelie            38.9          17.8               181        3625 female
+ 8 Adelie            39.2          19.6               195        4675 male  
+ 9 Adelie            34.1          18.1               193        3475 &lt;NA&gt;  
+10 Adelie            42            20.2               190        4250 &lt;NA&gt;  
+# … with 334 more rows
+```
+
+
+
+---
+background-image: url(dplyr2.png)
+background-size: 70px
+background-position: 98% 6%
+
+# `mutate`
+
+- Creates new variables with functions of existing variables
+
+
+```r
+penguins &lt;- penguins %&gt;% mutate(BMI = body_mass_g / 1000)
+penguins
+```
+
+```
+# A tibble: 344 × 9
+   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7               181        3750
+ 2 Adelie  Torgersen           39.5          17.4               186        3800
+ 3 Adelie  Torgersen           40.3          18                 195        3250
+ 4 Adelie  Torgersen           NA            NA                  NA          NA
+ 5 Adelie  Torgersen           36.7          19.3               193        3450
+ 6 Adelie  Torgersen           39.3          20.6               190        3650
+ 7 Adelie  Torgersen           38.9          17.8               181        3625
+ 8 Adelie  Torgersen           39.2          19.6               195        4675
+ 9 Adelie  Torgersen           34.1          18.1               193        3475
+10 Adelie  Torgersen           42            20.2               190        4250
+# … with 334 more rows, and 3 more variables: sex &lt;fct&gt;, year &lt;int&gt;, BMI &lt;dbl&gt;
+```
+
+---
+background-image: url(dplyr2.png)
+background-size: 70px
+background-position: 98% 6%
+
+# `summarise`(British) or `summarize` (US)
+
+- Collapse many values down to a single summary
+
+
+```r
+penguins %&gt;%
+  summarise(
+    bill_length_mm_mean=mean(bill_length_mm),
+    bill_length_mm_median=median(bill_length_mm),
+    BMI_mean=mean(BMI))
+```
+
+```
+# A tibble: 1 × 3
+  bill_length_mm_mean bill_length_mm_median BMI_mean
+                &lt;dbl&gt;                 &lt;dbl&gt;    &lt;dbl&gt;
+1                  NA                    NA       NA
+```
+
+---
+background-image: url(dplyr2.png)
+background-size: 70px
+background-position: 98% 6%
+
+# `summarise`(British) or `summarize` (US)
+
+- Collapse many values down to a single summary
+
+
+```r
+penguins %&gt;%
+  summarise(
+    bill_length_mm_mean=mean(bill_length_mm, na.rm=TRUE),
+    bill_length_mm_median=median(bill_length_mm, na.rm=TRUE),
+    BMI_mean=mean(BMI, na.rm=TRUE))
+```
+
+```
+# A tibble: 1 × 3
+  bill_length_mm_mean bill_length_mm_median BMI_mean
+                &lt;dbl&gt;                 &lt;dbl&gt;    &lt;dbl&gt;
+1                43.9                  44.4     4.20
+```
+
+
+---
+
+background-image: url(dplyr2.png)
+background-size: 70px
+background-position: 98% 6%
+
+# `arrange`
+
+- Reorder the rows
+
+
+```r
+arrange(penguins, desc(body_mass_g))
+```
+
+```
+# A tibble: 344 × 9
+   species island bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+   &lt;fct&gt;   &lt;fct&gt;           &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+ 1 Gentoo  Biscoe           49.2          15.2               221        6300
+ 2 Gentoo  Biscoe           59.6          17                 230        6050
+ 3 Gentoo  Biscoe           51.1          16.3               220        6000
+ 4 Gentoo  Biscoe           48.8          16.2               222        6000
+ 5 Gentoo  Biscoe           45.2          16.4               223        5950
+ 6 Gentoo  Biscoe           49.8          15.9               229        5950
+ 7 Gentoo  Biscoe           48.4          14.6               213        5850
+ 8 Gentoo  Biscoe           49.3          15.7               217        5850
+ 9 Gentoo  Biscoe           55.1          16                 230        5850
+10 Gentoo  Biscoe           49.5          16.2               229        5800
+# … with 334 more rows, and 3 more variables: sex &lt;fct&gt;, year &lt;int&gt;, BMI &lt;dbl&gt;
+```
+
+
+---
+
+background-image: url(dplyr2.png)
+background-size: 70px
+background-position: 98% 6%
+
+# `group_by`
+
+- Takes an existing tibble and converts it into a grouped tibble where operations are performed "by group". ungroup() removes grouping.
+
+
+
+
+---
+
+# `group_by`
+
+
+```r
+penguins_grouped &lt;- penguins %&gt;% group_by(species)
+penguins_grouped
+```
+
+```
+# A tibble: 344 × 9
+# Groups:   species [3]
+   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7               181        3750
+ 2 Adelie  Torgersen           39.5          17.4               186        3800
+ 3 Adelie  Torgersen           40.3          18                 195        3250
+ 4 Adelie  Torgersen           NA            NA                  NA          NA
+ 5 Adelie  Torgersen           36.7          19.3               193        3450
+ 6 Adelie  Torgersen           39.3          20.6               190        3650
+ 7 Adelie  Torgersen           38.9          17.8               181        3625
+ 8 Adelie  Torgersen           39.2          19.6               195        4675
+ 9 Adelie  Torgersen           34.1          18.1               193        3475
+10 Adelie  Torgersen           42            20.2               190        4250
+# … with 334 more rows, and 3 more variables: sex &lt;fct&gt;, year &lt;int&gt;, BMI &lt;dbl&gt;
+```
+
+---
+background-image: url(dplyr2.png)
+background-size: 70px
+background-position: 98% 6%
+
+# `group_by` (cont.)
+
+
+
+```r
+penguins %&gt;% summarise(BMI_mean=mean(BMI, na.rm=TRUE))
+```
+
+```
+# A tibble: 1 × 1
+  BMI_mean
+     &lt;dbl&gt;
+1     4.20
+```
+
+
+
+
+```r
+penguins_grouped %&gt;% summarise(BMI_mean=mean(BMI, na.rm=TRUE))
+```
+
+```
+# A tibble: 3 × 2
+  species   BMI_mean
+  &lt;fct&gt;        &lt;dbl&gt;
+1 Adelie        3.70
+2 Chinstrap     3.73
+3 Gentoo        5.08
+```
+
+
+---
+background-image: url(dplyr2.png)
+background-size: 70px
+background-position: 98% 6%
+
+# `rename`
+
+- Rename variables
+
+
+```r
+head(penguins, 3)
+```
+
+```
+# A tibble: 3 × 9
+  species island bill_length_mm bill_depth_mm flipper_length_… body_mass_g sex  
+  &lt;fct&gt;   &lt;fct&gt;           &lt;dbl&gt;         &lt;dbl&gt;            &lt;int&gt;       &lt;int&gt; &lt;fct&gt;
+1 Adelie  Torge…           39.1          18.7              181        3750 male 
+2 Adelie  Torge…           39.5          17.4              186        3800 fema…
+3 Adelie  Torge…           40.3          18                195        3250 fema…
+# … with 2 more variables: year &lt;int&gt;, BMI &lt;dbl&gt;
+```
+
+---
+# `rename`
+
+
+```r
+penguins &lt;- rename(penguins, `Bill length`=bill_length_mm,
+       Location=island) # new_name = old_name
+penguins
+```
+
+```
+# A tibble: 344 × 9
+   species Location  `Bill length` bill_depth_mm flipper_length_mm body_mass_g
+   &lt;fct&gt;   &lt;fct&gt;             &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+ 1 Adelie  Torgersen          39.1          18.7               181        3750
+ 2 Adelie  Torgersen          39.5          17.4               186        3800
+ 3 Adelie  Torgersen          40.3          18                 195        3250
+ 4 Adelie  Torgersen          NA            NA                  NA          NA
+ 5 Adelie  Torgersen          36.7          19.3               193        3450
+ 6 Adelie  Torgersen          39.3          20.6               190        3650
+ 7 Adelie  Torgersen          38.9          17.8               181        3625
+ 8 Adelie  Torgersen          39.2          19.6               195        4675
+ 9 Adelie  Torgersen          34.1          18.1               193        3475
+10 Adelie  Torgersen          42            20.2               190        4250
+# … with 334 more rows, and 3 more variables: sex &lt;fct&gt;, year &lt;int&gt;, BMI &lt;dbl&gt;
+```
+
+---
+background-image: url(dplyr2.png)
+background-size: 70px
+background-position: 98% 6%
+
+# Combine multiple operations
+
+
+
+```r
+penguins %&gt;%
+filter(species == 'Gentoo') %&gt;% head(2)
+```
+
+```
+# A tibble: 2 × 9
+  species Location `Bill length` bill_depth_mm flipper_length_mm body_mass_g
+  &lt;fct&gt;   &lt;fct&gt;            &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+1 Gentoo  Biscoe            46.1          13.2               211        4500
+2 Gentoo  Biscoe            50            16.3               230        5700
+# … with 3 more variables: sex &lt;fct&gt;, year &lt;int&gt;, BMI &lt;dbl&gt;
+```
+
+
+
+```r
+penguins %&gt;%
+filter(species == 'Gentoo') %&gt;% summarise(BMI_mean=mean(BMI, na.rm=TRUE))
+```
+
+```
+# A tibble: 1 × 1
+  BMI_mean
+     &lt;dbl&gt;
+1     5.08
+```
+
+---
+# Combine multiple operations
+
+
+```r
+penguins %&gt;%
+filter(species == 'Adelie') %&gt;%
+group_by(Location) %&gt;%
+filter(bill_depth_mm &gt; 20) %&gt;%
+arrange(desc(flipper_length_mm))
+```
+
+```
+# A tibble: 14 × 9
+# Groups:   Location [3]
+   species Location  `Bill length` bill_depth_mm flipper_length_mm body_mass_g
+   &lt;fct&gt;   &lt;fct&gt;             &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+ 1 Adelie  Dream              40.2          20.1               200        3975
+ 2 Adelie  Torgersen          37.3          20.5               199        3775
+ 3 Adelie  Torgersen          34.6          21.1               198        4400
+ 4 Adelie  Torgersen          42.5          20.7               197        4500
+ 5 Adelie  Dream              39.2          21.1               196        4150
+ 6 Adelie  Biscoe             41.3          21.1               195        4400
+ 7 Adelie  Torgersen          46            21.5               194        4200
+ 8 Adelie  Dream              41.3          20.3               194        3550
+ 9 Adelie  Torgersen          38.6          21.2               191        3800
+10 Adelie  Dream              42.3          21.2               191        4150
+11 Adelie  Biscoe             45.6          20.3               191        4600
+12 Adelie  Biscoe             39.6          20.7               191        3900
+13 Adelie  Torgersen          39.3          20.6               190        3650
+14 Adelie  Torgersen          42            20.2               190        4250
+# … with 3 more variables: sex &lt;fct&gt;, year &lt;int&gt;, BMI &lt;dbl&gt;
+```
+
+---
+class: center, middle
+
+
+All rights reserved by [Thiyanga S. Talagala](https://thiyanga.netlify.com/) and [Priyanga D Talagala](https://prital.netlify.app/)
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"slideNumberFormat": "%current%",
+"highlightStyle": "github",
+"highlightLines": true,
+"ratio": "16:9",
+"countIncrementalSlides": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

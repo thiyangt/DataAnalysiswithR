@@ -10,4 +10,4 @@ comments: false
 
 ## Resourses
 
-Slides: [Click here](/slides/7dataimport_export/7_import_export.html)
+Slides: [Click here](/slides/7dataimport_export/7_import_export_iassl.html)

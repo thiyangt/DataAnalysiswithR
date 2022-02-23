@@ -9,4 +9,4 @@ comments: false
 
 ## Resourses
 
-Slides: [Click here](/slides/datawrangling/datawrangling.html)
+Slides: [Click here](/slides/datawrangling/datawrangling_iassl.html)

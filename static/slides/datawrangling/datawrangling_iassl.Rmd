@@ -1,0 +1,764 @@
+---
+title: "Data Wrangling with R"
+subtitle: ""  
+author: 
+  - ""
+  - "Dr Thiyanga Talagala"
+date: 'SLAAS - 28/ 29 August, 2021'
+output:
+  xaringan::moon_reader:
+    css: [xaringan-themer.css, custom2.css]
+    nature:
+      slideNumberFormat: "%current%"
+      highlightStyle: github
+      highlightLines: true
+      ratio: 16:9
+      countIncrementalSlides: true
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(
+  fig.width=9, fig.height=3.5, fig.retina=3,
+  out.width = "100%",
+  cache = FALSE,
+  echo = TRUE,
+  message = FALSE, 
+  warning = FALSE,
+  fig.show = TRUE,
+  hiline = TRUE
+)
+```
+
+<style type="text/css">
+.remark-slide-content {
+    font-size: 35px;
+}
+</style>
+
+
+```{css, echo = FALSE}
+h1, #TOC>ul>li {
+  color: #006837;
+  font-weight: bold;
+}
+h2, #TOC>ul>ul>li {
+  color:  #006837;
+  #font-family:  "Times";
+  font-weight: bold;
+}
+h3, #TOC>ul>ul>li {
+  color: #ce1256;
+  #font-family:  "Times";
+  font-weight: bold;
+}
+```
+
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+#style_duo_accent(
+#  primary_color = "#1381B0",
+#  secondary_color = "#FF961C",
+#  inverse_header_color = "#FFFFFF"
+#)
+style_solarized_light(text_font_google   = google_font("Josefin Sans", "400", "400i", "800i", "800"))
+#style_mono_light(
+#  base_color = "#1c5253",
+#  header_font_google = google_font("Josefin Sans"),
+#  text_font_google   = google_font("Josefin Sans", "400", "400i", "800i", "800"),
+#  code_font_google   = google_font("Fira Mono")
+#)
+```
+
+
+## Data Wrangling/ Data Munging
+
+![](dplyrillustration.png)
+
+---
+background-image:url('tidy.png')
+background-size:contain
+
+---
+.pull-left[
+
+#Reshaping data
+
+- pivot_wider
+
+- pivot_longer
+
+- seperate
+
+- unite
+
+]
+
+
+
+
+
+---
+## Tidy Data
+
+```{r, comment=NA, echo=FALSE, out.width="80%"}
+knitr::include_graphics("tidy-1.png")
+```
+
+
+- Each **variable** is placed in its column
+
+- Each **observation** is placed in its own row
+
+- Each **value** is placed in its own cell
+
+
+---
+
+# packages
+
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+library(tidyverse) #or library(tidyr)
+library(magrittr)
+
+```
+
+![](tidyr.jpeg) ![](magrittrlogo.png)
+---
+
+# `tidyr` package
+
+
+.pull-left[
+
+<img src="tidyr/tidyrhadley.JPG" alt="knitrhex" width="550"/>
+]
+
+.pull-right[
+Hadley Wickham, Chief Scientist at RStudio  explaining tidyr at WOMBAT organized by Monash University, Australia.
+
+
+Image taken by [Thiyanga S Talagala](https://thiyanga.netlify.app/) at WOMBAT Melbourne, Australia, December-2019
+
+]
+---
+
+background-image: url(tidyr.jpeg)
+background-size: 100px
+background-position: 98% 6%
+
+# tidyr verbs
+.pull-left[
+
+### Main verbs
+
+- `pivot_longer` (gather)
+
+- `pivot_wider` (spread)
+]
+
+
+#### Input and Output 
+
+Main input: `data frame` or `tibble`.
+
+Output: `tibble`
+
+---
+class: duke-orange, center, middle
+
+# `pivot_longer`
+---
+## `pivot_longer()`
+
+- Turns columns into rows.
+
+- From wide format to long format.
+
+```{r, comment=NA, echo=FALSE, out.width="72%"}
+knitr::include_graphics("tidyr/pivot_longer.png")
+```
+
+
+---
+## `pivot_longer()`
+.pull-left[
+```{r, comment=NA, warning=FALSE, message=FALSE}
+dengue <- tibble( dist = c("Colombo", "Gampaha", "Kalutara"), 
+                  '2017' = c(20718, 10258, 34274), 
+                  '2018' = c(16573, 5857, 31647), 
+                  '2019' = c(8395, 3155, 10961)); 
+dengue
+```
+
+]
+
+.pull-right[
+
+```{r, comment=NA, warning=FALSE, message=FALSE}
+dengue %>% 
+  pivot_longer(2:4,
+               names_to="Year", 
+               values_to = "Dengue counts")
+```
+]
+---
+class: duke-orange, center, middle
+
+# `pivot_wider`
+
+---
+
+# `pivot_wider()` 
+
+- From long to wide format.
+
+![](tidyr/pivot_wider.png)
+
+---
+
+# `pivot_wider()` 
+
+
+```{r, comment=NA}
+Corona <- tibble(
+country = rep(c("USA", "Brazil", "Russia"), each=2),
+status = rep(c("Death", "Recovered"), 3),
+count = c(99381, 451745, 22746, 149911, 3633, 118798))
+```
+
+
+```{r, comment=NA}
+Corona 
+```
+
+---
+
+# `pivot_wider()` 
+
+.pull-left[
+```{r, comment=NA}
+Corona 
+```
+]
+
+.pull-right[
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+Corona %>% 
+  pivot_wider(names_from=status, 
+              values_from=count)
+
+```
+
+
+]
+
+
+---
+
+# Assign a name:
+
+```r
+*corona_wide_format <- Corona %>% 
+  pivot_wider(names_from=status, 
+  values_from=count)
+*corona_wide_format
+
+```
+
+
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+corona_wide_format <- Corona %>% 
+  pivot_wider(names_from=status, 
+              values_from=count)
+corona_wide_format 
+
+```
+
+---
+
+# `pivot_longer` vs `pivot_wider`
+
+![](tidyr/longer_wider.png)
+
+class: duke-orange, center, middle
+
+# `separate`
+---
+
+# `separate()`
+
+- Separate one column into several columns.
+
+
+```{r, comment=NA, message=FALSE}
+Melbourne <- 
+  tibble(Date = c("10-5-2020", "11-5-2020", "12-5-2020","13-5-2020"),
+         Tmin = c(5, 9, 9, 7), Tmax = c(18, 16, 16, 17),
+         Rainfall= c(30, 40, 10, 5)); Melbourne
+```
+
+---
+
+`separate()`: Separate one column into several columns.
+
+
+```{r, comment=NA, message=FALSE, echo=FALSE}
+Melbourne <- 
+  tibble(Date = c("10-5-2020", "11-5-2020", "12-5-2020","13-5-2020"),
+         Tmin = c(5, 9, 9, 7), Tmax = c(18, 16, 16, 17),
+         Rainfall= c(30, 40, 10, 5)); Melbourne
+```
+
+
+
+
+```{r, comment=NA, message=FALSE}
+Melbourne %>% separate(Date, into=c("day", "month", "year"), sep="-")
+```
+
+
+---
+
+ `separate()`
+
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+df <- data.frame(x = c(NA, "a.b", "a.d", "b.c"))
+df
+df %>% separate(x, c("Text1", "Text2"))
+```
+
+---
+`separate()`
+
+.pull-left[
+```{r, comment=NA}
+tbl <- tibble(input = c("a", "a b", "a-b c", NA))
+tbl
+```
+]
+
+--
+.pull-right[
+```{r, comment=NA}
+tbl %>% 
+  separate(input, c("Input1", "Input2"))
+```
+]
+---
+ `separate()`
+
+
+```{r, comment=NA}
+tbl <- tibble(input = c("a", "a b", "a-b c", NA)); tbl
+```
+
+--
+
+```r
+tbl %>% separate(input, c("Input1", "Input2", "Input3"))
+```
+
+```{r, comment=NA, echo=FALSE}
+tbl %>% separate(input, c("Input1", "Input2", "Input3"))
+```
+
+---
+
+class: duke-orange, center, middle
+
+# `unite`
+
+---
+# `unite()`
+
+- Unite several columns into one.
+
+.pull-left[
+```{r, comment=NA, warning=FALSE, message=FALSE}
+projects <- tibble(
+  Country = c("USA", "USA", "AUS", "AUS"),
+  State = c("LA", "CO", "VIC", "NSW"),
+  Cost = c(1000, 11000, 20000,30000)
+)
+projects
+```
+]
+
+
+
+
+---
+ `unite()`
+
+
+
+```{r, echo=FALSE, comment=NA}
+projects
+```
+
+```{r, comment=NA, warning=FALSE, message=FALSE}
+
+projects %>% unite("Location", c("State", "Country"))
+```
+
+---
+ `unite()`
+
+```{r, echo=FALSE, comment=NA}
+projects
+```
+
+
+```r
+projects %>% unite("Location", c("State", "Country"),
+*                   sep="-")
+```
+
+```{r, comment=NA, warning=FALSE, message=FALSE, echo=FALSE}
+projects %>% unite("Location", c("State", "Country"),
+                   sep="-")
+```
+
+
+---
+
+
+---
+background-image:url(dplyr.png)
+background-size:contain
+
+
+---
+
+.pull-left[
+
+
+- `filter`
+
+- `select`
+
+- `mutate`
+
+- `summarise`
+
+- `arrange`
+
+- `group_by`
+
+- `rename`
+
+]
+
+
+
+---
+background-image:url(dplyrillustration.png)
+background-size: contain
+
+---
+# packages
+
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+library(tidyverse) # To obtain dplyr
+library(magrittr)
+```
+
+<img src="dplyr2.png" alt="knitrhex" width="250"/> <img src="magrittrlogo.png" alt="rmarkdown" width="250"/>
+
+---
+
+# Dataset
+
+```{r, comment=NA, message=FALSE}
+library(palmerpenguins)
+data(penguins)
+head(penguins)
+
+```
+
+---
+background-image: url(penguins.png)
+background-size: contain
+
+---
+```{r, comment=NA, message=FALSE}
+summary(penguins)
+
+```
+---
+background-image: url(dplyr2.png)
+background-size: 100px
+background-position: 98% 6%
+
+
+# `dplyr` verbs
+
+.pull-left[
+- `filter`
+
+- `select`
+
+- `mutate`
+
+- `summarise`
+]
+
+.pull-right[
+
+- `arrange`
+
+- `group_by`
+
+- `rename`
+
+]
+
+
+---
+
+
+
+background-image: url(dplyr2.png)
+background-size: 70px
+background-position: 98% 6%
+
+
+# `filter`: Picks observations by their values.
+
+- Takes logical expressions and returns the rows for which all are `TRUE`.
+
+```{r, comment=NA, message=FALSE}
+filter(penguins, flipper_length_mm > 180)
+```
+
+---
+background-image: url(dplyr2.png)
+background-size: 70px
+background-position: 98% 6%
+
+# `filter` (cont)
+
+
+```{r, comment=NA, message=FALSE}
+# penguins %>% filter(species == "Chinstrap")
+filter(penguins,  species == "Chinstrap")
+```
+
+
+---
+background-image: url(dplyr2.png)
+background-size: 70px
+background-position: 98% 6%
+
+# `select`: Picks variables by their names.
+
+
+```{r, comment=NA, message=FALSE}
+head(penguins, 3)
+```
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+select(penguins, bill_length_mm:body_mass_g)
+```
+
+---
+background-image: url(dplyr2.png)
+background-size: 70px
+background-position: 98% 6%
+
+# `select` (cont.)
+
+
+```{r, comment=NA, message=FALSE}
+head(penguins, 3)
+```
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+select(penguins, species, body_mass_g)
+```
+
+---
+background-image: url(dplyr2.png)
+background-size: 70px
+background-position: 98% 6%
+
+# `select` (cont.)
+
+
+```{r, comment=NA, message=FALSE}
+head(penguins, 3)
+```
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+select(penguins, -c(island, year))
+```
+
+
+
+---
+background-image: url(dplyr2.png)
+background-size: 70px
+background-position: 98% 6%
+
+# `mutate`
+
+- Creates new variables with functions of existing variables
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+penguins <- penguins %>% mutate(BMI = body_mass_g / 1000)
+penguins
+```
+
+---
+background-image: url(dplyr2.png)
+background-size: 70px
+background-position: 98% 6%
+
+# `summarise`(British) or `summarize` (US)
+
+- Collapse many values down to a single summary
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+penguins %>%
+  summarise(
+    bill_length_mm_mean=mean(bill_length_mm),
+    bill_length_mm_median=median(bill_length_mm),
+    BMI_mean=mean(BMI))
+```
+
+---
+background-image: url(dplyr2.png)
+background-size: 70px
+background-position: 98% 6%
+
+# `summarise`(British) or `summarize` (US)
+
+- Collapse many values down to a single summary
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+penguins %>%
+  summarise(
+    bill_length_mm_mean=mean(bill_length_mm, na.rm=TRUE),
+    bill_length_mm_median=median(bill_length_mm, na.rm=TRUE),
+    BMI_mean=mean(BMI, na.rm=TRUE))
+```
+
+
+---
+
+background-image: url(dplyr2.png)
+background-size: 70px
+background-position: 98% 6%
+
+# `arrange`
+
+- Reorder the rows
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+arrange(penguins, desc(body_mass_g))
+```
+
+
+---
+
+background-image: url(dplyr2.png)
+background-size: 70px
+background-position: 98% 6%
+
+# `group_by`
+
+- Takes an existing tibble and converts it into a grouped tibble where operations are performed "by group". ungroup() removes grouping.
+
+
+
+
+---
+
+# `group_by`
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+penguins_grouped <- penguins %>% group_by(species)
+penguins_grouped
+```
+
+---
+background-image: url(dplyr2.png)
+background-size: 70px
+background-position: 98% 6%
+
+# `group_by` (cont.)
+
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+penguins %>% summarise(BMI_mean=mean(BMI, na.rm=TRUE))
+```
+
+
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+penguins_grouped %>% summarise(BMI_mean=mean(BMI, na.rm=TRUE))
+```
+
+
+---
+background-image: url(dplyr2.png)
+background-size: 70px
+background-position: 98% 6%
+
+# `rename`
+
+- Rename variables
+
+```{r, comment=NA, message=FALSE}
+head(penguins, 3)
+```
+
+---
+# `rename`
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+penguins <- rename(penguins, `Bill length`=bill_length_mm,
+       Location=island) # new_name = old_name
+penguins
+```
+
+---
+background-image: url(dplyr2.png)
+background-size: 70px
+background-position: 98% 6%
+
+# Combine multiple operations
+
+
+```{r, comment=NA, message=FALSE}
+penguins %>%
+filter(species == 'Gentoo') %>% head(2)
+```
+
+
+```{r, comment=NA, message=FALSE}
+penguins %>%
+filter(species == 'Gentoo') %>% summarise(BMI_mean=mean(BMI, na.rm=TRUE))
+```
+
+---
+# Combine multiple operations
+
+```{r, comment=NA}
+penguins %>%
+filter(species == 'Adelie') %>%
+group_by(Location) %>%
+filter(bill_depth_mm > 20) %>%
+arrange(desc(flipper_length_mm))
+```
+
+---
+class: center, middle
+
+
+All rights reserved by [Thiyanga S. Talagala](https://thiyanga.netlify.com/) and [Priyanga D Talagala](https://prital.netlify.app/)
