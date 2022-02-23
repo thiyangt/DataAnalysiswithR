@@ -7,4 +7,6 @@ tags: ["ggplot2"]
 comments: false
 ---
 
-👷Slides: [Click here](/slides/9ggplot/SLAAS-ggplot2.html)
+Slides: 
+
+[Data visualization with R](/slides/9ggplot/9_Data_visualization.html)
