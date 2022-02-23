@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>⚒️ 🗜️ Writing functions in</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr Thiyanga Talagala" />
+    <script src="functions_files/header-attrs/header-attrs.js"></script>
+    <link href="functions_files/countdown/countdown.css" rel="stylesheet" />
+    <script src="functions_files/countdown/countdown.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="custom2.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# ⚒️ 🗜️ Writing functions in
+## IASSL: 21/25 Feb, 2022
+### 
+### Dr Thiyanga Talagala
+
+---
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-slide-content {
+    font-size: 30px;
+
+}
+&lt;/style&gt;
+
+
+
+## Functions in R
+
+👉🏻 Perform a specific task according to a set of instructions.
+
+--
+👉🏻  Some functions we have discussed so far,
+
+&gt; `c`, `matrix`, `array`, `list`, `data.frame`, `str`, `dim`, `length`, `nrow`, `plot`
+
+
+
+---
+
+## Functions in R (cont.)
+
+👉🏻 There are basically two types of functions:
+
+    
+ &gt; 💻 Built-in functions 
+  
+      Already created or defined in the programming framework to make our work easier.
+&gt; 👨 User-defined functions
+           
+      Sometimes we need to create our own functions for a specific purpose.
+
+---
+
+.pull-left[
+
+## Syntax
+
+```r
+
+name &lt;- function(arg1, aug2, ...){
+
+&lt;FUNCTION BODY&gt;
+
+return(value)
+
+}
+
+```
+
+
+]
+
+
+.pull-right[
+
+### Example
+
+
+```r
+cal_power &lt;- function(x){
+
+a &lt;- x^2; b &lt;- x^3
+out &lt;- c(a, b)
+names(out) &lt;- c("squared", "cubed")
+out # or return(out)
+
+}
+```
+
+### Evaluation
+
+
+```r
+cal_power(2)
+```
+
+```
+squared   cubed 
+      4       8 
+```
+
+]
+
+--
+
+👉 Functions are created using the `function()`
+
+---
+
+class: inverse
+
+## Basic components of a function
+
+**1. Function name**
+
+---
+
+.pull-left[
+
+### Syntax
+
+```r
+
+name &lt;- function(arg1, aug2, ...){
+
+&lt;FUNCTION BODY&gt;
+
+return(value)
+
+}
+
+```
+
+
+]
+
+.pull-right[
+
+### Example
+
+
+```r
+*cal_power &lt;- function(x){
+
+a &lt;- x^2
+b &lt;- x^3
+out &lt;- c(a, b)
+names(out) &lt;- c("squared", "cubed")
+out # or return(out)
+
+}
+```
+
+
+
+
+]
+
+
+.content-box-yellow[Function name: **`cal_power`**]
+
+---
+
+.content-box-yellow[Function name: **`cal_power`**]
+
+ - use verbs, where possible
+ 
+ - should be meaningful
+ 
+ - use an underscore (_) to separate words
+ 
+ - avoid names of built-in functions
+ 
+ - start with lower case letters. Note that R is a case sensitive language
+
+
+---
+
+class: inverse
+
+## Basic components of a function
+
+1. Function name
+
+**2. Function arguments/ inputs**
+
+
+---
+
+
+.pull-left[
+
+### Syntax
+
+```r
+
+name &lt;- function(arg1, aug2, ...){
+
+&lt;FUNCTION BODY&gt;
+
+return(value)
+
+}
+
+```
+
+
+]
+
+.pull-right[
+
+### Example
+
+
+```r
+*cal_power &lt;- function(x){
+
+ a &lt;- x^2
+ b &lt;- x^3
+ out &lt;- c(a, b)
+ names(out) &lt;- c("squared", "cubed")
+ out # or return(out)
+
+}
+```
+
+
+
+
+]
+
+
+.content-box-yellow[Function arguments: **`x`**]
+
+
+- value passed to the function to obtain the function's result.
+
+---
+
+class: inverse
+
+## Basic components of a function
+
+1. Function name
+
+2. Function arguments/ inputs
+
+**3. Function body**
+
+---
+
+
+.pull-left[
+
+### Syntax
+
+```r
+
+name &lt;- function(arg1, aug2, ...){
+
+&lt;FUNCTION BODY&gt;
+
+return(value)
+
+}
+
+```
+
+
+]
+
+.pull-right[
+
+### Example
+
+
+```r
+cal_power &lt;- function(x){
+
+* a &lt;- x^2
+* b &lt;- x^3
+* out &lt;- c(a, b)
+* names(out) &lt;- c("squared", "cubed")
+* out # or return(out)
+
+}
+```
+
+
+
+
+]
+
+
+.content-box-yellow[Function body]
+
+---
+
+## Function with single line
+
+.pull-left[
+
+### Mathod 1
+
+```r
+cal_sqrt &lt;- function(x){
+
+x^2
+
+}
+```
+
+]
+
+.pull-right[
+
+### Method 2
+
+```r
+cal_sqrt &lt;- function(x) x^2
+```
+
+]
+
+
+---
+
+### Function body (Cont.)
+
+- {} do not go in one single line, always two lines
+
+```r
+# Good ---
+if(y == 2){
+print("even")
+}
+
+# Bad ---
+if(y == 2){ print("even")}
+```
+
+---
+
+**Load the mozzie dataset**
+
+
+```r
+library(mozzie)
+data(mozzie); head(mozzie, 2)
+```
+
+```
+  ID Year Week Colombo Gampaha Kalutara Kandy Matale Nuwara Eliya Galle
+1  1 2008   52      15       7        1    11      4            0     0
+2  2 2009    1      44      23        5    16     21            2     0
+  Hambantota Matara Jaffna Kilinochchi Mannar Vavuniya Mulative Batticalo
+1          6     22      0           0      8        0        0         1
+2          5     18      1           0      0        0        0         0
+  Ampara Trincomalee Kurunagala Puttalam Anuradhapura Polonnaruwa Badulla
+1      0           0          2        1            2           0       1
+2      1           1         10        5            0           0       1
+  Monaragala Ratnapura Kegalle
+1          1         2      16
+2          0         1      25
+```
+
+--
+
+&gt; Use Min-Max transformation to rescale all the districts variables onto 0-1 range.
+
+&gt; Min-Max transformation is `\(\frac{x_i-min(x)}{max(x)-min(x)}\)` where `\(x=(x_1, x_2, ...x_n)\)`.
+
+---
+
+** Min-Max transformation on `mozzie`**
+
+
+```r
+minmax.colombo &lt;- (mozzie$Colombo - min(mozzie$Colombo, na.rm = TRUE)) /
+  (max(mozzie$Colombo, na.rm=TRUE) - min(mozzie$Colombo, na.rm=TRUE))
+head(minmax.colombo) # Colombo district
+```
+
+```
+[1] 0.03157895 0.09263158 0.08210526 0.12000000 0.11157895 0.06105263
+```
+
+--
+
+
+```r
+minmax.gampaha &lt;- (mozzie$Gampaha - min(mozzie$Gampaha, na.rm = TRUE)) /
+  (max(mozzie$Gampaha, na.rm = TRUE) - min(mozzie$Gampaha, na.rm = TRUE)) 
+head(minmax.gampaha) # Gampaha district
+```
+
+```
+[1] 0.02734375 0.08984375 0.07421875 0.08984375 0.09375000 0.06640625
+```
+
+
+--
+
+```r
+minmax.kalutara &lt;- (mozzie$Gampaha - min(mozzie$Kalutara, na.rm = TRUE)) /
+  (max(mozzie$Kalutara, na.rm = TRUE) - min(mozzie$Kalutara, na.rm = TRUE))
+head(minmax.kalutara) # Kalutara district
+```
+
+```
+[1] 0.09333333 0.30666667 0.25333333 0.30666667 0.32000000 0.22666667
+```
+
+---
+## Copying-and-pasting 
+
+&gt; You could easily make errors.
+
+&gt; A mistake copied becomes a mistake repeated.
+
+--
+
+## When should you write a function?
+
+- Whenever you need to copy and paste a block of codes many times
+
+      - A function is a reusable block of programming code designed to do a specific task.
+
+- If you don't find a suitable built-in function to serve your purpose, you can write your own function
+
+- To share your work with others
+
+
+---
+
+# Writing a function
+
+### Step 1: Function name
+
+```r
+rescale_minmax
+
+```
+--
+
+### Step 2: Assign your function to the name
+
+```r
+rescale_minmax &lt;- 
+```
+--
+
+### Step 3: Tell R that you are writing a function
+
+```r_
+rescale_minmax &lt;- function(x) # Arguments/inputs should be defined inside ()
+
+```
+---
+
+### Step 4: Curly braces define the start and the end of your work
+
+```r
+rescale_minmax &lt;- function(x){
+
+# Task
+
+# output
+
+}
+
+```
+
+
+
+---
+## Step 5: Function inputs, task and outputs
+
+**Find all the inputs that correspond to a given function output?**
+
+
+
+```r
+(x - min(x, na.rm = TRUE)) / (max(x, na.rm=TRUE) - min(x, na.rm=TRUE))
+```
+
+
+
+---
+
+# Step 6: Complete your function
+
+
+
+
+```r
+rescale_minmax &lt;- function(x){
+  (x - min(x, na.rm = TRUE)) / (max(x, na.rm=TRUE) - min(x, na.rm=TRUE))
+}
+```
+
+---
+
+# Step 7: Check your function with a few different inputs
+
+
+```r
+rescale_minmax &lt;- function(x){
+  (x - min(x, na.rm = TRUE)) / (max(x, na.rm=TRUE) - min(x, na.rm=TRUE))
+}
+```
+
+--
+
+
+```r
+rescale_minmax(c(1, 200, 250, 80, NA))
+```
+
+```
+[1] 0.0000000 0.7991968 1.0000000 0.3172691        NA
+```
+
+
+---
+
+class: duke-orange, center, middle
+
+# Your turn
+
+
+---
+
+# Functions are for humans and computers
+
+- Descriptive names for variables.
+
+- Comment your code.
+
+
+
+---
+
+class: duke-orange, center, middle
+
+# Your turn
+
+---
+
+Write a function to compute z-score value of a A/L Mathematics student given the marks of the student. Assume
+
+mean(Mathematics) = 60, sd(Mathematics) = 10,
+
+mean(Chemistry) = 45, sd(Chemistry) = 20,
+
+mean(Physics) = 55, sd(Physics) = 5.
+
+<div class="countdown" id="timer_6215bad3" style="right:0;bottom:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+
+---
+class: center, middle
+
+## Thank you!
+
+
+
+All rights reserved by [Thiyanga S. Talagala](https://thiyanga.netlify.app/) 
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"slideNumberFormat": "%current%",
+"highlightStyle": "github",
+"highlightLines": true,
+"ratio": "16:9",
+"countIncrementalSlides": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

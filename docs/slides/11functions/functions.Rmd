@@ -1,0 +1,588 @@
+---
+title: "⚒️ 🗜️ Writing functions in "
+subtitle: "IASSL: 21/25 Feb, 2022" 
+author: 
+  - ""
+  - "Dr Thiyanga Talagala"
+date: ''
+output:
+  xaringan::moon_reader:
+    css: [xaringan-themer.css, custom2.css]
+    nature:
+      slideNumberFormat: "%current%"
+      highlightStyle: github
+      highlightLines: true
+      ratio: 16:9
+      countIncrementalSlides: true
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(
+  fig.width=9, fig.height=3.5, fig.retina=3,
+  out.width = "100%",
+  cache = FALSE,
+  echo = TRUE,
+  message = FALSE, 
+  warning = FALSE,
+  fig.show = TRUE,
+  hiline = TRUE
+)
+```
+
+<style type="text/css">
+.remark-slide-content {
+    font-size: 30px;
+
+}
+</style>
+
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+#style_duo_accent(
+#  primary_color = "#1381B0",
+#  secondary_color = "#FF961C",
+#  inverse_header_color = "#FFFFFF"
+#)
+style_solarized_light(text_font_google   = google_font("Josefin Sans", "400", "400i", "800i", "800"))
+#style_mono_light(
+#  base_color = "#1c5253",
+#  header_font_google = google_font("Josefin Sans"),
+#  text_font_google   = google_font("Josefin Sans", "400", "400i", "800i", "800"),
+#  code_font_google   = google_font("Fira Mono")
+#)
+```
+
+## Functions in R
+
+👉🏻 Perform a specific task according to a set of instructions.
+
+--
+👉🏻  Some functions we have discussed so far,
+
+> `c`, `matrix`, `array`, `list`, `data.frame`, `str`, `dim`, `length`, `nrow`, `plot`
+
+
+
+---
+
+## Functions in R (cont.)
+
+👉🏻 There are basically two types of functions:
+
+    
+ > 💻 Built-in functions 
+  
+      Already created or defined in the programming framework to make our work easier.
+> 👨 User-defined functions
+           
+      Sometimes we need to create our own functions for a specific purpose.
+
+---
+
+.pull-left[
+
+## Syntax
+
+```r
+
+name <- function(arg1, aug2, ...){
+
+<FUNCTION BODY>
+
+return(value)
+
+}
+
+```
+
+
+]
+
+
+.pull-right[
+
+### Example
+
+```{r}
+cal_power <- function(x){
+
+a <- x^2; b <- x^3
+out <- c(a, b)
+names(out) <- c("squared", "cubed")
+out # or return(out)
+
+}
+```
+
+### Evaluation
+
+```{r, comment=NA}
+cal_power(2)
+```
+
+]
+
+--
+
+👉 Functions are created using the `function()`
+
+---
+
+class: inverse
+
+## Basic components of a function
+
+**1. Function name**
+
+---
+
+.pull-left[
+
+### Syntax
+
+```r
+
+name <- function(arg1, aug2, ...){
+
+<FUNCTION BODY>
+
+return(value)
+
+}
+
+```
+
+
+]
+
+.pull-right[
+
+### Example
+
+```{r, eval=FALSE}
+*cal_power <- function(x){
+
+a <- x^2
+b <- x^3
+out <- c(a, b)
+names(out) <- c("squared", "cubed")
+out # or return(out)
+
+}
+```
+
+```{r, echo=FALSE}
+cal_power <- function(x){
+
+a <- x^2
+b <- x^3
+out <- c(a, b)
+names(out) <- c("squared", "cubed")
+out # or return(out)
+
+}
+```
+
+
+]
+
+
+.content-box-yellow[Function name: **`cal_power`**]
+
+---
+
+.content-box-yellow[Function name: **`cal_power`**]
+
+ - use verbs, where possible
+ 
+ - should be meaningful
+ 
+ - use an underscore (_) to separate words
+ 
+ - avoid names of built-in functions
+ 
+ - start with lower case letters. Note that R is a case sensitive language
+
+
+---
+
+class: inverse
+
+## Basic components of a function
+
+1. Function name
+
+**2. Function arguments/ inputs**
+
+
+---
+
+
+.pull-left[
+
+### Syntax
+
+```r
+
+name <- function(arg1, aug2, ...){
+
+<FUNCTION BODY>
+
+return(value)
+
+}
+
+```
+
+
+]
+
+.pull-right[
+
+### Example
+
+```{r, eval=FALSE}
+*cal_power <- function(x){
+
+ a <- x^2
+ b <- x^3
+ out <- c(a, b)
+ names(out) <- c("squared", "cubed")
+ out # or return(out)
+
+}
+```
+
+```{r, echo=FALSE}
+cal_power <- function(x){
+
+a <- x^2
+b <- x^3
+out <- c(a, b)
+names(out) <- c("squared", "cubed")
+out # or return(out)
+
+}
+```
+
+
+]
+
+
+.content-box-yellow[Function arguments: **`x`**]
+
+
+- value passed to the function to obtain the function's result.
+
+---
+
+class: inverse
+
+## Basic components of a function
+
+1. Function name
+
+2. Function arguments/ inputs
+
+**3. Function body**
+
+---
+
+
+.pull-left[
+
+### Syntax
+
+```r
+
+name <- function(arg1, aug2, ...){
+
+<FUNCTION BODY>
+
+return(value)
+
+}
+
+```
+
+
+]
+
+.pull-right[
+
+### Example
+
+```{r, eval=FALSE}
+cal_power <- function(x){
+
+* a <- x^2
+* b <- x^3
+* out <- c(a, b)
+* names(out) <- c("squared", "cubed")
+* out # or return(out)
+
+}
+```
+
+```{r, echo=FALSE}
+cal_power <- function(x){
+
+a <- x^2
+b <- x^3
+out <- c(a, b)
+names(out) <- c("squared", "cubed")
+out # or return(out)
+
+}
+```
+
+
+]
+
+
+.content-box-yellow[Function body]
+
+---
+
+## Function with single line
+
+.pull-left[
+
+### Mathod 1
+
+```r
+cal_sqrt <- function(x){
+
+x^2
+
+}
+```
+
+]
+
+.pull-right[
+
+### Method 2
+
+```r
+cal_sqrt <- function(x) x^2
+```
+
+]
+
+
+---
+
+### Function body (Cont.)
+
+- {} do not go in one single line, always two lines
+
+```r
+# Good ---
+if(y == 2){
+print("even")
+}
+
+# Bad ---
+if(y == 2){ print("even")}
+```
+
+---
+
+**Load the mozzie dataset**
+
+```{r, comment=NA}
+library(mozzie)
+data(mozzie); head(mozzie, 2)
+```
+
+--
+
+> Use Min-Max transformation to rescale all the districts variables onto 0-1 range.
+
+> Min-Max transformation is $\frac{x_i-min(x)}{max(x)-min(x)}$ where $x=(x_1, x_2, ...x_n)$.
+
+---
+
+** Min-Max transformation on `mozzie`**
+
+```{r, comment=NA}
+minmax.colombo <- (mozzie$Colombo - min(mozzie$Colombo, na.rm = TRUE)) /
+  (max(mozzie$Colombo, na.rm=TRUE) - min(mozzie$Colombo, na.rm=TRUE))
+head(minmax.colombo) # Colombo district
+```
+
+--
+
+```{r, comment=NA}
+minmax.gampaha <- (mozzie$Gampaha - min(mozzie$Gampaha, na.rm = TRUE)) /
+  (max(mozzie$Gampaha, na.rm = TRUE) - min(mozzie$Gampaha, na.rm = TRUE)) 
+head(minmax.gampaha) # Gampaha district
+```
+
+
+--
+```{r, comment=NA}
+minmax.kalutara <- (mozzie$Gampaha - min(mozzie$Kalutara, na.rm = TRUE)) /
+  (max(mozzie$Kalutara, na.rm = TRUE) - min(mozzie$Kalutara, na.rm = TRUE))
+head(minmax.kalutara) # Kalutara district
+```
+
+---
+## Copying-and-pasting 
+
+> You could easily make errors.
+
+> A mistake copied becomes a mistake repeated.
+
+--
+
+## When should you write a function?
+
+- Whenever you need to copy and paste a block of codes many times
+
+      - A function is a reusable block of programming code designed to do a specific task.
+
+- If you don't find a suitable built-in function to serve your purpose, you can write your own function
+
+- To share your work with others
+
+
+---
+
+# Writing a function
+
+### Step 1: Function name
+
+```r
+rescale_minmax
+
+```
+--
+
+### Step 2: Assign your function to the name
+
+```r
+rescale_minmax <- 
+```
+--
+
+### Step 3: Tell R that you are writing a function
+
+```r_
+rescale_minmax <- function(x) # Arguments/inputs should be defined inside ()
+
+```
+---
+
+### Step 4: Curly braces define the start and the end of your work
+
+```r
+rescale_minmax <- function(x){
+
+# Task
+
+# output
+
+}
+
+```
+
+
+
+---
+## Step 5: Function inputs, task and outputs
+
+**Find all the inputs that correspond to a given function output?**
+
+
+```{r, comment=NA, eval=FALSE}
+(x - min(x, na.rm = TRUE)) / (max(x, na.rm=TRUE) - min(x, na.rm=TRUE))
+
+```
+
+
+
+---
+
+# Step 6: Complete your function
+
+
+
+```{r, comment=NA}
+rescale_minmax <- function(x){
+  (x - min(x, na.rm = TRUE)) / (max(x, na.rm=TRUE) - min(x, na.rm=TRUE))
+}
+
+```
+
+---
+
+# Step 7: Check your function with a few different inputs
+
+```{r, comment=NA}
+rescale_minmax <- function(x){
+  (x - min(x, na.rm = TRUE)) / (max(x, na.rm=TRUE) - min(x, na.rm=TRUE))
+}
+
+```
+
+--
+
+```{r, comment=NA}
+rescale_minmax(c(1, 200, 250, 80, NA))
+
+```
+
+
+---
+
+class: duke-orange, center, middle
+
+# Your turn
+
+
+---
+
+# Functions are for humans and computers
+
+- Descriptive names for variables.
+
+- Comment your code.
+
+
+
+---
+
+class: duke-orange, center, middle
+
+# Your turn
+
+---
+
+Write a function to compute z-score value of a A/L Mathematics student given the marks of the student. Assume
+
+mean(Mathematics) = 60, sd(Mathematics) = 10,
+
+mean(Chemistry) = 45, sd(Chemistry) = 20,
+
+mean(Physics) = 55, sd(Physics) = 5.
+
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 5L, seconds = 00)
+```
+
+
+---
+class: center, middle
+
+## Thank you!
+
+
+
+All rights reserved by [Thiyanga S. Talagala](https://thiyanga.netlify.app/) 
+
+
+
