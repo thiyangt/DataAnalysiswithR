@@ -242,7 +242,7 @@ ggplot(district) + #<<
 ```
 ]
 ---
-Distribution of Population by Districts
+Divisional secretariat
 
 .pull-left[
 ```{r echo=TRUE, eval=FALSE}
@@ -269,6 +269,13 @@ knitr::include_graphics("fig/2_dplyr-joins.png")
 
 [Learn more: https://rpubs.com/williamsurles/293454](https://rpubs.com/williamsurles/293454)
 ---
+```{r echo=TRUE}
+head(district)
+```
+
+---
+
+## Dealing with our own datasets
 
 ```{r echo=TRUE}
 DISTRICT <- c("Ampara", "Anuradhapura", "Badulla", 
@@ -290,11 +297,13 @@ newdate <- tibble(DISTRICT, covidcount )
 ---
 ## Convert case of a string
 
+https://stringr.tidyverse.org/reference/case.html
+
+.pull-left[
 ```{r echo=TRUE}
 head(newdate)
 ```
-
----
+].pull-right[
 
 ```{r echo=TRUE}
 newdate <- newdate %>%
@@ -306,8 +315,35 @@ head(newdate)
 ```
 
 ]
+---
 
+Merge Data
 
+```{r echo=TRUE}
+
+full_data <- left_join(district, newdate, by= "DISTRICT")
+
+head(full_data)
+```
+---
+Distribution of Total Covid Count by Districts 
+
+.pull-left[
+```{r echo=TRUE, eval=FALSE}
+ggplot(full_data) + #<<
+  geom_sf(aes(fill = covidcount), #<<
+          show.legend = TRUE) + 
+  scale_fill_viridis()
+```
+].pull-right[
+
+```{r }
+ggplot(full_data) + #<<
+  geom_sf(aes(fill = covidcount), #<<
+          show.legend = TRUE) + 
+  scale_fill_viridis()
+```
+]
 ---
 class: inverse, middle, center
 

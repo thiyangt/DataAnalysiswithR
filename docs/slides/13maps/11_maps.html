@@ -283,7 +283,7 @@ library(viridis)
 &lt;img src="11_maps_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto;" /&gt;
 ]
 ---
-Distribution of Population by Districts
+Divisional secretariat
 
 .pull-left[
 
@@ -306,6 +306,31 @@ Join (merge) data with `dplyr` in R
 [Learn more: https://rpubs.com/williamsurles/293454](https://rpubs.com/williamsurles/293454)
 ---
 
+```r
+head(district)
+```
+
+```
+## Simple feature collection with 6 features and 3 fields
+## Geometry type: MULTIPOLYGON
+## Dimension:     XY
+## Bounding box:  xmin: 391095.2 ymin: 445857.8 xmax: 621918.1 ymax: 712393.4
+## Projected CRS: SLD99 / Sri Lanka Grid 1999
+## # A tibble: 6 × 4
+##                                              geometry DISTRICT Status population
+##                                    &lt;MULTIPOLYGON [m]&gt; &lt;chr&gt;    &lt;chr&gt;       &lt;dbl&gt;
+## 1 (((392952.6 594064.2, 392985.8 593971.5, 392986.2 … [UNKNOW… &lt;NA&gt;           NA
+## 2 (((551311.8 581603.6, 551324.5 581599.7, 551334.5 … AMPARA   Distr…     736000
+## 3 (((501928.5 712099.6, 501970.4 712098.8, 502020 71… ANURADH… Distr…     943000
+## 4 (((522825 568220.9, 522872.6 568217.7, 522926.1 56… BADULLA  Distr…     886000
+## 5 (((609877 559315.9, 609857.5 559313, 609845.2 5593… BATTICA… Distr…     579000
+## 6 (((400911.5 497888.4, 401032.5 497869.3, 401035.2 … COLOMBO  Distr…    2455000
+```
+
+---
+
+## Dealing with our own datasets
+
 
 ```r
 DISTRICT &lt;- c("Ampara", "Anuradhapura", "Badulla", 
@@ -327,31 +352,9 @@ newdate &lt;- tibble(DISTRICT, covidcount )
 ---
 ## Convert case of a string
 
+https://stringr.tidyverse.org/reference/case.html
+
 .pull-left[
-
-
-```r
-head(district)
-```
-
-```
-## Simple feature collection with 6 features and 3 fields
-## Geometry type: MULTIPOLYGON
-## Dimension:     XY
-## Bounding box:  xmin: 391095.2 ymin: 445857.8 xmax: 621918.1 ymax: 712393.4
-## Projected CRS: SLD99 / Sri Lanka Grid 1999
-## # A tibble: 6 × 4
-##                                              geometry DISTRICT Status population
-##                                    &lt;MULTIPOLYGON [m]&gt; &lt;chr&gt;    &lt;chr&gt;       &lt;dbl&gt;
-## 1 (((392952.6 594064.2, 392985.8 593971.5, 392986.2 … [UNKNOW… &lt;NA&gt;           NA
-## 2 (((551311.8 581603.6, 551324.5 581599.7, 551334.5 … AMPARA   Distr…     736000
-## 3 (((501928.5 712099.6, 501970.4 712098.8, 502020 71… ANURADH… Distr…     943000
-## 4 (((522825 568220.9, 522872.6 568217.7, 522926.1 56… BADULLA  Distr…     886000
-## 5 (((609877 559315.9, 609857.5 559313, 609845.2 5593… BATTICA… Distr…     579000
-## 6 (((400911.5 497888.4, 401032.5 497869.3, 401035.2 … COLOMBO  Distr…    2455000
-```
-].pull-right[
-
 
 ```r
 head(newdate)
@@ -368,42 +371,13 @@ head(newdate)
 ## 5 Colombo          132418
 ## 6 Galle             42314
 ```
-]
-
-
----
-
-.pull-left[
-
-
-```r
-head(district)
-```
-
-```
-## Simple feature collection with 6 features and 3 fields
-## Geometry type: MULTIPOLYGON
-## Dimension:     XY
-## Bounding box:  xmin: 391095.2 ymin: 445857.8 xmax: 621918.1 ymax: 712393.4
-## Projected CRS: SLD99 / Sri Lanka Grid 1999
-## # A tibble: 6 × 4
-##                                              geometry DISTRICT Status population
-##                                    &lt;MULTIPOLYGON [m]&gt; &lt;chr&gt;    &lt;chr&gt;       &lt;dbl&gt;
-## 1 (((392952.6 594064.2, 392985.8 593971.5, 392986.2 … [UNKNOW… &lt;NA&gt;           NA
-## 2 (((551311.8 581603.6, 551324.5 581599.7, 551334.5 … AMPARA   Distr…     736000
-## 3 (((501928.5 712099.6, 501970.4 712098.8, 502020 71… ANURADH… Distr…     943000
-## 4 (((522825 568220.9, 522872.6 568217.7, 522926.1 56… BADULLA  Distr…     886000
-## 5 (((609877 559315.9, 609857.5 559313, 609845.2 5593… BATTICA… Distr…     579000
-## 6 (((400911.5 497888.4, 401032.5 497869.3, 401035.2 … COLOMBO  Distr…    2455000
-```
-
-]
-.pull-right[
+].pull-right[
 
 
 ```r
 newdate &lt;- newdate %&gt;%
-  mutate(DISTRICT = stringr::str_to_upper(DISTRICT, locale = "en"))
+* mutate(DISTRICT= stringr::str_to_upper(
+*   DISTRICT, locale = "en"))
 
 head(newdate)
 ```
@@ -421,8 +395,48 @@ head(newdate)
 ```
 
 ]
+---
+
+Merge Data
 
 
+```r
+full_data &lt;- left_join(district, newdate, by= "DISTRICT")
+
+head(full_data)
+```
+
+```
+## Simple feature collection with 6 features and 4 fields
+## Geometry type: MULTIPOLYGON
+## Dimension:     XY
+## Bounding box:  xmin: 391095.2 ymin: 445857.8 xmax: 621918.1 ymax: 712393.4
+## Projected CRS: SLD99 / Sri Lanka Grid 1999
+## # A tibble: 6 × 5
+##                                   geometry DISTRICT Status population covidcount
+##                         &lt;MULTIPOLYGON [m]&gt; &lt;chr&gt;    &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;
+## 1 (((392952.6 594064.2, 392985.8 593971.5… [UNKNOW… &lt;NA&gt;           NA         NA
+## 2 (((551311.8 581603.6, 551324.5 581599.7… AMPARA   Distr…     736000      13867
+## 3 (((501928.5 712099.6, 501970.4 712098.8… ANURADH… Distr…     943000      14351
+## 4 (((522825 568220.9, 522872.6 568217.7, … BADULLA  Distr…     886000      14290
+## 5 (((609877 559315.9, 609857.5 559313, 60… BATTICA… Distr…     579000       9824
+## 6 (((400911.5 497888.4, 401032.5 497869.3… COLOMBO  Distr…    2455000     132418
+```
+---
+Distribution of Total Covid Count by Districts 
+
+.pull-left[
+
+```r
+*ggplot(full_data) +
+* geom_sf(aes(fill = covidcount),
+          show.legend = TRUE) + 
+  scale_fill_viridis()
+```
+].pull-right[
+
+&lt;img src="11_maps_files/figure-html/unnamed-chunk-30-1.png" style="display: block; margin: auto;" /&gt;
+]
 ---
 class: inverse, middle, center
 
