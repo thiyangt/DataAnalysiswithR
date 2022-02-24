@@ -1,0 +1,402 @@
+---
+title: <span style="color:#e8b22a">Tidy Time Series Graphics with R</span>
+subtitle: "IASSL Workshop"
+author: "Dr. Priyanga D. Talagala, University of Moratuwa"
+#institute: "RStudio, PBC"
+date: <span style="color:#3be3dd"> 21-25, February, 2022</span>
+output:
+  xaringan::moon_reader:
+    #css: [default, kunoichi, chocolate-fonts]
+    css: [ "default", "rladies", "rladies-fonts", "xaringan-themer.css"]
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      slideNumberFormat: "%current%" 
+---
+```{r setup, include=FALSE}
+library(knitr)
+options(htmltools.dir.version = FALSE)
+opts_chunk$set(
+  warning = FALSE,
+  message = FALSE,
+  echo = FALSE,
+  cache.path = 'cache/',
+  fig.align = 'center',
+  cache = TRUE
+)
+
+library(tidyverse)
+library(patchwork)
+
+```
+
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+style_mono_accent(
+   base_color = "#025859",
+   link_color = "#1148ed",
+   title_slide_background_color = "#025859",
+  inverse_background_color = "#17ffa2",
+  header_font_google = google_font("Josefin Sans"),
+  text_font_google   = google_font("Montserrat", "300", "300i"),
+  code_font_google   = google_font("Fira Mono"),
+  title_slide_text_color = "#3be3dd",
+  inverse_header_color = "#500252",
+   inverse_text_color = "#041a5c",
+   header_background_text_color = "#ffea00",
+  base_font_size = "20px",
+  text_font_size = "1.5rem",
+  )
+```
+
+### Main packages required
+
+```{r echo=TRUE}
+# Data manipulation and plotting functions
+library(tidyverse)
+
+# Data for "Forecasting: Principles and Practice" (3rd Edition)
+library(fpp3)
+```
+
+
+- `tsibble` Package:  Time series manipulation 
+- `tsibbledata` Package: Tidy time series data 
+- `feasts` Package: Time series graphics and statistics 
+- `fable` Package: Forecasting functions
+
+
+tidyverts: Tidy tools for time series: https://tidyverts.org/
+---
+## `tsibble` objects
+
+-  A tsibble allows storage and manipulation of multiple time series in R.
+-  It contains:
+
+   – An index: time information about the observation
+   
+   – Measured variable(s): numbers of interest
+   
+   – Key variable(s): optional unique identifiers for each series 
+   
+   – It works with tidyverse functions.
+---
+
+## The `tsibble` index
+
+.pull-left[
+```{r echo=TRUE}
+set.seed(1)
+ts <- tsibble(t = seq(36),
+              y = rnorm(36),
+              index = t) #<<
+ts
+```
+
+
+
+]
+--
+.pull-right[
+
+```{r echo=TRUE}
+mydata <- tsibble(
+  year = 2016:2020,
+  y = c(123, 39, 78, 52, 110),
+  index = year) #<<
+
+mydata
+
+```
+]
+
+---
+## `tibble` vs `tsibble`
+
+.pull-left[
+
+```{r echo=TRUE}
+#tibble
+mytibble <- tibble(
+  date = as.Date("2017-01-01") + 0:10,
+  y = c(123, 39, 78, 52, 110, 59,
+        78, 67, 67, 80, 90)) 
+mytibble
+```
+
+]
+--
+.pull-right[
+
+```{r echo=TRUE}
+# Converting to a tsibble
+mytsibble <- mytibble %>% 
+  as_tsibble(index = date) #<<
+mytsibble
+```
+]
+---
+
+.pull-left[
+
+```{r echo=TRUE}
+mytsibble
+```
+
+]
+--
+.pull-right[
+
+```{r echo=TRUE}
+mytsibble %>% autoplot(y)
+```
+]
+
+---
+
+.pull-left[
+### Working with tsibble objects
+
+Example: Quarterly Australian Electricity Production
+
+```{r echo=TRUE}
+elec <- aus_production %>%
+  select(Quarter, Electricity) %>% 
+  filter(year(Quarter) >= 1992)
+elec
+```
+
+]
+--
+.pull-right[
+```{r echo=TRUE, fig.height=5}
+elec %>%
+  autoplot(Electricity) #<<
+```
+]
+---
+
+.pull-left[
+## Seasonal plots
+
+```{r echo=TRUE}
+elec <- aus_production %>%
+  select(Quarter, Electricity) %>% 
+  filter(year(Quarter) >= 1992)
+elec
+```
+
+]
+--
+.pull-right[
+```{r echo=TRUE, fig.height=6}
+elec %>% 
+  gg_season(Electricity,  #<<
+            labels="both") #<<
+```
+]
+---
+
+
+.pull-left[
+## Seasonal plots
+
+```{r echo=TRUE, fig.height=6}
+elec %>% 
+  gg_season(Electricity, 
+            labels="left") #<<
+```
+
+]
+.pull-right[
+- Data plotted against the individual “seasons” in which the data were observed. (In this case a “season” is a month.)
+
+- Something like a time plot except that the data from each season are overlapped.
+
+- Enables the underlying seasonal pattern to be seen more clearly, and also allows any substantial departures from the seasonal pattern to be easily identified.
+]
+---
+```{r echo=TRUE, fig.height=6}
+elec %>% 
+  gg_season(Electricity, labels="left") + 
+  ylab("Electricity production in gigawatt hours") + #<<
+  ggtitle("Quarterly Australian Electricity Production") #<<
+```
+
+---
+
+.pull-left[
+## Seasonal subseries plots
+
+- Data for each season collected together in time plot as separate time series.
+
+- Enables the underlying seasonal pattern to be seen clearly, and changes in seasonality over time to be
+visualized.
+
+]
+
+--
+.pull-right[
+
+```{r echo=TRUE}
+elec %>% gg_subseries(Electricity)
+```
+
+]
+---
+## Multiple seasonal periods
+
+Half-hourly electricity demand for Victoria, Australia
+
+```{r echo = TRUE}
+vic_elec
+```
+
+
+---
+```{r echo=TRUE, fig.width= 11}
+vic_elec %>% 
+  autoplot(Demand)
+```
+---
+
+```{r echo=TRUE,  fig.width= 11}
+vic_elec %>% 
+  gg_season(Demand) #<<
+```
+---
+```{r echo=TRUE,  fig.width= 11}
+vic_elec %>% 
+  gg_season(Demand, period = "month") #<<
+```
+---
+```{r echo=TRUE,  fig.width= 11}
+vic_elec %>%
+  gg_season(Demand, period = "week") #<<
+```
+---
+
+```{r echo=TRUE,  fig.width= 11}
+vic_elec %>%
+  gg_season(Demand, period = "day") #<<
+```
+
+---
+
+```{r echo=TRUE,  fig.width= 11}
+vic_elec %>%
+  gg_season(Demand, period = "day") +
+  theme(text = element_text(size=14)) #<<
+```
+---
+.pull-left[
+```{r echo=TRUE}
+# install.packages("devtools")
+# devtools::install_github("thiyangt/covid19srilanka")
+library(covid19srilanka)
+district.wise.cases
+```
+
+]
+
+--
+.pull-right[
+
+```{r echo=TRUE}
+covidsl <- district.wise.cases %>%
+  as_tsibble(index = Date, #<<
+             key = District) #<<
+
+covidsl
+```
+
+]
+
+
+---
+
+
+```{r echo=TRUE, fig.width=15}
+p <- covidsl %>% autoplot(Count)
+p
+```
+
+---
+```{r echo=TRUE, fig.width=15 }
+plotly::ggplotly(p)
+```
+
+---
+
+```{r echo=TRUE}
+library(coronavirus)
+head(coronavirus)
+```
+
+---
+
+.pull-left[
+```{r echo=TRUE}
+covidsl <- coronavirus %>%
+  filter(country == "Sri Lanka") %>%
+  select(date, type, cases)
+
+head(covidsl)
+```
+
+]
+
+--
+.pull-right[
+
+```{r echo=TRUE}
+covidsl <- covidsl %>%
+  as_tsibble(index = date, #<<
+             key = type ) #<<
+
+head(covidsl)
+```
+
+]
+
+---
+
+```{r echo=TRUE, fig.width=11}
+p <- covidsl %>% autoplot(cases)
+p
+```
+
+---
+
+```{r echo=TRUE, fig.width=11}
+library(gganimate)
+p +
+  transition_reveal(along = date)
+```
+
+---
+class: inverse, middle, center
+
+```{r}
+icon::fa("github")
+icon::fa("twitter")
+
+```
+pridiltal and thiyangt
+
+# Acknowledgements:
+
+This work was supported in part by RETINA research lab funded by the OWSD, a program unit of United Nations Educational, Scientific and Cultural Organization (UNESCO).
+
+## Key References 
+
+- Forecasting: Principles and Practice (3rd ed), Rob J Hyndman and George Athanasopoulos https://otexts.com/fpp3/
+
+
+All rights reserved by Thiyanga S. Talagala and Priyanga D Talagala
+
+
+

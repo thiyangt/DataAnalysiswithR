@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Data visualization with R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. Priyanga D. Talagala, University of Moratuwa" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/rladies.css" rel="stylesheet" />
+    <link href="libs/remark-css/rladies-fonts.css" rel="stylesheet" />
+    <script src="libs/htmlwidgets/htmlwidgets.js"></script>
+    <script src="libs/plotly-binding/plotly.js"></script>
+    <script src="libs/typedarray/typedarray.min.js"></script>
+    <script src="libs/jquery/jquery.min.js"></script>
+    <link href="libs/crosstalk/css/crosstalk.css" rel="stylesheet" />
+    <script src="libs/crosstalk/js/crosstalk.min.js"></script>
+    <link href="libs/plotly-htmlwidgets-css/plotly-htmlwidgets.css" rel="stylesheet" />
+    <script src="libs/plotly-main/plotly-latest.min.js"></script>
+    <link href="libs/font-awesome/css/fontawesome-all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Data visualization with R
+## IASSL Workshop
+### Dr. Priyanga D. Talagala, University of Moratuwa
+### <span style="color:#8dcefc"> 21-25, February, 2022</span> </br></br><img src="fig/ggplot2.png" width="200" /> <img src="fig/15_palmerpenguins2.png" width="200" />
+
+---
+
+
+
+
+
+background-image:url('fig/tidyworkflow1.png')
+background-position: 50% 80%
+background-size: 85%
+class: top, center
+# Tidy Workflow
+---
+
+background-image:url('fig/tidyworkflow2.png')
+background-position: 50% 80%
+background-size: 85%
+class: top, center
+# Tidy Workflow
+---
+
+background-image:url('fig/tidyworkflow3.png')
+background-position: 50% 80%
+background-size: 85%
+class: top, center
+# Tidy Workflow
+---
+
+## The Datasaurus Dozen
+
+&lt;!--Data visualization and storytelling has always been one of the most important phases of any data science pipeline involving extracting meaningful insights from data, regardless of the complexity of the data or the project. Take a simple example of ‘The Datasaurus Dozen’ — twelve different datasets depicted in the following figure.
+
+https://towardsdatascience.com/a-comprehensive-guide-to-the-grammar-of-graphics-for-effective-visualization-of-multi-dimensional-1f92b4ed4149--&gt;
+
+.pull-left[
+
+```r
+library(datasauRus)
+library(ggplot2)
+
+datasaurus_dozen %&gt;%
+  ggplot(aes(x, y, color = dataset)) +
+  geom_point(show.legend = FALSE) +
+  facet_wrap(~dataset, ncol = 4)
+```
+
+] .pull-right[
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-2-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+]
+
+---
+
+## The Datasaurus Dozen
+
+.pull-left[
+
+```r
+library(datasauRus)
+library(ggplot2)
+
+datasaurus_dozen %&gt;%
+  ggplot(aes(x, y, color = dataset)) +
+  geom_point(show.legend = FALSE) +
+  facet_wrap(~dataset, ncol = 4)
+```
+
+
+
+&lt;/br&gt;
+
+Summary statistics | 
+-------------------|----
+X Mean     | 54.263
+Y Mean     | 47.832
+X SD    | 16.765
+Y SD     | 26.935
+Corr.    |  -0.064
+
+`The Datasaurus was created by Alberto Cairo`
+
+] .pull-right[
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-5-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+
+&lt;!-- https://r-mageddon.netlify.app/post/reanimating-the-datasaurus/
+
+
+Can you guess what is common among these very different looking sets of data?
+
+Essentially the Datasaurus Dozen is a playful twist on the classic statistical dataset; Anscombe’s Quartet. The Datasaurus Dozen is a group of twelve datasets, with nigh-identical summary statistics, but when plotted on a graph they prove to be distinctly dissimilar. Imagine my delight when I found the Datasaurus Dozen was available on CRAN in the datasauRus package.
+
+https://towardsdatascience.com/a-comprehensive-guide-to-the-grammar-of-graphics-for-effective-visualization-of-multi-dimensional-1f92b4ed4149
+
+It turned out that creating an animated version of the Datasaurus Dozen was absurdly simple, taking only 4 lines of code.
+
+This is a fun variant of the well known Anscombe’s quartet.
+
+It seems crazy to me that all these datasets have the same means, standard deviations and correlations!
+
+
+This is a fun variant of the well known Anscombe’s quartet, which many of you might be very familiar with, as depicted in the following figure.
+
+The key takeaway from these demonstrations would be, “Do not trust your data blindly, and start modeling on your data”. Summary statistics can always be deceptive. Always visualize and understand your data attributes before moving on to feature engineering and building statistical, machine learning and deep learning models.
+
+--&gt;
+
+---
+class: inverse, middle, center
+
+# Never trust summary statistics &lt;span style="color:#ff00b3"&gt;ALONE &lt;/span&gt;
+
+
+
+--
+
+##  Always visualize your data
+
+&lt;!-- http://www.thefunctionalart.com/2016/08/download-datasaurus-never-trust-summary.html
+
+https://cran.r-project.org/web/packages/datasauRus/vignettes/Datasaurus.html
+
+
+https://cran.r-project.org/web/packages/datasauRus/vignettes/Datasaurus.html
+--&gt;
+---
+class: inverse, middle, center
+
+# The Grammar of Graphics
+
+
+---
+
+
+class: inverse, middle, center
+
+### The Book
+# The Grammar of Graphics
+
+&lt;img src="fig/6_ggbook.jpg" width="25%" style="display: block; margin: auto;" /&gt;
+
+&lt;!-- The original grammar of graphics framework was proposed by Leland Wilkinson, which covers all major aspects pertaining to effective data visualization in detail. I would definitely recommend interested readers to check out the book on it, whenever they get a chance!
+--&gt;
+
+---
+&lt;!--https://flowingdata.com/2016/03/22/comparing-ggplot2-and-r-base-graphics/--&gt;
+
+
+
+
+
+
+.pull-left[
+R Base Graphics 
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
+
+]
+.pull-right[
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-10-1.png" style="display: block; margin: auto;" /&gt;
+
+]
+---
+class: middle, center
+## The Grammar of Graphics
+
+.pull-left[
+
+.pull-left[
+Pie Chart
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /&gt;
+
+Line Chart
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /&gt;
+
+]
+.pull-right[
+
+Bar Chart
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" /&gt;
+
+Scatterplot
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /&gt;
+]
+].pull-right[
+
+&lt;img src="fig/7_GG_a.png" width="1223" height="100%" style="display: block; margin: auto;" /&gt;
+]
+
+
+---
+
+class: inverse, middle, center
+
+&lt;!--https://medium.com/@zoldin/introduction-to-ggplot2-the-grammar-81d10e11d908--&gt;
+
+# The ggplot2 API
+
+&lt;img src="fig/ggplot.png" width="40%" style="display: block; margin: auto;" /&gt;
+---
+
+class: middle, center
+
+## Which dataset to plot?
+
+&lt;img src="fig/8_GG_1.png" width="40%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+.pull-left[
+## `palmerpenguins` data
+&lt;!--The palmerpenguins data contains size measurements for three penguin species observed on three islands in the Palmer Archipelago, Antarctica.
+
+https://allisonhorst.github.io/palmerpenguins/articles/intro.html
+--&gt;
+
+The Palmer Archipelago penguins. Artwork by `@allison_horst`.
+
+&lt;img src="fig/17_lter_penguins.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+&lt;img src="fig/18_culmen_depth.png" width="70%" style="display: block; margin: auto;" /&gt;
+].pull-right[
+
+&lt;img src="fig/15_palmerpenguins.png" width="35%" style="display: block; margin: auto;" /&gt;
+
+```
+# A tibble: 6 × 8
+  species island bill_length_mm bill_depth_mm flipper_length_… body_mass_g sex  
+  &lt;fct&gt;   &lt;fct&gt;           &lt;dbl&gt;         &lt;dbl&gt;            &lt;int&gt;       &lt;int&gt; &lt;fct&gt;
+1 Adelie  Torge…           39.1          18.7              181        3750 male 
+2 Adelie  Torge…           39.5          17.4              186        3800 fema…
+3 Adelie  Torge…           40.3          18                195        3250 fema…
+4 Adelie  Torge…           NA            NA                 NA          NA &lt;NA&gt; 
+5 Adelie  Torge…           36.7          19.3              193        3450 fema…
+6 Adelie  Torge…           39.3          20.6              190        3650 male 
+# … with 1 more variable: year &lt;int&gt;
+```
+
+```
+Rows: 344
+Columns: 8
+$ species           &lt;fct&gt; Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adel…
+$ island            &lt;fct&gt; Torgersen, Torgersen, Torgersen, Torgersen, Torgerse…
+$ bill_length_mm    &lt;dbl&gt; 39.1, 39.5, 40.3, NA, 36.7, 39.3, 38.9, 39.2, 34.1, …
+$ bill_depth_mm     &lt;dbl&gt; 18.7, 17.4, 18.0, NA, 19.3, 20.6, 17.8, 19.6, 18.1, …
+$ flipper_length_mm &lt;int&gt; 181, 186, 195, NA, 193, 190, 181, 195, 193, 190, 186…
+$ body_mass_g       &lt;int&gt; 3750, 3800, 3250, NA, 3450, 3650, 3625, 4675, 3475, …
+$ sex               &lt;fct&gt; male, female, female, NA, female, male, female, male…
+$ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007…
+```
+]
+
+---
+## Which dataset to plot?
+
+
+
+```r
+ggplot() 
+```
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-23-1.png" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+## Which dataset to plot?
+
+
+
+```r
+*ggplot(data = penguins)
+```
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-25-1.png" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+
+class: middle, center
+
+## Mapping 
+
+&lt;img src="fig/40_mapping.png" width="40%" style="display: block; margin: auto;" /&gt;
+
+
+---
+## Which columns to use for x and y?
+
+
+
+```r
+ggplot(data = penguins,
+*      mapping = aes(x = flipper_length_mm,
+*                    y = body_mass_g))
+```
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-28-1.png" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+class: middle, center
+
+## Geometries
+
+&lt;img src="fig/41_geom.png" width="40%" style="display: block; margin: auto;" /&gt;
+
+
+---
+## How to draw the plot?
+
+
+
+```r
+ggplot(data = penguins,
+       mapping = aes(x = flipper_length_mm,
+                     y = body_mass_g)) +
+* geom_point()
+```
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-31-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+class: middle, center
+
+## Data, Mapping and Geometries
+
+&lt;img src="fig/20_maingg.png" width="40%" style="display: block; margin: auto;" /&gt;
+---
+## How to draw the plot?
+
+
+
+```r
+ggplot(data = penguins) +
+* geom_point(mapping = aes(x = flipper_length_mm,
+*                          y = body_mass_g))
+```
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-34-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## How to draw the plot?
+
+
+
+```r
+ggplot() +
+  geom_point(mapping = aes(x = flipper_length_mm, 
+                           y = body_mass_g),
+*            data = penguins)
+```
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-36-1.png" style="display: block; margin: auto;" /&gt;
+---
+
+## Mapping Colours
+
+
+
+```r
+ggplot(penguins) +
+  geom_point( aes(x = flipper_length_mm,
+                  y = body_mass_g,
+*                 color = species,
+*                 shape = species))
+```
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-38-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+## Mapping Colours
+
+
+
+```r
+ggplot(penguins) +
+  geom_point( aes(x = flipper_length_mm,
+                  y = body_mass_g,
+*                 colour = flipper_length_mm &lt; 205))
+```
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-40-1.png" style="display: block; margin: auto;" /&gt;
+
+
+
+
+
+
+---
+## Setting Colours
+
+
+
+```r
+ggplot(penguins) +
+  geom_point( aes(x = flipper_length_mm,
+                  y = body_mass_g),
+*                 colour = 'purple')
+```
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-42-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+.pull-left[
+
+```r
+ggplot(penguins, 
+       aes(x = flipper_length_mm,
+           y = body_mass_g,
+           color = species, 
+           shape = species)) +
+  geom_point() +
+* geom_density_2d()
+```
+
+- Syntax starts with `geom_*`.
+- eg: geom_histogram(), geom_bar(), geom_boxplot().
+- Each shape has its own specific aesthetics arguments.
+
+].pull-right[
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-44-1.png" style="display: block; margin: auto;" /&gt;
+
+]
+--
+
+.pull-left[
+
+
+```r
+ggplot(penguins) +
+  geom_histogram(
+*   aes(x = flipper_length_mm))
+```
+].pull-right[
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-46-1.png" style="display: block; margin: auto;" /&gt;
+]
+---
+
+Each shape has its own specific aesthetics arguments.
+
+`?geom_point`
+
+&lt;img src="fig/22_help.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+---
+### Global Data vs Layer Specific Mapping
+
+.pull-left[
+
+```r
+*ggplot(data = penguins,
+*      aes(x = flipper_length_mm,
+*          y = body_mass_g)) +
+  geom_point() +
+  geom_density_2d()  
+```
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-48-1.png" style="display: block; margin: auto;" /&gt;
+
+
+].pull-right[
+
+
+```r
+ggplot() +
+* geom_point(data = penguins,
+*            aes(x = flipper_length_mm,
+*                y = body_mass_g)) +
+  geom_density_2d()  
+```
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-49-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+
+---
+
+```r
+ggplot() +
+  geom_point() 
+```
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-50-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+### Global Data vs Layer Specific Mapping
+
+.pull-left[
+
+```r
+ggplot(data = penguins,
+       aes(x = flipper_length_mm,
+           y = body_mass_g)) +
+  geom_point() +
+  geom_density_2d()  
+```
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-51-1.png" style="display: block; margin: auto;" /&gt;
+
+
+].pull-right[
+
+
+```r
+ggplot() +
+  geom_point(data = penguins, 
+             aes(x = flipper_length_mm,
+                 y = body_mass_g)) +
+* geom_density_2d(data = penguins,
+*                 aes(x = flipper_length_mm,
+*                     y = body_mass_g))
+```
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-52-1.png" style="display: block; margin: auto;" /&gt;
+
+]
+---
+class: middle, center
+
+## Statistics
+
+&lt;img src="fig/21_statistics.png" width="40%" style="display: block; margin: auto;" /&gt;
+
+---
+- There are two ways to use statistical functions. 
+
+&lt;!--https://medium.com/@zoldin/introduction-to-ggplot2-the-grammar-81d10e11d908--&gt;
+
+.pull-left[
+**define `stat_*()` function and `geom` argument inside that function**
+
+
+```r
+ggplot(penguins,
+       aes(x = flipper_length_mm,
+           y = body_mass_g)) +
+  geom_point() +
+* stat_summary(
+*   geom ="point",
+    fun.y ="mean",
+    colour ="red")
+```
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-54-1.png" style="display: block; margin: auto;" /&gt;
+
+].pull-right[
+**define `geom_*()` function and `stat` argument inside that function**
+
+
+```r
+ggplot(penguins,
+       aes(x = flipper_length_mm,
+           y = body_mass_g)) +
+  geom_point() + 
+* geom_point(
+*   stat ="summary",
+    fun.y ="mean",
+    colour ="red")
+```
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-55-1.png" style="display: block; margin: auto;" /&gt;
+
+]
+
+---
+
+Statistics  | Geometries
+------------|----------
+`stat_count` | `geom_bar`
+`stat_boxplot` | `geom_boxplot`
+`stat_identity` | `geom_col`
+`stat_bin`  | `geom_bar`, `geom_histogram`
+`stat_density` | `geom_density`
+
+--
+
+.pull-left[
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="fig/23_help.png" alt="?geom_boxplot" width="100%" /&gt;
+&lt;p class="caption"&gt;?geom_boxplot&lt;/p&gt;
+&lt;/div&gt;
+].pull-right[
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="fig/24_help.png" alt="?geom_bar" width="120%" /&gt;
+&lt;p class="caption"&gt;?geom_bar&lt;/p&gt;
+&lt;/div&gt;
+]
+---
+class: middle, center
+
+## Scales
+
+&lt;img src="fig/25_scale.png" width="40%" style="display: block; margin: auto;" /&gt;
+---
+
+## Scales
+
+
+```r
+ggplot(penguins) +
+  geom_point( aes(x = flipper_length_mm,
+                  y = body_mass_g,
+*                 color = species,
+*                 shape = species))
+```
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-60-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Scales
+
+
+```r
+ggplot(penguins) +
+  geom_point( aes(x = flipper_length_mm,
+                  y = body_mass_g,
+*                 color = species,
+*                 shape = island))
+```
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-62-1.png" style="display: block; margin: auto;" /&gt;
+---
+
+
+
+## Scales manual
+
+- It's recommended to use a named vector
+
+
+```r
+cols &lt;- c("Adelie" = "red", "Chinstrap" = "blue", "Gentoo" = "darkgreen")
+
+ggplot(penguins) +
+  geom_point( aes(x = flipper_length_mm,
+                  y = body_mass_g,
+*                 color = species)) +
+* scale_colour_manual(values = cols)
+```
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-64-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Scales
+
+
+```r
+ggplot(penguins) +
+  geom_point( aes(x = flipper_length_mm,
+                  y = body_mass_g,
+*                 color = bill_length_mm,
+*                 shape = island))
+```
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-66-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+
+## Scales
+
+
+```r
+ggplot(penguins) +
+  geom_point(aes(x = flipper_length_mm,
+                  y = body_mass_g,
+                  color = species)) +
+* scale_color_brewer(type = 'qual',
+*                    palette =  'Dark2')
+```
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-68-1.png" style="display: block; margin: auto;" /&gt;
+
+--
+
+- `scale_&lt;aesthetic&gt;_&lt;type&gt;`
+
+---
+
+`RColorBrewer::display.brewer.all()`
+
+&lt;!--
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-69-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+--&gt;
+
+&lt;img src="fig/26_brewer.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+```r
+ggplot(penguins) +
+  geom_point(aes(x = flipper_length_mm,
+                 y = body_mass_g,
+*                color = species)) +
+* scale_color_viridis_d()
+```
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-72-1.png" style="display: block; margin: auto;" /&gt;
+--
+
+- `viridis` and `RColorBrewer` provide different color scales that are robust to color-blindness.
+--
+
+- For details and an interactive palette selection tools see http://colorbrewer.org
+
+&lt;!--These functions makes it possible to set a custom color palette for each group level.
+Use a list of colors that are color-blind friendly. R packages such as viridis and RColorBrewer provide different color scales that are robust to color-blindness.--&gt;
+---
+
+```r
+ggplot(penguins) +
+  geom_point(aes(x = flipper_length_mm,
+                 y = body_mass_g,
+                 color = species,
+                 shape = species,
+                 alpha = species)) +
+* scale_x_continuous( breaks = c(170,200,230)) +
+* scale_y_log10() +
+* scale_colour_viridis_d(direction = -1, option= 'plasma') +
+* scale_shape_manual( values = c(17,18,19)) +
+* scale_alpha_manual( values = c( "Adelie" = 0.6, "Gentoo" = 0.5, #
+*                                 "Chinstrap" = 0.7))
+```
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-74-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+class: middle, center
+
+## Facets
+
+&lt;img src="fig/28_facets.png" width="40%" style="display: block; margin: auto;" /&gt;
+---
+## `facet_wrap()`
+
+
+```r
+ggplot(penguins) +
+  geom_point(aes(
+    x = flipper_length_mm,
+    y = body_mass_g)) + 
+* facet_wrap(vars(species))
+```
+
+&lt;!-- help page # Use vars() to supply faceting variables:--&gt;
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-77-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+## `facet_wrap()`
+
+
+```r
+ggplot(penguins) +
+  geom_point(aes(
+    x = flipper_length_mm,
+    y = body_mass_g)) + 
+  facet_wrap(vars(species),
+*            scales = "free_x")
+```
+
+&lt;!-- help page # Use vars() to supply faceting variables:--&gt;
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-79-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## `facet_grid()`
+
+
+```r
+ggplot(penguins) +
+  geom_point(aes(
+    x = flipper_length_mm,
+    y = body_mass_g)) + 
+* facet_grid( vars(species), vars(sex))
+```
+
+&lt;!-- help page # Use vars() to supply faceting variables:--&gt;
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-81-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+class: middle, center
+
+## Coordinates
+
+&lt;img src="fig/29_coord.png" width="40%" style="display: block; margin: auto;" /&gt;
+
+---
+## Coordinates
+
+
+```r
+ggplot(penguins) +
+  geom_bar(aes(x= species, fill = species)) 
+```
+
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-84-1.png" style="display: block; margin: auto;" /&gt;
+---
+
+
+```r
+ggplot(penguins) +
+  geom_bar(aes(x= species, fill = species)) +
+* coord_flip()
+```
+
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-86-1.png" style="display: block; margin: auto;" /&gt;
+
+--
+&lt;!--https://ggplot2-book.org/coord.html--&gt;
+
+- There are two types of coordinate systems:  
+   - Linear coordinate systems
+   - Non-linear coordinate systems 
+--
+
+- Linear coordinate systems : `coord_cartesian()`, `coord_flip()`, `coord_fixed()`
+--
+
+- Non-linear coordinate systems : eg : `coord_map()`, `coord_quickmap()`, `coord_sf()`, `coord_polar()`, `coord_trans()`
+
+---
+
+### Accommodating Human Limitations
+
+- Pie charts are one of the most overused graphs in the world and in most cases are not the best way to
+present data.
+--
+
+- You Shouldn’t Use Pie Charts In Your Dashboards
+--
+
+- Many visualization software vendors no longer include them in their catalogs.
+--
+
+- Pie charts are prone to misinterpretation and can easily be turned into disinformation.
+--
+
+- Humans are not great at judging angles, which is exactly what a pie chart uses to represent size.
+--
+
+- Lengths are much easier to compare, and length happens to be exactly what a bar chart uses to represent
+size.
+--
+
+- Bar charts allows the viewer to make comparisons based on the the length of the bars along a common
+scale (the y-axis).
+--
+
+- Humans tend to be more accurate when decoding differences based on these perceptual elements than based on area or color
+
+---
+class: middle, center
+
+## Themes
+
+&lt;img src="fig/32_themes.png" width="40%" style="display: block; margin: auto;" /&gt;
+---
+These are complete themes which control all **non-data** display. 
+
+.pull-left[
+
+```r
+ggplot(data = penguins,
+       aes(x = flipper_length_mm,
+           y = body_mass_g)) +
+  geom_point(aes(
+    color = species,
+    shape = species),
+    size = 3,
+    alpha = 0.8) +
+* theme_minimal()
+```
+
+].pull-right[
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-89-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+--
+.pull-left[
+
+```r
+ggplot(data = penguins,
+       aes(x = flipper_length_mm,
+           y = body_mass_g)) +
+  geom_point(aes(
+    color = species,
+    shape = species),
+    size = 3,
+    alpha = 0.8) +
+* theme_dark()
+```
+].pull-right[
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-91-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+---
+#### Create custom themes in ggplot.
+
+
+```r
+ggplot(penguins,
+       aes(x = flipper_length_mm, y = body_mass_g)) +
+  geom_point(aes(color = species, shape = species), size = 3, alpha = 0.8) +
+  scale_color_viridis_d() +
+* theme_minimal() +
+* labs(
+*   title = "Penguin size, Palmer Station LTER",
+*   subtitle = "Flipper length and body mass for Adelie, Chinstrap and Gentoo Penguins",
+*   x = "Flipper length (mm)", y = "Body mass (g)",
+*   color = "Penguin species", shape = "Penguin species") +
+* theme(
+*   aspect.ratio = 1, legend.position = c(0.2, 0.7),
+*   legend.background =
+*     element_rect(
+*       fill = "white",
+*       color = NA),
+*   plot.title.position = "plot",
+*   plot.caption =
+*     element_text(
+*       hjust = 0,
+*       face= "italic"),
+*   plot.caption.position = "plot")
+```
+
+
+---
+
+.pull-left[
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-93-1.png" style="display: block; margin: auto;" /&gt;
+].pull-right[
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-94-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+
+&lt;!--Why use custom themes?
+ggplot2, a popular R package for visualization (used here interchangeably with ggplot), produces graphics with a recognizable default “style”. While the “baked-in” ggplot theme settings can work well from a design standpoint, there is also massive flexibility and potential for customization within the theme() function of ggplot. Almost any non-data component of a plot - axes, titles subtitles, gridlines, and more - can be specified within this function.
+
+This customization can help you establish a personal or professional brand for your plots. Many organizations leverage ggplot themes in their publications to create a consistent style across graphics that they produce. 
+
+https://rpubs.com/mclaire19/ggplot2-custom-themes--&gt;
+
+---
+
+background-image:url('fig/33_gg.png')
+background-position: 50% 50%
+background-size: 100%
+class: top, center
+---
+class: inverse, middle, center
+
+# ggplot2 extensions
+---
+background-image:url('fig/34_extension.png')
+background-position: 50% 90%
+background-size: 100%
+class: top, center
+### ggplot2 extensions: `https://exts.ggplot2.tidyverse.org/`
+
+
+&lt;!--https://mode.com/blog/r-ggplot-extension-packages/--&gt;
+
+---
+
+class:  middle, center
+
+# 1. `patchwork` for plot composition
+
+&lt;img src="fig/35_patchwork.png" width="40%" style="display: block; margin: auto;" /&gt;
+---
+
+```r
+p1 &lt;-  ggplot(data = penguins, aes(x = flipper_length_mm, y = body_mass_g)) +
+  geom_point(aes(color = species, shape = species), size = 2) +
+  scale_color_manual(values = c("darkorange","darkorchid","cyan4")) +
+  theme(aspect.ratio = 1)
+
+p2 &lt;-  ggplot(data = penguins, aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point(aes(color = species, shape = species), size = 2)  +
+  scale_color_manual(values = c("darkorange","darkorchid","cyan4")) +
+    theme(aspect.ratio = 1)
+
+p3 &lt;- ggplot(data = penguins, aes(x = flipper_length_mm)) +
+  geom_histogram(aes(fill = species), alpha = 0.5, position = "identity") +
+  scale_fill_manual(values = c("darkorange","darkorchid","cyan4"))
+```
+
+---
+
+
+```r
+library(patchwork)
+p1 + p3 
+```
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-97-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+&lt;!--  The + operator simply combines plots without telling patchwork anything about the desired layout. The layout, unless changed with plot_layout() (See the Controlling Layout guide), will simply be a grid with enough rows and columns to contain the number of plots, while being as square as possible. For the special case of putting plots besides each other or on top of each other patchwork provides 2 shortcut operators. | will place plots next to each other while / will place them on top of each other.
+https://patchwork.data-imaginist.com/articles/guides/assembly.html--&gt;
+
+
+```r
+library(patchwork)
+(p1 | p2) / p3
+```
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-98-1.png" style="display: block; margin: auto;" /&gt;
+---
+
+```r
+library(patchwork)
+p &lt;- (p1 | p2) / p3
+
+*p + plot_layout(guide = 'collect')
+```
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-99-1.png" style="display: block; margin: auto;" /&gt;
+---
+
+```r
+library(patchwork)
+p &lt;- (p1 | p2) / p3
+
+p +
+  plot_layout(guide = 'collect') +
+  plot_annotation(
+*   title = 'Size measurements for adult foraging penguins near Palmer Station, Antarctica',
+*   tag_levels = 'A')
+```
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-100-1.png" style="display: block; margin: auto;" /&gt;
+---
+
+```r
+library(patchwork)
+p &lt;- (p1 | p2) / p3
+
+p &amp; 
+* theme(legend.position =  'none')
+```
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-101-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+class:  middle, center
+
+# 2. `plotly` 
+
+An R package for creating **interactive web graphics** via the open source JavaScript graphing library plotly.js.
+
+
+
+---
+
+
+```r
+p1 ## a ggplot object
+```
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-102-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+```r
+plotly::ggplotly(p1)
+```
+
+<div id="htmlwidget-3b8ce43551c3846237af" style="width:100%;height:504px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-3b8ce43551c3846237af">{"x":{"data":[{"x":[181,186,195,null,193,190,181,195,193,190,186,180,182,191,198,185,195,197,184,194,174,180,189,185,180,187,183,187,172,180,178,178,188,184,195,196,190,180,181,184,182,195,186,196,185,190,182,179,190,191,186,188,190,200,187,191,186,193,181,194,185,195,185,192,184,192,195,188,190,198,190,190,196,197,190,195,191,184,187,195,189,196,187,193,191,194,190,189,189,190,202,205,185,186,187,208,190,196,178,192,192,203,183,190,193,184,199,190,181,197,198,191,193,197,191,196,188,199,189,189,187,198,176,202,186,199,191,195,191,210,190,197,193,199,187,190,191,200,185,193,193,187,188,190,192,185,190,184,195,193,187,201],"y":[3750,3800,3250,null,3450,3650,3625,4675,3475,4250,3300,3700,3200,3800,4400,3700,3450,4500,3325,4200,3400,3600,3800,3950,3800,3800,3550,3200,3150,3950,3250,3900,3300,3900,3325,4150,3950,3550,3300,4650,3150,3900,3100,4400,3000,4600,3425,2975,3450,4150,3500,4300,3450,4050,2900,3700,3550,3800,2850,3750,3150,4400,3600,4050,2850,3950,3350,4100,3050,4450,3600,3900,3550,4150,3700,4250,3700,3900,3550,4000,3200,4700,3800,4200,3350,3550,3800,3500,3950,3600,3550,4300,3400,4450,3300,4300,3700,4350,2900,4100,3725,4725,3075,4250,2925,3550,3750,3900,3175,4775,3825,4600,3200,4275,3900,4075,2900,3775,3350,3325,3150,3500,3450,3875,3050,4000,3275,4300,3050,4000,3325,3500,3500,4475,3425,3900,3175,3975,3400,4250,3400,3475,3050,3725,3000,3650,4250,3475,3450,3750,3700,4000],"text":["species: Adelie<br />species: Adelie<br />flipper_length_mm: 181<br />body_mass_g: 3750","species: Adelie<br />species: Adelie<br />flipper_length_mm: 186<br />body_mass_g: 3800","species: Adelie<br />species: Adelie<br />flipper_length_mm: 195<br />body_mass_g: 3250","species: Adelie<br />species: Adelie<br />flipper_length_mm:  NA<br />body_mass_g:   NA","species: Adelie<br />species: Adelie<br />flipper_length_mm: 193<br />body_mass_g: 3450","species: Adelie<br />species: Adelie<br />flipper_length_mm: 190<br />body_mass_g: 3650","species: Adelie<br />species: Adelie<br />flipper_length_mm: 181<br />body_mass_g: 3625","species: Adelie<br />species: Adelie<br />flipper_length_mm: 195<br />body_mass_g: 4675","species: Adelie<br />species: Adelie<br />flipper_length_mm: 193<br />body_mass_g: 3475","species: Adelie<br />species: Adelie<br />flipper_length_mm: 190<br />body_mass_g: 4250","species: Adelie<br />species: Adelie<br />flipper_length_mm: 186<br />body_mass_g: 3300","species: Adelie<br />species: Adelie<br />flipper_length_mm: 180<br />body_mass_g: 3700","species: Adelie<br />species: Adelie<br />flipper_length_mm: 182<br />body_mass_g: 3200","species: Adelie<br />species: Adelie<br />flipper_length_mm: 191<br />body_mass_g: 3800","species: Adelie<br />species: Adelie<br />flipper_length_mm: 198<br />body_mass_g: 4400","species: Adelie<br />species: Adelie<br />flipper_length_mm: 185<br />body_mass_g: 3700","species: Adelie<br />species: Adelie<br />flipper_length_mm: 195<br />body_mass_g: 3450","species: Adelie<br />species: Adelie<br />flipper_length_mm: 197<br />body_mass_g: 4500","species: Adelie<br />species: Adelie<br />flipper_length_mm: 184<br />body_mass_g: 3325","species: Adelie<br />species: Adelie<br />flipper_length_mm: 194<br />body_mass_g: 4200","species: Adelie<br />species: Adelie<br />flipper_length_mm: 174<br />body_mass_g: 3400","species: Adelie<br />species: Adelie<br />flipper_length_mm: 180<br />body_mass_g: 3600","species: Adelie<br />species: Adelie<br />flipper_length_mm: 189<br />body_mass_g: 3800","species: Adelie<br />species: Adelie<br />flipper_length_mm: 185<br />body_mass_g: 3950","species: Adelie<br />species: Adelie<br />flipper_length_mm: 180<br />body_mass_g: 3800","species: Adelie<br />species: Adelie<br />flipper_length_mm: 187<br />body_mass_g: 3800","species: Adelie<br />species: Adelie<br />flipper_length_mm: 183<br />body_mass_g: 3550","species: Adelie<br />species: Adelie<br />flipper_length_mm: 187<br />body_mass_g: 3200","species: Adelie<br />species: Adelie<br />flipper_length_mm: 172<br />body_mass_g: 3150","species: Adelie<br />species: Adelie<br />flipper_length_mm: 180<br />body_mass_g: 3950","species: Adelie<br />species: Adelie<br />flipper_length_mm: 178<br />body_mass_g: 3250","species: Adelie<br />species: Adelie<br />flipper_length_mm: 178<br />body_mass_g: 3900","species: Adelie<br />species: Adelie<br />flipper_length_mm: 188<br />body_mass_g: 3300","species: Adelie<br />species: Adelie<br />flipper_length_mm: 184<br />body_mass_g: 3900","species: Adelie<br />species: Adelie<br />flipper_length_mm: 195<br />body_mass_g: 3325","species: Adelie<br />species: Adelie<br />flipper_length_mm: 196<br />body_mass_g: 4150","species: Adelie<br />species: Adelie<br />flipper_length_mm: 190<br />body_mass_g: 3950","species: Adelie<br />species: Adelie<br />flipper_length_mm: 180<br />body_mass_g: 3550","species: Adelie<br />species: Adelie<br />flipper_length_mm: 181<br />body_mass_g: 3300","species: Adelie<br />species: Adelie<br />flipper_length_mm: 184<br />body_mass_g: 4650","species: Adelie<br />species: Adelie<br />flipper_length_mm: 182<br />body_mass_g: 3150","species: Adelie<br />species: Adelie<br />flipper_length_mm: 195<br />body_mass_g: 3900","species: Adelie<br />species: Adelie<br />flipper_length_mm: 186<br />body_mass_g: 3100","species: Adelie<br />species: Adelie<br />flipper_length_mm: 196<br />body_mass_g: 4400","species: Adelie<br />species: Adelie<br />flipper_length_mm: 185<br />body_mass_g: 3000","species: Adelie<br />species: Adelie<br />flipper_length_mm: 190<br />body_mass_g: 4600","species: Adelie<br />species: Adelie<br />flipper_length_mm: 182<br />body_mass_g: 3425","species: Adelie<br />species: Adelie<br />flipper_length_mm: 179<br />body_mass_g: 2975","species: Adelie<br />species: Adelie<br />flipper_length_mm: 190<br />body_mass_g: 3450","species: Adelie<br />species: Adelie<br />flipper_length_mm: 191<br />body_mass_g: 4150","species: Adelie<br />species: Adelie<br />flipper_length_mm: 186<br />body_mass_g: 3500","species: Adelie<br />species: Adelie<br />flipper_length_mm: 188<br />body_mass_g: 4300","species: Adelie<br />species: Adelie<br />flipper_length_mm: 190<br />body_mass_g: 3450","species: Adelie<br />species: Adelie<br />flipper_length_mm: 200<br />body_mass_g: 4050","species: Adelie<br />species: Adelie<br />flipper_length_mm: 187<br />body_mass_g: 2900","species: Adelie<br />species: Adelie<br />flipper_length_mm: 191<br />body_mass_g: 3700","species: Adelie<br />species: Adelie<br />flipper_length_mm: 186<br />body_mass_g: 3550","species: Adelie<br />species: Adelie<br />flipper_length_mm: 193<br />body_mass_g: 3800","species: Adelie<br />species: Adelie<br />flipper_length_mm: 181<br />body_mass_g: 2850","species: Adelie<br />species: Adelie<br />flipper_length_mm: 194<br />body_mass_g: 3750","species: Adelie<br />species: Adelie<br />flipper_length_mm: 185<br />body_mass_g: 3150","species: Adelie<br />species: Adelie<br />flipper_length_mm: 195<br />body_mass_g: 4400","species: Adelie<br />species: Adelie<br />flipper_length_mm: 185<br />body_mass_g: 3600","species: Adelie<br />species: Adelie<br />flipper_length_mm: 192<br />body_mass_g: 4050","species: Adelie<br />species: Adelie<br />flipper_length_mm: 184<br />body_mass_g: 2850","species: Adelie<br />species: Adelie<br />flipper_length_mm: 192<br />body_mass_g: 3950","species: Adelie<br />species: Adelie<br />flipper_length_mm: 195<br />body_mass_g: 3350","species: Adelie<br />species: Adelie<br />flipper_length_mm: 188<br />body_mass_g: 4100","species: Adelie<br />species: Adelie<br />flipper_length_mm: 190<br />body_mass_g: 3050","species: Adelie<br />species: Adelie<br />flipper_length_mm: 198<br />body_mass_g: 4450","species: Adelie<br />species: Adelie<br />flipper_length_mm: 190<br />body_mass_g: 3600","species: Adelie<br />species: Adelie<br />flipper_length_mm: 190<br />body_mass_g: 3900","species: Adelie<br />species: Adelie<br />flipper_length_mm: 196<br />body_mass_g: 3550","species: Adelie<br />species: Adelie<br />flipper_length_mm: 197<br />body_mass_g: 4150","species: Adelie<br />species: Adelie<br />flipper_length_mm: 190<br />body_mass_g: 3700","species: Adelie<br />species: Adelie<br />flipper_length_mm: 195<br />body_mass_g: 4250","species: Adelie<br />species: Adelie<br />flipper_length_mm: 191<br />body_mass_g: 3700","species: Adelie<br />species: Adelie<br />flipper_length_mm: 184<br />body_mass_g: 3900","species: Adelie<br />species: Adelie<br />flipper_length_mm: 187<br />body_mass_g: 3550","species: Adelie<br />species: Adelie<br />flipper_length_mm: 195<br />body_mass_g: 4000","species: Adelie<br />species: Adelie<br />flipper_length_mm: 189<br />body_mass_g: 3200","species: Adelie<br />species: Adelie<br />flipper_length_mm: 196<br />body_mass_g: 4700","species: Adelie<br />species: Adelie<br />flipper_length_mm: 187<br />body_mass_g: 3800","species: Adelie<br />species: Adelie<br />flipper_length_mm: 193<br />body_mass_g: 4200","species: Adelie<br />species: Adelie<br />flipper_length_mm: 191<br />body_mass_g: 3350","species: Adelie<br />species: Adelie<br />flipper_length_mm: 194<br />body_mass_g: 3550","species: Adelie<br />species: Adelie<br />flipper_length_mm: 190<br />body_mass_g: 3800","species: Adelie<br />species: Adelie<br />flipper_length_mm: 189<br />body_mass_g: 3500","species: Adelie<br />species: Adelie<br />flipper_length_mm: 189<br />body_mass_g: 3950","species: Adelie<br />species: Adelie<br />flipper_length_mm: 190<br />body_mass_g: 3600","species: Adelie<br />species: Adelie<br />flipper_length_mm: 202<br />body_mass_g: 3550","species: Adelie<br />species: Adelie<br />flipper_length_mm: 205<br />body_mass_g: 4300","species: Adelie<br />species: Adelie<br />flipper_length_mm: 185<br />body_mass_g: 3400","species: Adelie<br />species: Adelie<br />flipper_length_mm: 186<br />body_mass_g: 4450","species: Adelie<br />species: Adelie<br />flipper_length_mm: 187<br />body_mass_g: 3300","species: Adelie<br />species: Adelie<br />flipper_length_mm: 208<br />body_mass_g: 4300","species: Adelie<br />species: Adelie<br />flipper_length_mm: 190<br />body_mass_g: 3700","species: Adelie<br />species: Adelie<br />flipper_length_mm: 196<br />body_mass_g: 4350","species: Adelie<br />species: Adelie<br />flipper_length_mm: 178<br />body_mass_g: 2900","species: Adelie<br />species: Adelie<br />flipper_length_mm: 192<br />body_mass_g: 4100","species: Adelie<br />species: Adelie<br />flipper_length_mm: 192<br />body_mass_g: 3725","species: Adelie<br />species: Adelie<br />flipper_length_mm: 203<br />body_mass_g: 4725","species: Adelie<br />species: Adelie<br />flipper_length_mm: 183<br />body_mass_g: 3075","species: Adelie<br />species: Adelie<br />flipper_length_mm: 190<br />body_mass_g: 4250","species: Adelie<br />species: Adelie<br />flipper_length_mm: 193<br />body_mass_g: 2925","species: Adelie<br />species: Adelie<br />flipper_length_mm: 184<br />body_mass_g: 3550","species: Adelie<br />species: Adelie<br />flipper_length_mm: 199<br />body_mass_g: 3750","species: Adelie<br />species: Adelie<br />flipper_length_mm: 190<br />body_mass_g: 3900","species: Adelie<br />species: Adelie<br />flipper_length_mm: 181<br />body_mass_g: 3175","species: Adelie<br />species: Adelie<br />flipper_length_mm: 197<br />body_mass_g: 4775","species: Adelie<br />species: Adelie<br />flipper_length_mm: 198<br />body_mass_g: 3825","species: Adelie<br />species: Adelie<br />flipper_length_mm: 191<br />body_mass_g: 4600","species: Adelie<br />species: Adelie<br />flipper_length_mm: 193<br />body_mass_g: 3200","species: Adelie<br />species: Adelie<br />flipper_length_mm: 197<br />body_mass_g: 4275","species: Adelie<br />species: Adelie<br />flipper_length_mm: 191<br />body_mass_g: 3900","species: Adelie<br />species: Adelie<br />flipper_length_mm: 196<br />body_mass_g: 4075","species: Adelie<br />species: Adelie<br />flipper_length_mm: 188<br />body_mass_g: 2900","species: Adelie<br />species: Adelie<br />flipper_length_mm: 199<br />body_mass_g: 3775","species: Adelie<br />species: Adelie<br />flipper_length_mm: 189<br />body_mass_g: 3350","species: Adelie<br />species: Adelie<br />flipper_length_mm: 189<br />body_mass_g: 3325","species: Adelie<br />species: Adelie<br />flipper_length_mm: 187<br />body_mass_g: 3150","species: Adelie<br />species: Adelie<br />flipper_length_mm: 198<br />body_mass_g: 3500","species: Adelie<br />species: Adelie<br />flipper_length_mm: 176<br />body_mass_g: 3450","species: Adelie<br />species: Adelie<br />flipper_length_mm: 202<br />body_mass_g: 3875","species: Adelie<br />species: Adelie<br />flipper_length_mm: 186<br />body_mass_g: 3050","species: Adelie<br />species: Adelie<br />flipper_length_mm: 199<br />body_mass_g: 4000","species: Adelie<br />species: Adelie<br />flipper_length_mm: 191<br />body_mass_g: 3275","species: Adelie<br />species: Adelie<br />flipper_length_mm: 195<br />body_mass_g: 4300","species: Adelie<br />species: Adelie<br />flipper_length_mm: 191<br />body_mass_g: 3050","species: Adelie<br />species: Adelie<br />flipper_length_mm: 210<br />body_mass_g: 4000","species: Adelie<br />species: Adelie<br />flipper_length_mm: 190<br />body_mass_g: 3325","species: Adelie<br />species: Adelie<br />flipper_length_mm: 197<br />body_mass_g: 3500","species: Adelie<br />species: Adelie<br />flipper_length_mm: 193<br />body_mass_g: 3500","species: Adelie<br />species: Adelie<br />flipper_length_mm: 199<br />body_mass_g: 4475","species: Adelie<br />species: Adelie<br />flipper_length_mm: 187<br />body_mass_g: 3425","species: Adelie<br />species: Adelie<br />flipper_length_mm: 190<br />body_mass_g: 3900","species: Adelie<br />species: Adelie<br />flipper_length_mm: 191<br />body_mass_g: 3175","species: Adelie<br />species: Adelie<br />flipper_length_mm: 200<br />body_mass_g: 3975","species: Adelie<br />species: Adelie<br />flipper_length_mm: 185<br />body_mass_g: 3400","species: Adelie<br />species: Adelie<br />flipper_length_mm: 193<br />body_mass_g: 4250","species: Adelie<br />species: Adelie<br />flipper_length_mm: 193<br />body_mass_g: 3400","species: Adelie<br />species: Adelie<br />flipper_length_mm: 187<br />body_mass_g: 3475","species: Adelie<br />species: Adelie<br />flipper_length_mm: 188<br />body_mass_g: 3050","species: Adelie<br />species: Adelie<br />flipper_length_mm: 190<br />body_mass_g: 3725","species: Adelie<br />species: Adelie<br />flipper_length_mm: 192<br />body_mass_g: 3000","species: Adelie<br />species: Adelie<br />flipper_length_mm: 185<br />body_mass_g: 3650","species: Adelie<br />species: Adelie<br />flipper_length_mm: 190<br />body_mass_g: 4250","species: Adelie<br />species: Adelie<br />flipper_length_mm: 184<br />body_mass_g: 3475","species: Adelie<br />species: Adelie<br />flipper_length_mm: 195<br />body_mass_g: 3450","species: Adelie<br />species: Adelie<br />flipper_length_mm: 193<br />body_mass_g: 3750","species: Adelie<br />species: Adelie<br />flipper_length_mm: 187<br />body_mass_g: 3700","species: Adelie<br />species: Adelie<br />flipper_length_mm: 201<br />body_mass_g: 4000"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(255,140,0,1)","opacity":1,"size":7.55905511811024,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(255,140,0,1)"}},"hoveron":"points","name":"Adelie","legendgroup":"Adelie","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[192,196,193,188,197,198,178,197,195,198,193,194,185,201,190,201,197,181,190,195,181,191,187,193,195,197,200,200,191,205,187,201,187,203,195,199,195,210,192,205,210,187,196,196,196,201,190,212,187,198,199,201,193,203,187,197,191,203,202,194,206,189,195,207,202,193,210,198],"y":[3500,3900,3650,3525,3725,3950,3250,3750,4150,3700,3800,3775,3700,4050,3575,4050,3300,3700,3450,4400,3600,3400,2900,3800,3300,4150,3400,3800,3700,4550,3200,4300,3350,4100,3600,3900,3850,4800,2700,4500,3950,3650,3550,3500,3675,4450,3400,4300,3250,3675,3325,3950,3600,4050,3350,3450,3250,4050,3800,3525,3950,3650,3650,4000,3400,3775,4100,3775],"text":["species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 192<br />body_mass_g: 3500","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 196<br />body_mass_g: 3900","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 193<br />body_mass_g: 3650","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 188<br />body_mass_g: 3525","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 197<br />body_mass_g: 3725","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 198<br />body_mass_g: 3950","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 178<br />body_mass_g: 3250","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 197<br />body_mass_g: 3750","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 195<br />body_mass_g: 4150","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 198<br />body_mass_g: 3700","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 193<br />body_mass_g: 3800","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 194<br />body_mass_g: 3775","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 185<br />body_mass_g: 3700","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 201<br />body_mass_g: 4050","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 190<br />body_mass_g: 3575","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 201<br />body_mass_g: 4050","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 197<br />body_mass_g: 3300","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 181<br />body_mass_g: 3700","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 190<br />body_mass_g: 3450","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 195<br />body_mass_g: 4400","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 181<br />body_mass_g: 3600","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 191<br />body_mass_g: 3400","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 187<br />body_mass_g: 2900","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 193<br />body_mass_g: 3800","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 195<br />body_mass_g: 3300","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 197<br />body_mass_g: 4150","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 200<br />body_mass_g: 3400","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 200<br />body_mass_g: 3800","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 191<br />body_mass_g: 3700","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 205<br />body_mass_g: 4550","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 187<br />body_mass_g: 3200","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 201<br />body_mass_g: 4300","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 187<br />body_mass_g: 3350","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 203<br />body_mass_g: 4100","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 195<br />body_mass_g: 3600","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 199<br />body_mass_g: 3900","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 195<br />body_mass_g: 3850","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 210<br />body_mass_g: 4800","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 192<br />body_mass_g: 2700","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 205<br />body_mass_g: 4500","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 210<br />body_mass_g: 3950","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 187<br />body_mass_g: 3650","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 196<br />body_mass_g: 3550","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 196<br />body_mass_g: 3500","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 196<br />body_mass_g: 3675","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 201<br />body_mass_g: 4450","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 190<br />body_mass_g: 3400","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 212<br />body_mass_g: 4300","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 187<br />body_mass_g: 3250","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 198<br />body_mass_g: 3675","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 199<br />body_mass_g: 3325","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 201<br />body_mass_g: 3950","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 193<br />body_mass_g: 3600","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 203<br />body_mass_g: 4050","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 187<br />body_mass_g: 3350","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 197<br />body_mass_g: 3450","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 191<br />body_mass_g: 3250","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 203<br />body_mass_g: 4050","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 202<br />body_mass_g: 3800","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 194<br />body_mass_g: 3525","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 206<br />body_mass_g: 3950","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 189<br />body_mass_g: 3650","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 195<br />body_mass_g: 3650","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 207<br />body_mass_g: 4000","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 202<br />body_mass_g: 3400","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 193<br />body_mass_g: 3775","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 210<br />body_mass_g: 4100","species: Chinstrap<br />species: Chinstrap<br />flipper_length_mm: 198<br />body_mass_g: 3775"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(153,50,204,1)","opacity":1,"size":7.55905511811024,"symbol":"triangle-up","line":{"width":1.88976377952756,"color":"rgba(153,50,204,1)"}},"hoveron":"points","name":"Chinstrap","legendgroup":"Chinstrap","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[211,230,210,218,215,210,211,219,209,215,214,216,214,213,210,217,210,221,209,222,218,215,213,215,215,215,216,215,210,220,222,209,207,230,220,220,213,219,208,208,208,225,210,216,222,217,210,225,213,215,210,220,210,225,217,220,208,220,208,224,208,221,214,231,219,230,214,229,220,223,216,221,221,217,216,230,209,220,215,223,212,221,212,224,212,228,218,218,212,230,218,228,212,224,214,226,216,222,203,225,219,228,215,228,216,215,210,219,208,209,216,229,213,230,217,230,217,222,214,null,215,222,212,213],"y":[4500,5700,4450,5700,5400,4550,4800,5200,4400,5150,4650,5550,4650,5850,4200,5850,4150,6300,4800,5350,5700,5000,4400,5050,5000,5100,4100,5650,4600,5550,5250,4700,5050,6050,5150,5400,4950,5250,4350,5350,3950,5700,4300,4750,5550,4900,4200,5400,5100,5300,4850,5300,4400,5000,4900,5050,4300,5000,4450,5550,4200,5300,4400,5650,4700,5700,4650,5800,4700,5550,4750,5000,5100,5200,4700,5800,4600,6000,4750,5950,4625,5450,4725,5350,4750,5600,4600,5300,4875,5550,4950,5400,4750,5650,4850,5200,4925,4875,4625,5250,4850,5600,4975,5500,4725,5500,4700,5500,4575,5500,5000,5950,4650,5500,4375,5850,4875,6000,4925,null,4850,5750,5200,5400],"text":["species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 211<br />body_mass_g: 4500","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 230<br />body_mass_g: 5700","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 210<br />body_mass_g: 4450","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 218<br />body_mass_g: 5700","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 215<br />body_mass_g: 5400","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 210<br />body_mass_g: 4550","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 211<br />body_mass_g: 4800","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 219<br />body_mass_g: 5200","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 209<br />body_mass_g: 4400","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 215<br />body_mass_g: 5150","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 214<br />body_mass_g: 4650","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 216<br />body_mass_g: 5550","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 214<br />body_mass_g: 4650","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 213<br />body_mass_g: 5850","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 210<br />body_mass_g: 4200","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 217<br />body_mass_g: 5850","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 210<br />body_mass_g: 4150","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 221<br />body_mass_g: 6300","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 209<br />body_mass_g: 4800","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 222<br />body_mass_g: 5350","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 218<br />body_mass_g: 5700","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 215<br />body_mass_g: 5000","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 213<br />body_mass_g: 4400","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 215<br />body_mass_g: 5050","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 215<br />body_mass_g: 5000","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 215<br />body_mass_g: 5100","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 216<br />body_mass_g: 4100","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 215<br />body_mass_g: 5650","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 210<br />body_mass_g: 4600","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 220<br />body_mass_g: 5550","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 222<br />body_mass_g: 5250","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 209<br />body_mass_g: 4700","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 207<br />body_mass_g: 5050","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 230<br />body_mass_g: 6050","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 220<br />body_mass_g: 5150","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 220<br />body_mass_g: 5400","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 213<br />body_mass_g: 4950","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 219<br />body_mass_g: 5250","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 208<br />body_mass_g: 4350","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 208<br />body_mass_g: 5350","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 208<br />body_mass_g: 3950","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 225<br />body_mass_g: 5700","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 210<br />body_mass_g: 4300","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 216<br />body_mass_g: 4750","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 222<br />body_mass_g: 5550","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 217<br />body_mass_g: 4900","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 210<br />body_mass_g: 4200","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 225<br />body_mass_g: 5400","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 213<br />body_mass_g: 5100","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 215<br />body_mass_g: 5300","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 210<br />body_mass_g: 4850","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 220<br />body_mass_g: 5300","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 210<br />body_mass_g: 4400","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 225<br />body_mass_g: 5000","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 217<br />body_mass_g: 4900","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 220<br />body_mass_g: 5050","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 208<br />body_mass_g: 4300","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 220<br />body_mass_g: 5000","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 208<br />body_mass_g: 4450","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 224<br />body_mass_g: 5550","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 208<br />body_mass_g: 4200","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 221<br />body_mass_g: 5300","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 214<br />body_mass_g: 4400","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 231<br />body_mass_g: 5650","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 219<br />body_mass_g: 4700","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 230<br />body_mass_g: 5700","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 214<br />body_mass_g: 4650","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 229<br />body_mass_g: 5800","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 220<br />body_mass_g: 4700","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 223<br />body_mass_g: 5550","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 216<br />body_mass_g: 4750","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 221<br />body_mass_g: 5000","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 221<br />body_mass_g: 5100","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 217<br />body_mass_g: 5200","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 216<br />body_mass_g: 4700","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 230<br />body_mass_g: 5800","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 209<br />body_mass_g: 4600","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 220<br />body_mass_g: 6000","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 215<br />body_mass_g: 4750","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 223<br />body_mass_g: 5950","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 212<br />body_mass_g: 4625","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 221<br />body_mass_g: 5450","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 212<br />body_mass_g: 4725","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 224<br />body_mass_g: 5350","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 212<br />body_mass_g: 4750","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 228<br />body_mass_g: 5600","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 218<br />body_mass_g: 4600","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 218<br />body_mass_g: 5300","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 212<br />body_mass_g: 4875","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 230<br />body_mass_g: 5550","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 218<br />body_mass_g: 4950","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 228<br />body_mass_g: 5400","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 212<br />body_mass_g: 4750","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 224<br />body_mass_g: 5650","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 214<br />body_mass_g: 4850","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 226<br />body_mass_g: 5200","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 216<br />body_mass_g: 4925","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 222<br />body_mass_g: 4875","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 203<br />body_mass_g: 4625","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 225<br />body_mass_g: 5250","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 219<br />body_mass_g: 4850","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 228<br />body_mass_g: 5600","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 215<br />body_mass_g: 4975","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 228<br />body_mass_g: 5500","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 216<br />body_mass_g: 4725","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 215<br />body_mass_g: 5500","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 210<br />body_mass_g: 4700","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 219<br />body_mass_g: 5500","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 208<br />body_mass_g: 4575","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 209<br />body_mass_g: 5500","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 216<br />body_mass_g: 5000","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 229<br />body_mass_g: 5950","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 213<br />body_mass_g: 4650","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 230<br />body_mass_g: 5500","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 217<br />body_mass_g: 4375","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 230<br />body_mass_g: 5850","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 217<br />body_mass_g: 4875","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 222<br />body_mass_g: 6000","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 214<br />body_mass_g: 4925","species: Gentoo<br />species: Gentoo<br />flipper_length_mm:  NA<br />body_mass_g:   NA","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 215<br />body_mass_g: 4850","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 222<br />body_mass_g: 5750","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 212<br />body_mass_g: 5200","species: Gentoo<br />species: Gentoo<br />flipper_length_mm: 213<br />body_mass_g: 5400"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,139,139,1)","opacity":1,"size":7.55905511811024,"symbol":"square","line":{"width":1.88976377952756,"color":"rgba(0,139,139,1)"}},"hoveron":"points","name":"Gentoo","legendgroup":"Gentoo","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":23.3059360730594,"r":7.30593607305936,"b":37.2602739726027,"l":48.9497716894977},"plot_bgcolor":"rgba(235,235,235,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[169.05,233.95],"tickmode":"array","ticktext":["170","180","190","200","210","220","230"],"tickvals":[170,180,190,200,210,220,230],"categoryorder":"array","categoryarray":["170","180","190","200","210","220","230"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"y","title":{"text":"flipper_length_mm","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[2520,6480],"tickmode":"array","ticktext":["3000","4000","5000","6000"],"tickvals":[3000,4000,5000,6000],"categoryorder":"array","categoryarray":["3000","4000","5000","6000"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"x","title":{"text":"body_mass_g","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.88976377952756,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.689497716895},"y":0.938132733408324},"annotations":[{"text":"species","x":1.02,"y":1,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"left","yanchor":"bottom","legendTitle":true}],"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","showSendToCloud":false},"source":"A","attrs":{"15da790554ca":{"colour":{},"shape":{},"x":{},"y":{},"type":"scatter"}},"cur_data":"15da790554ca","visdat":{"15da790554ca":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+
+---
+class:  middle, center
+
+# 3. `GGally` 
+
+
+---
+
+
+```r
+GGally::ggpairs(penguins[, 1:5], aes(color = species, fill = species))+
+  scale_color_viridis_d() +
+  scale_fill_viridis_d()
+```
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-104-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+class:  middle, center
+
+# 4. `gganimate` 
+
+&lt;img src="fig/36_gganimate.png" width="40%" style="display: block; margin: auto;" /&gt;
+
+---
+
+```r
+library("ggplot2")
+library("dlstats")
+
+data &lt;- cran_stats("ggplot2")
+
+p &lt;- ggplot(data, aes(x= end, y = downloads)) +
+  geom_line() +
+  labs(title = "Download stats of ggplot2 package", x = "Time", y = "Downloads")
+
+p
+```
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-106-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+```r
+library(gganimate)
+p + 
+* transition_reveal(along = end)
+```
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-107-1.gif" style="display: block; margin: auto;" /&gt;
+
+- Sometimes you might need to install the `png` and `gifski` packages and restart the R-Studio.
+
+&lt;!--
+
+https://stackoverflow.com/questions/59664377/gganimate-plot-not-showing-and-saving-bunch-of-pngs
+
+And then, I installed the png and gifski packages and restart the R-Studio. It's working. I think, you can try this.--&gt;
+---
+
+.pull-left[
+
+```r
+p &lt;- ggplot(penguins, 
+            aes(flipper_length_mm,
+                body_mass_g , 
+                color = species)) +
+  geom_point() + 
+  scale_color_viridis_d() +
+  labs(
+    title = "Measurements of penguins
+    {closest_state}") +
+* transition_states(states = year) +
+* enter_grow() +
+* exit_fade()
+
+p
+```
+].pull-right[
+![](fig/39_gganim.gif)
+
+]
+
+---
+
+class:  middle, center
+
+# 5. `ggrepel` 
+
+&lt;img src="fig/37_ggrepel.png" width="40%" style="display: block; margin: auto;" /&gt;
+---
+### Text annotation
+
+
+```r
+df &lt;-  penguins %&gt;%
+  filter( flipper_length_mm &gt; 225 )
+
+ggplot(penguins, aes(x=flipper_length_mm, y= body_mass_g))+
+  geom_point()+
+  theme(aspect.ratio = 1) + 
+* geom_text(data= df,
+*           aes(x=flipper_length_mm, y= body_mass_g, label= island))
+```
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-110-1.png" style="display: block; margin: auto;" /&gt;
+---
+
+### Text annotation
+
+
+```r
+ggplot(penguins, aes(x=flipper_length_mm, y= body_mass_g))+
+  geom_point()+
+  theme(aspect.ratio = 1) + 
+* ggrepel::geom_text_repel(data= df,
+*           aes(x=flipper_length_mm, y= body_mass_g, label= island))
+```
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-111-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+class:  middle, center
+
+# 6. `ggforce` 
+
+&lt;img src="fig/38_ggforce.jpeg" width="40%" style="display: block; margin: auto;" /&gt;
+---
+
+
+
+```r
+library(ggforce)
+
+penguins &lt;- penguins %&gt;% drop_na()
+p &lt;- ggplot(penguins, aes(x=flipper_length_mm, y= body_mass_g))+
+* geom_mark_ellipse(aes(
+*   filter = species == "Gentoo",
+*   label = 'Gentoo penguins'),
+*   description = 'Palmer Station Antarctica LTER and K. Gorman. 2020.') +
+  geom_point() 
+
+p
+```
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-113-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+```r
+library(ggforce)
+ggplot(penguins, aes(x=flipper_length_mm, y= body_mass_g, color = species)) +
+    geom_point() +
+  scale_color_viridis_d() +
+    facet_zoom(x = species == "Gentoo") 
+```
+
+&lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-114-1.png" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+
+class: inverse, middle, center
+
+<i class="fab  fa-github "></i><i class="fab  fa-twitter "></i>
+pridiltal and thiyangt
+
+# Acknowledgements:
+
+Hadley Wickham, Thomas Lin Pedersen and ggplot development team
+
+This work was supported in part by RETINA research lab funded by the OWSD, a program unit of United Nations Educational, Scientific and Cultural Organization (UNESCO).
+
+## Key References 
+
+- ggplot2: Elegant Graphics for Data Analysis https://ggplot2-book.org/
+- ggplot2 workshop by Thomas Lin Pedersen https://www.youtube.com/watch?v=h29g21z0a68
+
+
+All rights reserved by Thiyanga S. Talagala and Priyanga D Talagala
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"slideNumberFormat": "%current%"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

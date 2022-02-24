@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Tidy Time Series Graphics with R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. Priyanga D. Talagala, University of Moratuwa" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/rladies.css" rel="stylesheet" />
+    <link href="libs/remark-css/rladies-fonts.css" rel="stylesheet" />
+    <script src="libs/htmlwidgets/htmlwidgets.js"></script>
+    <script src="libs/plotly-binding/plotly.js"></script>
+    <script src="libs/typedarray/typedarray.min.js"></script>
+    <script src="libs/jquery/jquery.min.js"></script>
+    <link href="libs/crosstalk/css/crosstalk.css" rel="stylesheet" />
+    <script src="libs/crosstalk/js/crosstalk.min.js"></script>
+    <link href="libs/plotly-htmlwidgets-css/plotly-htmlwidgets.css" rel="stylesheet" />
+    <script src="libs/plotly-main/plotly-latest.min.js"></script>
+    <link href="libs/font-awesome/css/fontawesome-all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# <span style="color:#e8b22a">Tidy Time Series Graphics with R</span>
+## IASSL Workshop
+### Dr. Priyanga D. Talagala, University of Moratuwa
+### <span style="color:#3be3dd"> 21-25, February, 2022</span>
+
+---
+
+
+
+
+
+### Main packages required
+
+
+```r
+# Data manipulation and plotting functions
+library(tidyverse)
+
+# Data for "Forecasting: Principles and Practice" (3rd Edition)
+library(fpp3)
+```
+
+
+- `tsibble` Package:  Time series manipulation 
+- `tsibbledata` Package: Tidy time series data 
+- `feasts` Package: Time series graphics and statistics 
+- `fable` Package: Forecasting functions
+
+
+tidyverts: Tidy tools for time series: https://tidyverts.org/
+---
+## `tsibble` objects
+
+-  A tsibble allows storage and manipulation of multiple time series in R.
+-  It contains:
+
+   – An index: time information about the observation
+   
+   – Measured variable(s): numbers of interest
+   
+   – Key variable(s): optional unique identifiers for each series 
+   
+   – It works with tidyverse functions.
+---
+
+## The `tsibble` index
+
+.pull-left[
+
+```r
+set.seed(1)
+ts &lt;- tsibble(t = seq(36),
+              y = rnorm(36),
+*             index = t)
+ts
+```
+
+```
+## # A tsibble: 36 x 2 [1]
+##        t      y
+##    &lt;int&gt;  &lt;dbl&gt;
+##  1     1 -0.626
+##  2     2  0.184
+##  3     3 -0.836
+##  4     4  1.60 
+##  5     5  0.330
+##  6     6 -0.820
+##  7     7  0.487
+##  8     8  0.738
+##  9     9  0.576
+## 10    10 -0.305
+## # … with 26 more rows
+```
+
+
+
+]
+--
+.pull-right[
+
+
+```r
+mydata &lt;- tsibble(
+  year = 2016:2020,
+  y = c(123, 39, 78, 52, 110),
+* index = year)
+
+mydata
+```
+
+```
+## # A tsibble: 5 x 2 [1Y]
+##    year     y
+##   &lt;int&gt; &lt;dbl&gt;
+## 1  2016   123
+## 2  2017    39
+## 3  2018    78
+## 4  2019    52
+## 5  2020   110
+```
+]
+
+---
+## `tibble` vs `tsibble`
+
+.pull-left[
+
+
+```r
+#tibble
+mytibble &lt;- tibble(
+  date = as.Date("2017-01-01") + 0:10,
+  y = c(123, 39, 78, 52, 110, 59,
+        78, 67, 67, 80, 90)) 
+mytibble
+```
+
+```
+## # A tibble: 11 × 2
+##    date           y
+##    &lt;date&gt;     &lt;dbl&gt;
+##  1 2017-01-01   123
+##  2 2017-01-02    39
+##  3 2017-01-03    78
+##  4 2017-01-04    52
+##  5 2017-01-05   110
+##  6 2017-01-06    59
+##  7 2017-01-07    78
+##  8 2017-01-08    67
+##  9 2017-01-09    67
+## 10 2017-01-10    80
+## 11 2017-01-11    90
+```
+
+]
+--
+.pull-right[
+
+
+```r
+# Converting to a tsibble
+mytsibble &lt;- mytibble %&gt;% 
+* as_tsibble(index = date)
+mytsibble
+```
+
+```
+## # A tsibble: 11 x 2 [1D]
+##    date           y
+##    &lt;date&gt;     &lt;dbl&gt;
+##  1 2017-01-01   123
+##  2 2017-01-02    39
+##  3 2017-01-03    78
+##  4 2017-01-04    52
+##  5 2017-01-05   110
+##  6 2017-01-06    59
+##  7 2017-01-07    78
+##  8 2017-01-08    67
+##  9 2017-01-09    67
+## 10 2017-01-10    80
+## 11 2017-01-11    90
+```
+]
+---
+
+.pull-left[
+
+
+```r
+mytsibble
+```
+
+```
+## # A tsibble: 11 x 2 [1D]
+##    date           y
+##    &lt;date&gt;     &lt;dbl&gt;
+##  1 2017-01-01   123
+##  2 2017-01-02    39
+##  3 2017-01-03    78
+##  4 2017-01-04    52
+##  5 2017-01-05   110
+##  6 2017-01-06    59
+##  7 2017-01-07    78
+##  8 2017-01-08    67
+##  9 2017-01-09    67
+## 10 2017-01-10    80
+## 11 2017-01-11    90
+```
+
+]
+--
+.pull-right[
+
+
+```r
+mytsibble %&gt;% autoplot(y)
+```
+
+&lt;img src="10_TS_graphics_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+.pull-left[
+### Working with tsibble objects
+
+Example: Quarterly Australian Electricity Production
+
+
+```r
+elec &lt;- aus_production %&gt;%
+  select(Quarter, Electricity) %&gt;% 
+  filter(year(Quarter) &gt;= 1992)
+elec
+```
+
+```
+## # A tsibble: 74 x 2 [1Q]
+##    Quarter Electricity
+##      &lt;qtr&gt;       &lt;dbl&gt;
+##  1 1992 Q1       38332
+##  2 1992 Q2       39774
+##  3 1992 Q3       42246
+##  4 1992 Q4       38498
+##  5 1993 Q1       39460
+##  6 1993 Q2       41356
+##  7 1993 Q3       42949
+##  8 1993 Q4       40974
+##  9 1994 Q1       40162
+## 10 1994 Q2       41199
+## # … with 64 more rows
+```
+
+]
+--
+.pull-right[
+
+```r
+elec %&gt;%
+* autoplot(Electricity)
+```
+
+&lt;img src="10_TS_graphics_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
+]
+---
+
+.pull-left[
+## Seasonal plots
+
+
+```r
+elec &lt;- aus_production %&gt;%
+  select(Quarter, Electricity) %&gt;% 
+  filter(year(Quarter) &gt;= 1992)
+elec
+```
+
+```
+## # A tsibble: 74 x 2 [1Q]
+##    Quarter Electricity
+##      &lt;qtr&gt;       &lt;dbl&gt;
+##  1 1992 Q1       38332
+##  2 1992 Q2       39774
+##  3 1992 Q3       42246
+##  4 1992 Q4       38498
+##  5 1993 Q1       39460
+##  6 1993 Q2       41356
+##  7 1993 Q3       42949
+##  8 1993 Q4       40974
+##  9 1994 Q1       40162
+## 10 1994 Q2       41199
+## # … with 64 more rows
+```
+
+]
+--
+.pull-right[
+
+```r
+elec %&gt;% 
+* gg_season(Electricity,
+*           labels="both")
+```
+
+&lt;img src="10_TS_graphics_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /&gt;
+]
+---
+
+
+.pull-left[
+## Seasonal plots
+
+
+```r
+elec %&gt;% 
+  gg_season(Electricity, 
+*           labels="left")
+```
+
+&lt;img src="10_TS_graphics_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /&gt;
+
+]
+.pull-right[
+- Data plotted against the individual “seasons” in which the data were observed. (In this case a “season” is a month.)
+
+- Something like a time plot except that the data from each season are overlapped.
+
+- Enables the underlying seasonal pattern to be seen more clearly, and also allows any substantial departures from the seasonal pattern to be easily identified.
+]
+---
+
+```r
+elec %&gt;% 
+  gg_season(Electricity, labels="left") + 
+* ylab("Electricity production in gigawatt hours") +
+* ggtitle("Quarterly Australian Electricity Production")
+```
+
+&lt;img src="10_TS_graphics_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+.pull-left[
+## Seasonal subseries plots
+
+- Data for each season collected together in time plot as separate time series.
+
+- Enables the underlying seasonal pattern to be seen clearly, and changes in seasonality over time to be
+visualized.
+
+]
+
+--
+.pull-right[
+
+
+```r
+elec %&gt;% gg_subseries(Electricity)
+```
+
+&lt;img src="10_TS_graphics_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /&gt;
+
+]
+---
+## Multiple seasonal periods
+
+Half-hourly electricity demand for Victoria, Australia
+
+
+```r
+vic_elec
+```
+
+```
+## # A tsibble: 52,608 x 5 [30m] &lt;Australia/Melbourne&gt;
+##    Time                Demand Temperature Date       Holiday
+##    &lt;dttm&gt;               &lt;dbl&gt;       &lt;dbl&gt; &lt;date&gt;     &lt;lgl&gt;  
+##  1 2012-01-01 00:00:00  4383.        21.4 2012-01-01 TRUE   
+##  2 2012-01-01 00:30:00  4263.        21.0 2012-01-01 TRUE   
+##  3 2012-01-01 01:00:00  4049.        20.7 2012-01-01 TRUE   
+##  4 2012-01-01 01:30:00  3878.        20.6 2012-01-01 TRUE   
+##  5 2012-01-01 02:00:00  4036.        20.4 2012-01-01 TRUE   
+##  6 2012-01-01 02:30:00  3866.        20.2 2012-01-01 TRUE   
+##  7 2012-01-01 03:00:00  3694.        20.1 2012-01-01 TRUE   
+##  8 2012-01-01 03:30:00  3562.        19.6 2012-01-01 TRUE   
+##  9 2012-01-01 04:00:00  3433.        19.1 2012-01-01 TRUE   
+## 10 2012-01-01 04:30:00  3359.        19.0 2012-01-01 TRUE   
+## # … with 52,598 more rows
+```
+
+
+---
+
+```r
+vic_elec %&gt;% 
+  autoplot(Demand)
+```
+
+&lt;img src="10_TS_graphics_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
+---
+
+
+```r
+vic_elec %&gt;% 
+* gg_season(Demand)
+```
+
+&lt;img src="10_TS_graphics_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto;" /&gt;
+---
+
+```r
+vic_elec %&gt;% 
+* gg_season(Demand, period = "month")
+```
+
+&lt;img src="10_TS_graphics_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
+---
+
+```r
+vic_elec %&gt;%
+* gg_season(Demand, period = "week")
+```
+
+&lt;img src="10_TS_graphics_files/figure-html/unnamed-chunk-19-1.png" style="display: block; margin: auto;" /&gt;
+---
+
+
+```r
+vic_elec %&gt;%
+* gg_season(Demand, period = "day")
+```
+
+&lt;img src="10_TS_graphics_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+```r
+vic_elec %&gt;%
+  gg_season(Demand, period = "day") +
+* theme(text = element_text(size=14))
+```
+
+&lt;img src="10_TS_graphics_files/figure-html/unnamed-chunk-21-1.png" style="display: block; margin: auto;" /&gt;
+---
+.pull-left[
+
+```r
+# install.packages("devtools")
+# devtools::install_github("thiyangt/covid19srilanka")
+library(covid19srilanka)
+district.wise.cases
+```
+
+```
+## # A tibble: 832 × 3
+##    Date       District     Count
+##    &lt;date&gt;     &lt;chr&gt;        &lt;dbl&gt;
+##  1 2021-08-01 Colombo      71267
+##  2 2021-08-01 Gampaha      56085
+##  3 2021-08-01 Kalutara     33300
+##  4 2021-08-01 Kandy        14576
+##  5 2021-08-01 Kurunagala   15327
+##  6 2021-08-01 Galle        14841
+##  7 2021-08-01 Ratnapura    12267
+##  8 2021-08-01 Matara        7778
+##  9 2021-08-01 Matale        5694
+## 10 2021-08-01 Nuwara Eliya  7917
+## # … with 822 more rows
+```
+
+]
+
+--
+.pull-right[
+
+
+```r
+covidsl &lt;- district.wise.cases %&gt;%
+* as_tsibble(index = Date,
+*            key = District)
+
+covidsl
+```
+
+```
+## # A tsibble: 832 x 3 [1D]
+## # Key:       District [26]
+##    Date       District Count
+##    &lt;date&gt;     &lt;chr&gt;    &lt;dbl&gt;
+##  1 2021-08-01 Ampara    2117
+##  2 2021-08-02 Ampara    2125
+##  3 2021-08-03 Ampara    2137
+##  4 2021-08-04 Ampara    2144
+##  5 2021-08-05 Ampara    2150
+##  6 2021-08-06 Ampara    2150
+##  7 2021-08-07 Ampara    2153
+##  8 2021-08-08 Ampara    2175
+##  9 2021-08-09 Ampara    2180
+## 10 2021-08-10 Ampara    2190
+## # … with 822 more rows
+```
+
+]
+
+
+---
+
+
+
+```r
+p &lt;- covidsl %&gt;% autoplot(Count)
+p
+```
+
+&lt;img src="10_TS_graphics_files/figure-html/unnamed-chunk-24-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+```r
+plotly::ggplotly(p)
+```
+
+<div id="htmlwidget-c072f26745d6feeb4567" style="width:1080px;height:504px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-c072f26745d6feeb4567">{"x":{"data":[{"x":[18840,18841,18842,18843,18844,18845,18846,18847,18848,18849,18850,18851,18852,18853,18854,18855,18856,18857,18858,18859,18860,18861,18862,18863,18864,18865,18866,18867,18868,18869,18870,18871],"y":[2117,2125,2137,2144,2150,2150,2153,2175,2180,2190,2199,2209,2233,2238,2718,2721,2721,3866,3877,4002,4014,4020,4020,4084,4429,4429,4465,4499,4502,5275,5296,5298],"text":["Date: 2021-08-01<br />Count:  2117<br />interaction(District, sep = \"/\"): Ampara","Date: 2021-08-02<br />Count:  2125<br />interaction(District, sep = \"/\"): Ampara","Date: 2021-08-03<br />Count:  2137<br />interaction(District, sep = \"/\"): Ampara","Date: 2021-08-04<br />Count:  2144<br />interaction(District, sep = \"/\"): Ampara","Date: 2021-08-05<br />Count:  2150<br />interaction(District, sep = \"/\"): Ampara","Date: 2021-08-06<br />Count:  2150<br />interaction(District, sep = \"/\"): Ampara","Date: 2021-08-07<br />Count:  2153<br />interaction(District, sep = \"/\"): Ampara","Date: 2021-08-08<br />Count:  2175<br />interaction(District, sep = \"/\"): Ampara","Date: 2021-08-09<br />Count:  2180<br />interaction(District, sep = \"/\"): Ampara","Date: 2021-08-10<br />Count:  2190<br />interaction(District, sep = \"/\"): Ampara","Date: 2021-08-11<br />Count:  2199<br />interaction(District, sep = \"/\"): Ampara","Date: 2021-08-12<br />Count:  2209<br />interaction(District, sep = \"/\"): Ampara","Date: 2021-08-13<br />Count:  2233<br />interaction(District, sep = \"/\"): Ampara","Date: 2021-08-14<br />Count:  2238<br />interaction(District, sep = \"/\"): Ampara","Date: 2021-08-15<br />Count:  2718<br />interaction(District, sep = \"/\"): Ampara","Date: 2021-08-16<br />Count:  2721<br />interaction(District, sep = \"/\"): Ampara","Date: 2021-08-17<br />Count:  2721<br />interaction(District, sep = \"/\"): Ampara","Date: 2021-08-18<br />Count:  3866<br />interaction(District, sep = \"/\"): Ampara","Date: 2021-08-19<br />Count:  3877<br />interaction(District, sep = \"/\"): Ampara","Date: 2021-08-20<br />Count:  4002<br />interaction(District, sep = \"/\"): Ampara","Date: 2021-08-21<br />Count:  4014<br />interaction(District, sep = \"/\"): Ampara","Date: 2021-08-22<br />Count:  4020<br />interaction(District, sep = \"/\"): Ampara","Date: 2021-08-23<br />Count:  4020<br />interaction(District, sep = \"/\"): Ampara","Date: 2021-08-24<br />Count:  4084<br />interaction(District, sep = \"/\"): Ampara","Date: 2021-08-25<br />Count:  4429<br />interaction(District, sep = \"/\"): Ampara","Date: 2021-08-26<br />Count:  4429<br />interaction(District, sep = \"/\"): Ampara","Date: 2021-08-27<br />Count:  4465<br />interaction(District, sep = \"/\"): Ampara","Date: 2021-08-28<br />Count:  4499<br />interaction(District, sep = \"/\"): Ampara","Date: 2021-08-29<br />Count:  4502<br />interaction(District, sep = \"/\"): Ampara","Date: 2021-08-30<br />Count:  5275<br />interaction(District, sep = \"/\"): Ampara","Date: 2021-08-31<br />Count:  5296<br />interaction(District, sep = \"/\"): Ampara","Date: 2021-09-01<br />Count:  5298<br />interaction(District, sep = \"/\"): Ampara"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(248,118,109,1)","dash":"solid"},"hoveron":"points","name":"Ampara","legendgroup":"Ampara","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[18840,18841,18842,18843,18844,18845,18846,18847,18848,18849,18850,18851,18852,18853,18854,18855,18856,18857,18858,18859,18860,18861,18862,18863,18864,18865,18866,18867,18868,18869,18870,18871],"y":[4213,4241,4264,4268,4300,4330,4361,4362,4363,4395,4463,4471,4525,4526,4617,4618,4772,4820,5158,5198,5451,5580,5650,5779,5906,5919,6145,6149,6327,6357,6566,7089],"text":["Date: 2021-08-01<br />Count:  4213<br />interaction(District, sep = \"/\"): Anuradhapura","Date: 2021-08-02<br />Count:  4241<br />interaction(District, sep = \"/\"): Anuradhapura","Date: 2021-08-03<br />Count:  4264<br />interaction(District, sep = \"/\"): Anuradhapura","Date: 2021-08-04<br />Count:  4268<br />interaction(District, sep = \"/\"): Anuradhapura","Date: 2021-08-05<br />Count:  4300<br />interaction(District, sep = \"/\"): Anuradhapura","Date: 2021-08-06<br />Count:  4330<br />interaction(District, sep = \"/\"): Anuradhapura","Date: 2021-08-07<br />Count:  4361<br />interaction(District, sep = \"/\"): Anuradhapura","Date: 2021-08-08<br />Count:  4362<br />interaction(District, sep = \"/\"): Anuradhapura","Date: 2021-08-09<br />Count:  4363<br />interaction(District, sep = \"/\"): Anuradhapura","Date: 2021-08-10<br />Count:  4395<br />interaction(District, sep = \"/\"): Anuradhapura","Date: 2021-08-11<br />Count:  4463<br />interaction(District, sep = \"/\"): Anuradhapura","Date: 2021-08-12<br />Count:  4471<br />interaction(District, sep = \"/\"): Anuradhapura","Date: 2021-08-13<br />Count:  4525<br />interaction(District, sep = \"/\"): Anuradhapura","Date: 2021-08-14<br />Count:  4526<br />interaction(District, sep = \"/\"): Anuradhapura","Date: 2021-08-15<br />Count:  4617<br />interaction(District, sep = \"/\"): Anuradhapura","Date: 2021-08-16<br />Count:  4618<br />interaction(District, sep = \"/\"): Anuradhapura","Date: 2021-08-17<br />Count:  4772<br />interaction(District, sep = \"/\"): Anuradhapura","Date: 2021-08-18<br />Count:  4820<br />interaction(District, sep = \"/\"): Anuradhapura","Date: 2021-08-19<br />Count:  5158<br />interaction(District, sep = \"/\"): Anuradhapura","Date: 2021-08-20<br />Count:  5198<br />interaction(District, sep = \"/\"): Anuradhapura","Date: 2021-08-21<br />Count:  5451<br />interaction(District, sep = \"/\"): Anuradhapura","Date: 2021-08-22<br />Count:  5580<br />interaction(District, sep = \"/\"): Anuradhapura","Date: 2021-08-23<br />Count:  5650<br />interaction(District, sep = \"/\"): Anuradhapura","Date: 2021-08-24<br />Count:  5779<br />interaction(District, sep = \"/\"): Anuradhapura","Date: 2021-08-25<br />Count:  5906<br />interaction(District, sep = \"/\"): Anuradhapura","Date: 2021-08-26<br />Count:  5919<br />interaction(District, sep = \"/\"): Anuradhapura","Date: 2021-08-27<br />Count:  6145<br />interaction(District, sep = \"/\"): Anuradhapura","Date: 2021-08-28<br />Count:  6149<br />interaction(District, sep = \"/\"): Anuradhapura","Date: 2021-08-29<br />Count:  6327<br />interaction(District, sep = \"/\"): Anuradhapura","Date: 2021-08-30<br />Count:  6357<br />interaction(District, sep = \"/\"): Anuradhapura","Date: 2021-08-31<br />Count:  6566<br />interaction(District, sep = \"/\"): Anuradhapura","Date: 2021-09-01<br />Count:  7089<br />interaction(District, sep = \"/\"): Anuradhapura"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(238,128,67,1)","dash":"solid"},"hoveron":"points","name":"Anuradhapura","legendgroup":"Anuradhapura","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[18840,18841,18842,18843,18844,18845,18846,18847,18848,18849,18850,18851,18852,18853,18854,18855,18856,18857,18858,18859,18860,18861,18862,18863,18864,18865,18866,18867,18868,18869,18870,18871],"y":[7345,7406,7467,7505,7575,7688,7710,7721,7779,7825,7845,7868,7954,8000,8033,8043,8200,8313,8423,8738,8752,8757,8817,8824,8955,9048,9248,9406,9484,9894,9966,9995],"text":["Date: 2021-08-01<br />Count:  7345<br />interaction(District, sep = \"/\"): Badulla","Date: 2021-08-02<br />Count:  7406<br />interaction(District, sep = \"/\"): Badulla","Date: 2021-08-03<br />Count:  7467<br />interaction(District, sep = \"/\"): Badulla","Date: 2021-08-04<br />Count:  7505<br />interaction(District, sep = \"/\"): Badulla","Date: 2021-08-05<br />Count:  7575<br />interaction(District, sep = \"/\"): Badulla","Date: 2021-08-06<br />Count:  7688<br />interaction(District, sep = \"/\"): Badulla","Date: 2021-08-07<br />Count:  7710<br />interaction(District, sep = \"/\"): Badulla","Date: 2021-08-08<br />Count:  7721<br />interaction(District, sep = \"/\"): Badulla","Date: 2021-08-09<br />Count:  7779<br />interaction(District, sep = \"/\"): Badulla","Date: 2021-08-10<br />Count:  7825<br />interaction(District, sep = \"/\"): Badulla","Date: 2021-08-11<br />Count:  7845<br />interaction(District, sep = \"/\"): Badulla","Date: 2021-08-12<br />Count:  7868<br />interaction(District, sep = \"/\"): Badulla","Date: 2021-08-13<br />Count:  7954<br />interaction(District, sep = \"/\"): Badulla","Date: 2021-08-14<br />Count:  8000<br />interaction(District, sep = \"/\"): Badulla","Date: 2021-08-15<br />Count:  8033<br />interaction(District, sep = \"/\"): Badulla","Date: 2021-08-16<br />Count:  8043<br />interaction(District, sep = \"/\"): Badulla","Date: 2021-08-17<br />Count:  8200<br />interaction(District, sep = \"/\"): Badulla","Date: 2021-08-18<br />Count:  8313<br />interaction(District, sep = \"/\"): Badulla","Date: 2021-08-19<br />Count:  8423<br />interaction(District, sep = \"/\"): Badulla","Date: 2021-08-20<br />Count:  8738<br />interaction(District, sep = \"/\"): Badulla","Date: 2021-08-21<br />Count:  8752<br />interaction(District, sep = \"/\"): Badulla","Date: 2021-08-22<br />Count:  8757<br />interaction(District, sep = \"/\"): Badulla","Date: 2021-08-23<br />Count:  8817<br />interaction(District, sep = \"/\"): Badulla","Date: 2021-08-24<br />Count:  8824<br />interaction(District, sep = \"/\"): Badulla","Date: 2021-08-25<br />Count:  8955<br />interaction(District, sep = \"/\"): Badulla","Date: 2021-08-26<br />Count:  9048<br />interaction(District, sep = \"/\"): Badulla","Date: 2021-08-27<br />Count:  9248<br />interaction(District, sep = \"/\"): Badulla","Date: 2021-08-28<br />Count:  9406<br />interaction(District, sep = \"/\"): Badulla","Date: 2021-08-29<br />Count:  9484<br />interaction(District, sep = \"/\"): Badulla","Date: 2021-08-30<br />Count:  9894<br />interaction(District, sep = \"/\"): Badulla","Date: 2021-08-31<br />Count:  9966<br />interaction(District, sep = \"/\"): Badulla","Date: 2021-09-01<br />Count:  9995<br />interaction(District, sep = \"/\"): Badulla"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(225,138,0,1)","dash":"solid"},"hoveron":"points","name":"Badulla","legendgroup":"Badulla","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[18840,18841,18842,18843,18844,18845,18846,18847,18848,18849,18850,18851,18852,18853,18854,18855,18856,18857,18858,18859,18860,18861,18862,18863,18864,18865,18866,18867,18868,18869,18870,18871],"y":[3180,3181,3203,3236,3270,3276,3324,3329,3367,3394,3452,3499,3505,3513,3551,3563,3575,3647,3745,3753,3831,3897,4006,4153,4604,4711,4801,4823,4895,5596,5667,5730],"text":["Date: 2021-08-01<br />Count:  3180<br />interaction(District, sep = \"/\"): Batticaloa","Date: 2021-08-02<br />Count:  3181<br />interaction(District, sep = \"/\"): Batticaloa","Date: 2021-08-03<br />Count:  3203<br />interaction(District, sep = \"/\"): Batticaloa","Date: 2021-08-04<br />Count:  3236<br />interaction(District, sep = \"/\"): Batticaloa","Date: 2021-08-05<br />Count:  3270<br />interaction(District, sep = \"/\"): Batticaloa","Date: 2021-08-06<br />Count:  3276<br />interaction(District, sep = \"/\"): Batticaloa","Date: 2021-08-07<br />Count:  3324<br />interaction(District, sep = \"/\"): Batticaloa","Date: 2021-08-08<br />Count:  3329<br />interaction(District, sep = \"/\"): Batticaloa","Date: 2021-08-09<br />Count:  3367<br />interaction(District, sep = \"/\"): Batticaloa","Date: 2021-08-10<br />Count:  3394<br />interaction(District, sep = \"/\"): Batticaloa","Date: 2021-08-11<br />Count:  3452<br />interaction(District, sep = \"/\"): Batticaloa","Date: 2021-08-12<br />Count:  3499<br />interaction(District, sep = \"/\"): Batticaloa","Date: 2021-08-13<br />Count:  3505<br />interaction(District, sep = \"/\"): Batticaloa","Date: 2021-08-14<br />Count:  3513<br />interaction(District, sep = \"/\"): Batticaloa","Date: 2021-08-15<br />Count:  3551<br />interaction(District, sep = \"/\"): Batticaloa","Date: 2021-08-16<br />Count:  3563<br />interaction(District, sep = \"/\"): Batticaloa","Date: 2021-08-17<br />Count:  3575<br />interaction(District, sep = \"/\"): Batticaloa","Date: 2021-08-18<br />Count:  3647<br />interaction(District, sep = \"/\"): Batticaloa","Date: 2021-08-19<br />Count:  3745<br />interaction(District, sep = \"/\"): Batticaloa","Date: 2021-08-20<br />Count:  3753<br />interaction(District, sep = \"/\"): Batticaloa","Date: 2021-08-21<br />Count:  3831<br />interaction(District, sep = \"/\"): Batticaloa","Date: 2021-08-22<br />Count:  3897<br />interaction(District, sep = \"/\"): Batticaloa","Date: 2021-08-23<br />Count:  4006<br />interaction(District, sep = \"/\"): Batticaloa","Date: 2021-08-24<br />Count:  4153<br />interaction(District, sep = \"/\"): Batticaloa","Date: 2021-08-25<br />Count:  4604<br />interaction(District, sep = \"/\"): Batticaloa","Date: 2021-08-26<br />Count:  4711<br />interaction(District, sep = \"/\"): Batticaloa","Date: 2021-08-27<br />Count:  4801<br />interaction(District, sep = \"/\"): Batticaloa","Date: 2021-08-28<br />Count:  4823<br />interaction(District, sep = \"/\"): Batticaloa","Date: 2021-08-29<br />Count:  4895<br />interaction(District, sep = \"/\"): Batticaloa","Date: 2021-08-30<br />Count:  5596<br />interaction(District, sep = \"/\"): Batticaloa","Date: 2021-08-31<br />Count:  5667<br />interaction(District, sep = \"/\"): Batticaloa","Date: 2021-09-01<br />Count:  5730<br />interaction(District, sep = \"/\"): Batticaloa"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(209,147,0,1)","dash":"solid"},"hoveron":"points","name":"Batticaloa","legendgroup":"Batticaloa","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[18840,18841,18842,18843,18844,18845,18846,18847,18848,18849,18850,18851,18852,18853,18854,18855,18856,18857,18858,18859,18860,18861,18862,18863,18864,18865,18866,18867,18868,18869,18870,18871],"y":[71267,71928,72541,73373,74196,75120,75637,76324,77231,77742,78337,79176,79879,80807,81743,82644,83049,84332,85309,86972,87868,88952,89643,90813,92231,93355,94398,95431,96454,97663,98415,99240],"text":["Date: 2021-08-01<br />Count: 71267<br />interaction(District, sep = \"/\"): Colombo","Date: 2021-08-02<br />Count: 71928<br />interaction(District, sep = \"/\"): Colombo","Date: 2021-08-03<br />Count: 72541<br />interaction(District, sep = \"/\"): Colombo","Date: 2021-08-04<br />Count: 73373<br />interaction(District, sep = \"/\"): Colombo","Date: 2021-08-05<br />Count: 74196<br />interaction(District, sep = \"/\"): Colombo","Date: 2021-08-06<br />Count: 75120<br />interaction(District, sep = \"/\"): Colombo","Date: 2021-08-07<br />Count: 75637<br />interaction(District, sep = \"/\"): Colombo","Date: 2021-08-08<br />Count: 76324<br />interaction(District, sep = \"/\"): Colombo","Date: 2021-08-09<br />Count: 77231<br />interaction(District, sep = \"/\"): Colombo","Date: 2021-08-10<br />Count: 77742<br />interaction(District, sep = \"/\"): Colombo","Date: 2021-08-11<br />Count: 78337<br />interaction(District, sep = \"/\"): Colombo","Date: 2021-08-12<br />Count: 79176<br />interaction(District, sep = \"/\"): Colombo","Date: 2021-08-13<br />Count: 79879<br />interaction(District, sep = \"/\"): Colombo","Date: 2021-08-14<br />Count: 80807<br />interaction(District, sep = \"/\"): Colombo","Date: 2021-08-15<br />Count: 81743<br />interaction(District, sep = \"/\"): Colombo","Date: 2021-08-16<br />Count: 82644<br />interaction(District, sep = \"/\"): Colombo","Date: 2021-08-17<br />Count: 83049<br />interaction(District, sep = \"/\"): Colombo","Date: 2021-08-18<br />Count: 84332<br />interaction(District, sep = \"/\"): Colombo","Date: 2021-08-19<br />Count: 85309<br />interaction(District, sep = \"/\"): Colombo","Date: 2021-08-20<br />Count: 86972<br />interaction(District, sep = \"/\"): Colombo","Date: 2021-08-21<br />Count: 87868<br />interaction(District, sep = \"/\"): Colombo","Date: 2021-08-22<br />Count: 88952<br />interaction(District, sep = \"/\"): Colombo","Date: 2021-08-23<br />Count: 89643<br />interaction(District, sep = \"/\"): Colombo","Date: 2021-08-24<br />Count: 90813<br />interaction(District, sep = \"/\"): Colombo","Date: 2021-08-25<br />Count: 92231<br />interaction(District, sep = \"/\"): Colombo","Date: 2021-08-26<br />Count: 93355<br />interaction(District, sep = \"/\"): Colombo","Date: 2021-08-27<br />Count: 94398<br />interaction(District, sep = \"/\"): Colombo","Date: 2021-08-28<br />Count: 95431<br />interaction(District, sep = \"/\"): Colombo","Date: 2021-08-29<br />Count: 96454<br />interaction(District, sep = \"/\"): Colombo","Date: 2021-08-30<br />Count: 97663<br />interaction(District, sep = \"/\"): Colombo","Date: 2021-08-31<br />Count: 98415<br />interaction(District, sep = \"/\"): Colombo","Date: 2021-09-01<br />Count: 99240<br />interaction(District, sep = \"/\"): Colombo"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(190,156,0,1)","dash":"solid"},"hoveron":"points","name":"Colombo","legendgroup":"Colombo","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[18840,18841,18842,18843,18844,18845,18846,18847,18848,18849,18850,18851,18852,18853,18854,18855,18856,18857,18858,18859,18860,18861,18862,18863,18864,18865,18866,18867,18868,18869,18870,18871],"y":[14841,14963,15043,15125,15290,15390,15539,15679,15834,15919,16125,16355,16457,16526,17405,17540,17712,18671,18772,20219,20426,20571,20804,21158,22251,22541,22660,22812,22996,23825,24037,24152],"text":["Date: 2021-08-01<br />Count: 14841<br />interaction(District, sep = \"/\"): Galle","Date: 2021-08-02<br />Count: 14963<br />interaction(District, sep = \"/\"): Galle","Date: 2021-08-03<br />Count: 15043<br />interaction(District, sep = \"/\"): Galle","Date: 2021-08-04<br />Count: 15125<br />interaction(District, sep = \"/\"): Galle","Date: 2021-08-05<br />Count: 15290<br />interaction(District, sep = \"/\"): Galle","Date: 2021-08-06<br />Count: 15390<br />interaction(District, sep = \"/\"): Galle","Date: 2021-08-07<br />Count: 15539<br />interaction(District, sep = \"/\"): Galle","Date: 2021-08-08<br />Count: 15679<br />interaction(District, sep = \"/\"): Galle","Date: 2021-08-09<br />Count: 15834<br />interaction(District, sep = \"/\"): Galle","Date: 2021-08-10<br />Count: 15919<br />interaction(District, sep = \"/\"): Galle","Date: 2021-08-11<br />Count: 16125<br />interaction(District, sep = \"/\"): Galle","Date: 2021-08-12<br />Count: 16355<br />interaction(District, sep = \"/\"): Galle","Date: 2021-08-13<br />Count: 16457<br />interaction(District, sep = \"/\"): Galle","Date: 2021-08-14<br />Count: 16526<br />interaction(District, sep = \"/\"): Galle","Date: 2021-08-15<br />Count: 17405<br />interaction(District, sep = \"/\"): Galle","Date: 2021-08-16<br />Count: 17540<br />interaction(District, sep = \"/\"): Galle","Date: 2021-08-17<br />Count: 17712<br />interaction(District, sep = \"/\"): Galle","Date: 2021-08-18<br />Count: 18671<br />interaction(District, sep = \"/\"): Galle","Date: 2021-08-19<br />Count: 18772<br />interaction(District, sep = \"/\"): Galle","Date: 2021-08-20<br />Count: 20219<br />interaction(District, sep = \"/\"): Galle","Date: 2021-08-21<br />Count: 20426<br />interaction(District, sep = \"/\"): Galle","Date: 2021-08-22<br />Count: 20571<br />interaction(District, sep = \"/\"): Galle","Date: 2021-08-23<br />Count: 20804<br />interaction(District, sep = \"/\"): Galle","Date: 2021-08-24<br />Count: 21158<br />interaction(District, sep = \"/\"): Galle","Date: 2021-08-25<br />Count: 22251<br />interaction(District, sep = \"/\"): Galle","Date: 2021-08-26<br />Count: 22541<br />interaction(District, sep = \"/\"): Galle","Date: 2021-08-27<br />Count: 22660<br />interaction(District, sep = \"/\"): Galle","Date: 2021-08-28<br />Count: 22812<br />interaction(District, sep = \"/\"): Galle","Date: 2021-08-29<br />Count: 22996<br />interaction(District, sep = \"/\"): Galle","Date: 2021-08-30<br />Count: 23825<br />interaction(District, sep = \"/\"): Galle","Date: 2021-08-31<br />Count: 24037<br />interaction(District, sep = \"/\"): Galle","Date: 2021-09-01<br />Count: 24152<br />interaction(District, sep = \"/\"): Galle"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(168,164,0,1)","dash":"solid"},"hoveron":"points","name":"Galle","legendgroup":"Galle","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[18840,18841,18842,18843,18844,18845,18846,18847,18848,18849,18850,18851,18852,18853,18854,18855,18856,18857,18858,18859,18860,18861,18862,18863,18864,18865,18866,18867,18868,18869,18870,18871],"y":[56085,56525,56956,57443,57788,58239,58813,59245,59794,60412,60795,61202,61733,62593,64246,65228,66459,67295,67706,69469,69966,70545,71568,72427,73970,74515,75660,76574,77633,78708,79753,80404],"text":["Date: 2021-08-01<br />Count: 56085<br />interaction(District, sep = \"/\"): Gampaha","Date: 2021-08-02<br />Count: 56525<br />interaction(District, sep = \"/\"): Gampaha","Date: 2021-08-03<br />Count: 56956<br />interaction(District, sep = \"/\"): Gampaha","Date: 2021-08-04<br />Count: 57443<br />interaction(District, sep = \"/\"): Gampaha","Date: 2021-08-05<br />Count: 57788<br />interaction(District, sep = \"/\"): Gampaha","Date: 2021-08-06<br />Count: 58239<br />interaction(District, sep = \"/\"): Gampaha","Date: 2021-08-07<br />Count: 58813<br />interaction(District, sep = \"/\"): Gampaha","Date: 2021-08-08<br />Count: 59245<br />interaction(District, sep = \"/\"): Gampaha","Date: 2021-08-09<br />Count: 59794<br />interaction(District, sep = \"/\"): Gampaha","Date: 2021-08-10<br />Count: 60412<br />interaction(District, sep = \"/\"): Gampaha","Date: 2021-08-11<br />Count: 60795<br />interaction(District, sep = \"/\"): Gampaha","Date: 2021-08-12<br />Count: 61202<br />interaction(District, sep = \"/\"): Gampaha","Date: 2021-08-13<br />Count: 61733<br />interaction(District, sep = \"/\"): Gampaha","Date: 2021-08-14<br />Count: 62593<br />interaction(District, sep = \"/\"): Gampaha","Date: 2021-08-15<br />Count: 64246<br />interaction(District, sep = \"/\"): Gampaha","Date: 2021-08-16<br />Count: 65228<br />interaction(District, sep = \"/\"): Gampaha","Date: 2021-08-17<br />Count: 66459<br />interaction(District, sep = \"/\"): Gampaha","Date: 2021-08-18<br />Count: 67295<br />interaction(District, sep = \"/\"): Gampaha","Date: 2021-08-19<br />Count: 67706<br />interaction(District, sep = \"/\"): Gampaha","Date: 2021-08-20<br />Count: 69469<br />interaction(District, sep = \"/\"): Gampaha","Date: 2021-08-21<br />Count: 69966<br />interaction(District, sep = \"/\"): Gampaha","Date: 2021-08-22<br />Count: 70545<br />interaction(District, sep = \"/\"): Gampaha","Date: 2021-08-23<br />Count: 71568<br />interaction(District, sep = \"/\"): Gampaha","Date: 2021-08-24<br />Count: 72427<br />interaction(District, sep = \"/\"): Gampaha","Date: 2021-08-25<br />Count: 73970<br />interaction(District, sep = \"/\"): Gampaha","Date: 2021-08-26<br />Count: 74515<br />interaction(District, sep = \"/\"): Gampaha","Date: 2021-08-27<br />Count: 75660<br />interaction(District, sep = \"/\"): Gampaha","Date: 2021-08-28<br />Count: 76574<br />interaction(District, sep = \"/\"): Gampaha","Date: 2021-08-29<br />Count: 77633<br />interaction(District, sep = \"/\"): Gampaha","Date: 2021-08-30<br />Count: 78708<br />interaction(District, sep = \"/\"): Gampaha","Date: 2021-08-31<br />Count: 79753<br />interaction(District, sep = \"/\"): Gampaha","Date: 2021-09-01<br />Count: 80404<br />interaction(District, sep = \"/\"): Gampaha"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(140,171,0,1)","dash":"solid"},"hoveron":"points","name":"Gampaha","legendgroup":"Gampaha","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[18840,18841,18842,18843,18844,18845,18846,18847,18848,18849,18850,18851,18852,18853,18854,18855,18856,18857,18858,18859,18860,18861,18862,18863,18864,18865,18866,18867,18868,18869,18870,18871],"y":[3727,3783,3792,3882,3930,3994,4073,4161,4253,4383,4576,4787,4828,4837,5122,5265,5325,5742,5828,6204,6335,6594,6750,7010,7377,7587,7613,7938,8059,8493,8632,8950],"text":["Date: 2021-08-01<br />Count:  3727<br />interaction(District, sep = \"/\"): Hambantota","Date: 2021-08-02<br />Count:  3783<br />interaction(District, sep = \"/\"): Hambantota","Date: 2021-08-03<br />Count:  3792<br />interaction(District, sep = \"/\"): Hambantota","Date: 2021-08-04<br />Count:  3882<br />interaction(District, sep = \"/\"): Hambantota","Date: 2021-08-05<br />Count:  3930<br />interaction(District, sep = \"/\"): Hambantota","Date: 2021-08-06<br />Count:  3994<br />interaction(District, sep = \"/\"): Hambantota","Date: 2021-08-07<br />Count:  4073<br />interaction(District, sep = \"/\"): Hambantota","Date: 2021-08-08<br />Count:  4161<br />interaction(District, sep = \"/\"): Hambantota","Date: 2021-08-09<br />Count:  4253<br />interaction(District, sep = \"/\"): Hambantota","Date: 2021-08-10<br />Count:  4383<br />interaction(District, sep = \"/\"): Hambantota","Date: 2021-08-11<br />Count:  4576<br />interaction(District, sep = \"/\"): Hambantota","Date: 2021-08-12<br />Count:  4787<br />interaction(District, sep = \"/\"): Hambantota","Date: 2021-08-13<br />Count:  4828<br />interaction(District, sep = \"/\"): Hambantota","Date: 2021-08-14<br />Count:  4837<br />interaction(District, sep = \"/\"): Hambantota","Date: 2021-08-15<br />Count:  5122<br />interaction(District, sep = \"/\"): Hambantota","Date: 2021-08-16<br />Count:  5265<br />interaction(District, sep = \"/\"): Hambantota","Date: 2021-08-17<br />Count:  5325<br />interaction(District, sep = \"/\"): Hambantota","Date: 2021-08-18<br />Count:  5742<br />interaction(District, sep = \"/\"): Hambantota","Date: 2021-08-19<br />Count:  5828<br />interaction(District, sep = \"/\"): Hambantota","Date: 2021-08-20<br />Count:  6204<br />interaction(District, sep = \"/\"): Hambantota","Date: 2021-08-21<br />Count:  6335<br />interaction(District, sep = \"/\"): Hambantota","Date: 2021-08-22<br />Count:  6594<br />interaction(District, sep = \"/\"): Hambantota","Date: 2021-08-23<br />Count:  6750<br />interaction(District, sep = \"/\"): Hambantota","Date: 2021-08-24<br />Count:  7010<br />interaction(District, sep = \"/\"): Hambantota","Date: 2021-08-25<br />Count:  7377<br />interaction(District, sep = \"/\"): Hambantota","Date: 2021-08-26<br />Count:  7587<br />interaction(District, sep = \"/\"): Hambantota","Date: 2021-08-27<br />Count:  7613<br />interaction(District, sep = \"/\"): Hambantota","Date: 2021-08-28<br />Count:  7938<br />interaction(District, sep = \"/\"): Hambantota","Date: 2021-08-29<br />Count:  8059<br />interaction(District, sep = \"/\"): Hambantota","Date: 2021-08-30<br />Count:  8493<br />interaction(District, sep = \"/\"): Hambantota","Date: 2021-08-31<br />Count:  8632<br />interaction(District, sep = \"/\"): Hambantota","Date: 2021-09-01<br />Count:  8950<br />interaction(District, sep = \"/\"): Hambantota"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(104,177,0,1)","dash":"solid"},"hoveron":"points","name":"Hambantota","legendgroup":"Hambantota","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[18840,18841,18842,18843,18844,18845,18846,18847,18848,18849,18850,18851,18852,18853,18854,18855,18856,18857,18858,18859,18860,18861,18862,18863,18864,18865,18866,18867,18868,18869,18870,18871],"y":[6178,6220,6253,6313,6405,6465,6557,6612,6650,6704,6718,6839,6915,7010,7069,7133,7233,7315,7456,7562,7689,7809,7908,8092,8202,8369,8428,8540,8611,8692,8828,8978],"text":["Date: 2021-08-01<br />Count:  6178<br />interaction(District, sep = \"/\"): Jaffna","Date: 2021-08-02<br />Count:  6220<br />interaction(District, sep = \"/\"): Jaffna","Date: 2021-08-03<br />Count:  6253<br />interaction(District, sep = \"/\"): Jaffna","Date: 2021-08-04<br />Count:  6313<br />interaction(District, sep = \"/\"): Jaffna","Date: 2021-08-05<br />Count:  6405<br />interaction(District, sep = \"/\"): Jaffna","Date: 2021-08-06<br />Count:  6465<br />interaction(District, sep = \"/\"): Jaffna","Date: 2021-08-07<br />Count:  6557<br />interaction(District, sep = \"/\"): Jaffna","Date: 2021-08-08<br />Count:  6612<br />interaction(District, sep = \"/\"): Jaffna","Date: 2021-08-09<br />Count:  6650<br />interaction(District, sep = \"/\"): Jaffna","Date: 2021-08-10<br />Count:  6704<br />interaction(District, sep = \"/\"): Jaffna","Date: 2021-08-11<br />Count:  6718<br />interaction(District, sep = \"/\"): Jaffna","Date: 2021-08-12<br />Count:  6839<br />interaction(District, sep = \"/\"): Jaffna","Date: 2021-08-13<br />Count:  6915<br />interaction(District, sep = \"/\"): Jaffna","Date: 2021-08-14<br />Count:  7010<br />interaction(District, sep = \"/\"): Jaffna","Date: 2021-08-15<br />Count:  7069<br />interaction(District, sep = \"/\"): Jaffna","Date: 2021-08-16<br />Count:  7133<br />interaction(District, sep = \"/\"): Jaffna","Date: 2021-08-17<br />Count:  7233<br />interaction(District, sep = \"/\"): Jaffna","Date: 2021-08-18<br />Count:  7315<br />interaction(District, sep = \"/\"): Jaffna","Date: 2021-08-19<br />Count:  7456<br />interaction(District, sep = \"/\"): Jaffna","Date: 2021-08-20<br />Count:  7562<br />interaction(District, sep = \"/\"): Jaffna","Date: 2021-08-21<br />Count:  7689<br />interaction(District, sep = \"/\"): Jaffna","Date: 2021-08-22<br />Count:  7809<br />interaction(District, sep = \"/\"): Jaffna","Date: 2021-08-23<br />Count:  7908<br />interaction(District, sep = \"/\"): Jaffna","Date: 2021-08-24<br />Count:  8092<br />interaction(District, sep = \"/\"): Jaffna","Date: 2021-08-25<br />Count:  8202<br />interaction(District, sep = \"/\"): Jaffna","Date: 2021-08-26<br />Count:  8369<br />interaction(District, sep = \"/\"): Jaffna","Date: 2021-08-27<br />Count:  8428<br />interaction(District, sep = \"/\"): Jaffna","Date: 2021-08-28<br />Count:  8540<br />interaction(District, sep = \"/\"): Jaffna","Date: 2021-08-29<br />Count:  8611<br />interaction(District, sep = \"/\"): Jaffna","Date: 2021-08-30<br />Count:  8692<br />interaction(District, sep = \"/\"): Jaffna","Date: 2021-08-31<br />Count:  8828<br />interaction(District, sep = \"/\"): Jaffna","Date: 2021-09-01<br />Count:  8978<br />interaction(District, sep = \"/\"): Jaffna"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(36,183,0,1)","dash":"solid"},"hoveron":"points","name":"Jaffna","legendgroup":"Jaffna","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[18840,18841,18842,18843,18844,18845,18846,18847,18848,18849,18850,18851,18852,18853,18854,18855,18856,18857,18858,18859,18860,18861,18862,18863,18864,18865,18866,18867,18868,18869,18870,18871],"y":[2902,2910,2916,2926,2928,2942,2951,2984,3009,3029,3070,3082,3103,3123,3128,3154,3161,3232,3240,3391,3432,3448,3547,3587,3868,3916,3921,3931,3945,3997,4028,4043],"text":["Date: 2021-08-01<br />Count:  2902<br />interaction(District, sep = \"/\"): Kalmunai","Date: 2021-08-02<br />Count:  2910<br />interaction(District, sep = \"/\"): Kalmunai","Date: 2021-08-03<br />Count:  2916<br />interaction(District, sep = \"/\"): Kalmunai","Date: 2021-08-04<br />Count:  2926<br />interaction(District, sep = \"/\"): Kalmunai","Date: 2021-08-05<br />Count:  2928<br />interaction(District, sep = \"/\"): Kalmunai","Date: 2021-08-06<br />Count:  2942<br />interaction(District, sep = \"/\"): Kalmunai","Date: 2021-08-07<br />Count:  2951<br />interaction(District, sep = \"/\"): Kalmunai","Date: 2021-08-08<br />Count:  2984<br />interaction(District, sep = \"/\"): Kalmunai","Date: 2021-08-09<br />Count:  3009<br />interaction(District, sep = \"/\"): Kalmunai","Date: 2021-08-10<br />Count:  3029<br />interaction(District, sep = \"/\"): Kalmunai","Date: 2021-08-11<br />Count:  3070<br />interaction(District, sep = \"/\"): Kalmunai","Date: 2021-08-12<br />Count:  3082<br />interaction(District, sep = \"/\"): Kalmunai","Date: 2021-08-13<br />Count:  3103<br />interaction(District, sep = \"/\"): Kalmunai","Date: 2021-08-14<br />Count:  3123<br />interaction(District, sep = \"/\"): Kalmunai","Date: 2021-08-15<br />Count:  3128<br />interaction(District, sep = \"/\"): Kalmunai","Date: 2021-08-16<br />Count:  3154<br />interaction(District, sep = \"/\"): Kalmunai","Date: 2021-08-17<br />Count:  3161<br />interaction(District, sep = \"/\"): Kalmunai","Date: 2021-08-18<br />Count:  3232<br />interaction(District, sep = \"/\"): Kalmunai","Date: 2021-08-19<br />Count:  3240<br />interaction(District, sep = \"/\"): Kalmunai","Date: 2021-08-20<br />Count:  3391<br />interaction(District, sep = \"/\"): Kalmunai","Date: 2021-08-21<br />Count:  3432<br />interaction(District, sep = \"/\"): Kalmunai","Date: 2021-08-22<br />Count:  3448<br />interaction(District, sep = \"/\"): Kalmunai","Date: 2021-08-23<br />Count:  3547<br />interaction(District, sep = \"/\"): Kalmunai","Date: 2021-08-24<br />Count:  3587<br />interaction(District, sep = \"/\"): Kalmunai","Date: 2021-08-25<br />Count:  3868<br />interaction(District, sep = \"/\"): Kalmunai","Date: 2021-08-26<br />Count:  3916<br />interaction(District, sep = \"/\"): Kalmunai","Date: 2021-08-27<br />Count:  3921<br />interaction(District, sep = \"/\"): Kalmunai","Date: 2021-08-28<br />Count:  3931<br />interaction(District, sep = \"/\"): Kalmunai","Date: 2021-08-29<br />Count:  3945<br />interaction(District, sep = \"/\"): Kalmunai","Date: 2021-08-30<br />Count:  3997<br />interaction(District, sep = \"/\"): Kalmunai","Date: 2021-08-31<br />Count:  4028<br />interaction(District, sep = \"/\"): Kalmunai","Date: 2021-09-01<br />Count:  4043<br />interaction(District, sep = \"/\"): Kalmunai"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(0,187,73,1)","dash":"solid"},"hoveron":"points","name":"Kalmunai","legendgroup":"Kalmunai","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[18840,18841,18842,18843,18844,18845,18846,18847,18848,18849,18850,18851,18852,18853,18854,18855,18856,18857,18858,18859,18860,18861,18862,18863,18864,18865,18866,18867,18868,18869,18870,18871],"y":[33300,33501,33882,34165,34325,34578,34931,35608,35863,36390,36641,36862,37331,37698,38436,38607,39042,39271,39518,40109,40574,40823,41026,41391,42067,42352,42549,42938,43332,43619,43820,44302],"text":["Date: 2021-08-01<br />Count: 33300<br />interaction(District, sep = \"/\"): Kalutara","Date: 2021-08-02<br />Count: 33501<br />interaction(District, sep = \"/\"): Kalutara","Date: 2021-08-03<br />Count: 33882<br />interaction(District, sep = \"/\"): Kalutara","Date: 2021-08-04<br />Count: 34165<br />interaction(District, sep = \"/\"): Kalutara","Date: 2021-08-05<br />Count: 34325<br />interaction(District, sep = \"/\"): Kalutara","Date: 2021-08-06<br />Count: 34578<br />interaction(District, sep = \"/\"): Kalutara","Date: 2021-08-07<br />Count: 34931<br />interaction(District, sep = \"/\"): Kalutara","Date: 2021-08-08<br />Count: 35608<br />interaction(District, sep = \"/\"): Kalutara","Date: 2021-08-09<br />Count: 35863<br />interaction(District, sep = \"/\"): Kalutara","Date: 2021-08-10<br />Count: 36390<br />interaction(District, sep = \"/\"): Kalutara","Date: 2021-08-11<br />Count: 36641<br />interaction(District, sep = \"/\"): Kalutara","Date: 2021-08-12<br />Count: 36862<br />interaction(District, sep = \"/\"): Kalutara","Date: 2021-08-13<br />Count: 37331<br />interaction(District, sep = \"/\"): Kalutara","Date: 2021-08-14<br />Count: 37698<br />interaction(District, sep = \"/\"): Kalutara","Date: 2021-08-15<br />Count: 38436<br />interaction(District, sep = \"/\"): Kalutara","Date: 2021-08-16<br />Count: 38607<br />interaction(District, sep = \"/\"): Kalutara","Date: 2021-08-17<br />Count: 39042<br />interaction(District, sep = \"/\"): Kalutara","Date: 2021-08-18<br />Count: 39271<br />interaction(District, sep = \"/\"): Kalutara","Date: 2021-08-19<br />Count: 39518<br />interaction(District, sep = \"/\"): Kalutara","Date: 2021-08-20<br />Count: 40109<br />interaction(District, sep = \"/\"): Kalutara","Date: 2021-08-21<br />Count: 40574<br />interaction(District, sep = \"/\"): Kalutara","Date: 2021-08-22<br />Count: 40823<br />interaction(District, sep = \"/\"): Kalutara","Date: 2021-08-23<br />Count: 41026<br />interaction(District, sep = \"/\"): Kalutara","Date: 2021-08-24<br />Count: 41391<br />interaction(District, sep = \"/\"): Kalutara","Date: 2021-08-25<br />Count: 42067<br />interaction(District, sep = \"/\"): Kalutara","Date: 2021-08-26<br />Count: 42352<br />interaction(District, sep = \"/\"): Kalutara","Date: 2021-08-27<br />Count: 42549<br />interaction(District, sep = \"/\"): Kalutara","Date: 2021-08-28<br />Count: 42938<br />interaction(District, sep = \"/\"): Kalutara","Date: 2021-08-29<br />Count: 43332<br />interaction(District, sep = \"/\"): Kalutara","Date: 2021-08-30<br />Count: 43619<br />interaction(District, sep = \"/\"): Kalutara","Date: 2021-08-31<br />Count: 43820<br />interaction(District, sep = \"/\"): Kalutara","Date: 2021-09-01<br />Count: 44302<br />interaction(District, sep = \"/\"): Kalutara"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(0,190,112,1)","dash":"solid"},"hoveron":"points","name":"Kalutara","legendgroup":"Kalutara","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[18840,18841,18842,18843,18844,18845,18846,18847,18848,18849,18850,18851,18852,18853,18854,18855,18856,18857,18858,18859,18860,18861,18862,18863,18864,18865,18866,18867,18868,18869,18870,18871],"y":[14576,14607,14823,14880,14955,15004,15110,15208,15247,15374,15442,15500,15550,15635,15667,15731,15776,16006,16074,16201,16290,16359,16599,16735,16899,17029,17193,17274,17316,17434,17608,17737],"text":["Date: 2021-08-01<br />Count: 14576<br />interaction(District, sep = \"/\"): Kandy","Date: 2021-08-02<br />Count: 14607<br />interaction(District, sep = \"/\"): Kandy","Date: 2021-08-03<br />Count: 14823<br />interaction(District, sep = \"/\"): Kandy","Date: 2021-08-04<br />Count: 14880<br />interaction(District, sep = \"/\"): Kandy","Date: 2021-08-05<br />Count: 14955<br />interaction(District, sep = \"/\"): Kandy","Date: 2021-08-06<br />Count: 15004<br />interaction(District, sep = \"/\"): Kandy","Date: 2021-08-07<br />Count: 15110<br />interaction(District, sep = \"/\"): Kandy","Date: 2021-08-08<br />Count: 15208<br />interaction(District, sep = \"/\"): Kandy","Date: 2021-08-09<br />Count: 15247<br />interaction(District, sep = \"/\"): Kandy","Date: 2021-08-10<br />Count: 15374<br />interaction(District, sep = \"/\"): Kandy","Date: 2021-08-11<br />Count: 15442<br />interaction(District, sep = \"/\"): Kandy","Date: 2021-08-12<br />Count: 15500<br />interaction(District, sep = \"/\"): Kandy","Date: 2021-08-13<br />Count: 15550<br />interaction(District, sep = \"/\"): Kandy","Date: 2021-08-14<br />Count: 15635<br />interaction(District, sep = \"/\"): Kandy","Date: 2021-08-15<br />Count: 15667<br />interaction(District, sep = \"/\"): Kandy","Date: 2021-08-16<br />Count: 15731<br />interaction(District, sep = \"/\"): Kandy","Date: 2021-08-17<br />Count: 15776<br />interaction(District, sep = \"/\"): Kandy","Date: 2021-08-18<br />Count: 16006<br />interaction(District, sep = \"/\"): Kandy","Date: 2021-08-19<br />Count: 16074<br />interaction(District, sep = \"/\"): Kandy","Date: 2021-08-20<br />Count: 16201<br />interaction(District, sep = \"/\"): Kandy","Date: 2021-08-21<br />Count: 16290<br />interaction(District, sep = \"/\"): Kandy","Date: 2021-08-22<br />Count: 16359<br />interaction(District, sep = \"/\"): Kandy","Date: 2021-08-23<br />Count: 16599<br />interaction(District, sep = \"/\"): Kandy","Date: 2021-08-24<br />Count: 16735<br />interaction(District, sep = \"/\"): Kandy","Date: 2021-08-25<br />Count: 16899<br />interaction(District, sep = \"/\"): Kandy","Date: 2021-08-26<br />Count: 17029<br />interaction(District, sep = \"/\"): Kandy","Date: 2021-08-27<br />Count: 17193<br />interaction(District, sep = \"/\"): Kandy","Date: 2021-08-28<br />Count: 17274<br />interaction(District, sep = \"/\"): Kandy","Date: 2021-08-29<br />Count: 17316<br />interaction(District, sep = \"/\"): Kandy","Date: 2021-08-30<br />Count: 17434<br />interaction(District, sep = \"/\"): Kandy","Date: 2021-08-31<br />Count: 17608<br />interaction(District, sep = \"/\"): Kandy","Date: 2021-09-01<br />Count: 17737<br />interaction(District, sep = \"/\"): Kandy"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(0,192,144,1)","dash":"solid"},"hoveron":"points","name":"Kandy","legendgroup":"Kandy","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[18840,18841,18842,18843,18844,18845,18846,18847,18848,18849,18850,18851,18852,18853,18854,18855,18856,18857,18858,18859,18860,18861,18862,18863,18864,18865,18866,18867,18868,18869,18870,18871],"y":[6792,6814,6855,6887,6898,6906,6979,6992,6994,7055,7070,7093,7095,7103,7145,7158,7198,7222,7278,7324,7364,7504,7521,7560,7696,7789,7918,7983,8074,8324,8530,8599],"text":["Date: 2021-08-01<br />Count:  6792<br />interaction(District, sep = \"/\"): Kegalle","Date: 2021-08-02<br />Count:  6814<br />interaction(District, sep = \"/\"): Kegalle","Date: 2021-08-03<br />Count:  6855<br />interaction(District, sep = \"/\"): Kegalle","Date: 2021-08-04<br />Count:  6887<br />interaction(District, sep = \"/\"): Kegalle","Date: 2021-08-05<br />Count:  6898<br />interaction(District, sep = \"/\"): Kegalle","Date: 2021-08-06<br />Count:  6906<br />interaction(District, sep = \"/\"): Kegalle","Date: 2021-08-07<br />Count:  6979<br />interaction(District, sep = \"/\"): Kegalle","Date: 2021-08-08<br />Count:  6992<br />interaction(District, sep = \"/\"): Kegalle","Date: 2021-08-09<br />Count:  6994<br />interaction(District, sep = \"/\"): Kegalle","Date: 2021-08-10<br />Count:  7055<br />interaction(District, sep = \"/\"): Kegalle","Date: 2021-08-11<br />Count:  7070<br />interaction(District, sep = \"/\"): Kegalle","Date: 2021-08-12<br />Count:  7093<br />interaction(District, sep = \"/\"): Kegalle","Date: 2021-08-13<br />Count:  7095<br />interaction(District, sep = \"/\"): Kegalle","Date: 2021-08-14<br />Count:  7103<br />interaction(District, sep = \"/\"): Kegalle","Date: 2021-08-15<br />Count:  7145<br />interaction(District, sep = \"/\"): Kegalle","Date: 2021-08-16<br />Count:  7158<br />interaction(District, sep = \"/\"): Kegalle","Date: 2021-08-17<br />Count:  7198<br />interaction(District, sep = \"/\"): Kegalle","Date: 2021-08-18<br />Count:  7222<br />interaction(District, sep = \"/\"): Kegalle","Date: 2021-08-19<br />Count:  7278<br />interaction(District, sep = \"/\"): Kegalle","Date: 2021-08-20<br />Count:  7324<br />interaction(District, sep = \"/\"): Kegalle","Date: 2021-08-21<br />Count:  7364<br />interaction(District, sep = \"/\"): Kegalle","Date: 2021-08-22<br />Count:  7504<br />interaction(District, sep = \"/\"): Kegalle","Date: 2021-08-23<br />Count:  7521<br />interaction(District, sep = \"/\"): Kegalle","Date: 2021-08-24<br />Count:  7560<br />interaction(District, sep = \"/\"): Kegalle","Date: 2021-08-25<br />Count:  7696<br />interaction(District, sep = \"/\"): Kegalle","Date: 2021-08-26<br />Count:  7789<br />interaction(District, sep = \"/\"): Kegalle","Date: 2021-08-27<br />Count:  7918<br />interaction(District, sep = \"/\"): Kegalle","Date: 2021-08-28<br />Count:  7983<br />interaction(District, sep = \"/\"): Kegalle","Date: 2021-08-29<br />Count:  8074<br />interaction(District, sep = \"/\"): Kegalle","Date: 2021-08-30<br />Count:  8324<br />interaction(District, sep = \"/\"): Kegalle","Date: 2021-08-31<br />Count:  8530<br />interaction(District, sep = \"/\"): Kegalle","Date: 2021-09-01<br />Count:  8599<br />interaction(District, sep = \"/\"): Kegalle"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(0,193,171,1)","dash":"solid"},"hoveron":"points","name":"Kegalle","legendgroup":"Kegalle","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[18840,18841,18842,18843,18844,18845,18846,18847,18848,18849,18850,18851,18852,18853,18854,18855,18856,18857,18858,18859,18860,18861,18862,18863,18864,18865,18866,18867,18868,18869,18870,18871],"y":[1480,1515,1518,1520,1548,1548,1558,1565,1570,1573,1573,1578,1607,1617,1744,1744,1896,2112,2115,2275,2279,2284,2285,2285,3098,3105,3142,3142,3144,3826,3847,3851],"text":["Date: 2021-08-01<br />Count:  1480<br />interaction(District, sep = \"/\"): Kilinochchi","Date: 2021-08-02<br />Count:  1515<br />interaction(District, sep = \"/\"): Kilinochchi","Date: 2021-08-03<br />Count:  1518<br />interaction(District, sep = \"/\"): Kilinochchi","Date: 2021-08-04<br />Count:  1520<br />interaction(District, sep = \"/\"): Kilinochchi","Date: 2021-08-05<br />Count:  1548<br />interaction(District, sep = \"/\"): Kilinochchi","Date: 2021-08-06<br />Count:  1548<br />interaction(District, sep = \"/\"): Kilinochchi","Date: 2021-08-07<br />Count:  1558<br />interaction(District, sep = \"/\"): Kilinochchi","Date: 2021-08-08<br />Count:  1565<br />interaction(District, sep = \"/\"): Kilinochchi","Date: 2021-08-09<br />Count:  1570<br />interaction(District, sep = \"/\"): Kilinochchi","Date: 2021-08-10<br />Count:  1573<br />interaction(District, sep = \"/\"): Kilinochchi","Date: 2021-08-11<br />Count:  1573<br />interaction(District, sep = \"/\"): Kilinochchi","Date: 2021-08-12<br />Count:  1578<br />interaction(District, sep = \"/\"): Kilinochchi","Date: 2021-08-13<br />Count:  1607<br />interaction(District, sep = \"/\"): Kilinochchi","Date: 2021-08-14<br />Count:  1617<br />interaction(District, sep = \"/\"): Kilinochchi","Date: 2021-08-15<br />Count:  1744<br />interaction(District, sep = \"/\"): Kilinochchi","Date: 2021-08-16<br />Count:  1744<br />interaction(District, sep = \"/\"): Kilinochchi","Date: 2021-08-17<br />Count:  1896<br />interaction(District, sep = \"/\"): Kilinochchi","Date: 2021-08-18<br />Count:  2112<br />interaction(District, sep = \"/\"): Kilinochchi","Date: 2021-08-19<br />Count:  2115<br />interaction(District, sep = \"/\"): Kilinochchi","Date: 2021-08-20<br />Count:  2275<br />interaction(District, sep = \"/\"): Kilinochchi","Date: 2021-08-21<br />Count:  2279<br />interaction(District, sep = \"/\"): Kilinochchi","Date: 2021-08-22<br />Count:  2284<br />interaction(District, sep = \"/\"): Kilinochchi","Date: 2021-08-23<br />Count:  2285<br />interaction(District, sep = \"/\"): Kilinochchi","Date: 2021-08-24<br />Count:  2285<br />interaction(District, sep = \"/\"): Kilinochchi","Date: 2021-08-25<br />Count:  3098<br />interaction(District, sep = \"/\"): Kilinochchi","Date: 2021-08-26<br />Count:  3105<br />interaction(District, sep = \"/\"): Kilinochchi","Date: 2021-08-27<br />Count:  3142<br />interaction(District, sep = \"/\"): Kilinochchi","Date: 2021-08-28<br />Count:  3142<br />interaction(District, sep = \"/\"): Kilinochchi","Date: 2021-08-29<br />Count:  3144<br />interaction(District, sep = \"/\"): Kilinochchi","Date: 2021-08-30<br />Count:  3826<br />interaction(District, sep = \"/\"): Kilinochchi","Date: 2021-08-31<br />Count:  3847<br />interaction(District, sep = \"/\"): Kilinochchi","Date: 2021-09-01<br />Count:  3851<br />interaction(District, sep = \"/\"): Kilinochchi"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(0,191,196,1)","dash":"solid"},"hoveron":"points","name":"Kilinochchi","legendgroup":"Kilinochchi","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[18840,18841,18842,18843,18844,18845,18846,18847,18848,18849,18850,18851,18852,18853,18854,18855,18856,18857,18858,18859,18860,18861,18862,18863,18864,18865,18866,18867,18868,18869,18870,18871],"y":[15327,15400,15453,15559,15692,15773,15915,16046,16158,16189,16356,16577,16790,16955,17062,17253,17371,17729,17933,18064,18344,18546,18791,18890,19090,19413,19656,20130,20535,20830,21017,21323],"text":["Date: 2021-08-01<br />Count: 15327<br />interaction(District, sep = \"/\"): Kurunagala","Date: 2021-08-02<br />Count: 15400<br />interaction(District, sep = \"/\"): Kurunagala","Date: 2021-08-03<br />Count: 15453<br />interaction(District, sep = \"/\"): Kurunagala","Date: 2021-08-04<br />Count: 15559<br />interaction(District, sep = \"/\"): Kurunagala","Date: 2021-08-05<br />Count: 15692<br />interaction(District, sep = \"/\"): Kurunagala","Date: 2021-08-06<br />Count: 15773<br />interaction(District, sep = \"/\"): Kurunagala","Date: 2021-08-07<br />Count: 15915<br />interaction(District, sep = \"/\"): Kurunagala","Date: 2021-08-08<br />Count: 16046<br />interaction(District, sep = \"/\"): Kurunagala","Date: 2021-08-09<br />Count: 16158<br />interaction(District, sep = \"/\"): Kurunagala","Date: 2021-08-10<br />Count: 16189<br />interaction(District, sep = \"/\"): Kurunagala","Date: 2021-08-11<br />Count: 16356<br />interaction(District, sep = \"/\"): Kurunagala","Date: 2021-08-12<br />Count: 16577<br />interaction(District, sep = \"/\"): Kurunagala","Date: 2021-08-13<br />Count: 16790<br />interaction(District, sep = \"/\"): Kurunagala","Date: 2021-08-14<br />Count: 16955<br />interaction(District, sep = \"/\"): Kurunagala","Date: 2021-08-15<br />Count: 17062<br />interaction(District, sep = \"/\"): Kurunagala","Date: 2021-08-16<br />Count: 17253<br />interaction(District, sep = \"/\"): Kurunagala","Date: 2021-08-17<br />Count: 17371<br />interaction(District, sep = \"/\"): Kurunagala","Date: 2021-08-18<br />Count: 17729<br />interaction(District, sep = \"/\"): Kurunagala","Date: 2021-08-19<br />Count: 17933<br />interaction(District, sep = \"/\"): Kurunagala","Date: 2021-08-20<br />Count: 18064<br />interaction(District, sep = \"/\"): Kurunagala","Date: 2021-08-21<br />Count: 18344<br />interaction(District, sep = \"/\"): Kurunagala","Date: 2021-08-22<br />Count: 18546<br />interaction(District, sep = \"/\"): Kurunagala","Date: 2021-08-23<br />Count: 18791<br />interaction(District, sep = \"/\"): Kurunagala","Date: 2021-08-24<br />Count: 18890<br />interaction(District, sep = \"/\"): Kurunagala","Date: 2021-08-25<br />Count: 19090<br />interaction(District, sep = \"/\"): Kurunagala","Date: 2021-08-26<br />Count: 19413<br />interaction(District, sep = \"/\"): Kurunagala","Date: 2021-08-27<br />Count: 19656<br />interaction(District, sep = \"/\"): Kurunagala","Date: 2021-08-28<br />Count: 20130<br />interaction(District, sep = \"/\"): Kurunagala","Date: 2021-08-29<br />Count: 20535<br />interaction(District, sep = \"/\"): Kurunagala","Date: 2021-08-30<br />Count: 20830<br />interaction(District, sep = \"/\"): Kurunagala","Date: 2021-08-31<br />Count: 21017<br />interaction(District, sep = \"/\"): Kurunagala","Date: 2021-09-01<br />Count: 21323<br />interaction(District, sep = \"/\"): Kurunagala"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(0,187,218,1)","dash":"solid"},"hoveron":"points","name":"Kurunagala","legendgroup":"Kurunagala","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[18840,18841,18842,18843,18844,18845,18846,18847,18848,18849,18850,18851,18852,18853,18854,18855,18856,18857,18858,18859,18860,18861,18862,18863,18864,18865,18866,18867,18868,18869,18870,18871],"y":[1320,1355,1389,1394,1432,1446,1454,1459,1465,1479,1483,1488,1498,1511,1547,1553,1565,1567,1569,1584,1594,1607,1623,1623,1628,1632,1663,1666,1667,1668,1683,1687],"text":["Date: 2021-08-01<br />Count:  1320<br />interaction(District, sep = \"/\"): Mannar","Date: 2021-08-02<br />Count:  1355<br />interaction(District, sep = \"/\"): Mannar","Date: 2021-08-03<br />Count:  1389<br />interaction(District, sep = \"/\"): Mannar","Date: 2021-08-04<br />Count:  1394<br />interaction(District, sep = \"/\"): Mannar","Date: 2021-08-05<br />Count:  1432<br />interaction(District, sep = \"/\"): Mannar","Date: 2021-08-06<br />Count:  1446<br />interaction(District, sep = \"/\"): Mannar","Date: 2021-08-07<br />Count:  1454<br />interaction(District, sep = \"/\"): Mannar","Date: 2021-08-08<br />Count:  1459<br />interaction(District, sep = \"/\"): Mannar","Date: 2021-08-09<br />Count:  1465<br />interaction(District, sep = \"/\"): Mannar","Date: 2021-08-10<br />Count:  1479<br />interaction(District, sep = \"/\"): Mannar","Date: 2021-08-11<br />Count:  1483<br />interaction(District, sep = \"/\"): Mannar","Date: 2021-08-12<br />Count:  1488<br />interaction(District, sep = \"/\"): Mannar","Date: 2021-08-13<br />Count:  1498<br />interaction(District, sep = \"/\"): Mannar","Date: 2021-08-14<br />Count:  1511<br />interaction(District, sep = \"/\"): Mannar","Date: 2021-08-15<br />Count:  1547<br />interaction(District, sep = \"/\"): Mannar","Date: 2021-08-16<br />Count:  1553<br />interaction(District, sep = \"/\"): Mannar","Date: 2021-08-17<br />Count:  1565<br />interaction(District, sep = \"/\"): Mannar","Date: 2021-08-18<br />Count:  1567<br />interaction(District, sep = \"/\"): Mannar","Date: 2021-08-19<br />Count:  1569<br />interaction(District, sep = \"/\"): Mannar","Date: 2021-08-20<br />Count:  1584<br />interaction(District, sep = \"/\"): Mannar","Date: 2021-08-21<br />Count:  1594<br />interaction(District, sep = \"/\"): Mannar","Date: 2021-08-22<br />Count:  1607<br />interaction(District, sep = \"/\"): Mannar","Date: 2021-08-23<br />Count:  1623<br />interaction(District, sep = \"/\"): Mannar","Date: 2021-08-24<br />Count:  1623<br />interaction(District, sep = \"/\"): Mannar","Date: 2021-08-25<br />Count:  1628<br />interaction(District, sep = \"/\"): Mannar","Date: 2021-08-26<br />Count:  1632<br />interaction(District, sep = \"/\"): Mannar","Date: 2021-08-27<br />Count:  1663<br />interaction(District, sep = \"/\"): Mannar","Date: 2021-08-28<br />Count:  1666<br />interaction(District, sep = \"/\"): Mannar","Date: 2021-08-29<br />Count:  1667<br />interaction(District, sep = \"/\"): Mannar","Date: 2021-08-30<br />Count:  1668<br />interaction(District, sep = \"/\"): Mannar","Date: 2021-08-31<br />Count:  1683<br />interaction(District, sep = \"/\"): Mannar","Date: 2021-09-01<br />Count:  1687<br />interaction(District, sep = \"/\"): Mannar"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(0,181,237,1)","dash":"solid"},"hoveron":"points","name":"Mannar","legendgroup":"Mannar","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[18840,18841,18842,18843,18844,18845,18846,18847,18848,18849,18850,18851,18852,18853,18854,18855,18856,18857,18858,18859,18860,18861,18862,18863,18864,18865,18866,18867,18868,18869,18870,18871],"y":[5694,5768,5883,5883,5902,5946,6022,6067,6160,6169,6206,6215,6241,6285,6412,6437,6447,6720,6830,7659,7729,7847,7903,7914,8081,8234,8269,8320,8381,9001,9092,9146],"text":["Date: 2021-08-01<br />Count:  5694<br />interaction(District, sep = \"/\"): Matale","Date: 2021-08-02<br />Count:  5768<br />interaction(District, sep = \"/\"): Matale","Date: 2021-08-03<br />Count:  5883<br />interaction(District, sep = \"/\"): Matale","Date: 2021-08-04<br />Count:  5883<br />interaction(District, sep = \"/\"): Matale","Date: 2021-08-05<br />Count:  5902<br />interaction(District, sep = \"/\"): Matale","Date: 2021-08-06<br />Count:  5946<br />interaction(District, sep = \"/\"): Matale","Date: 2021-08-07<br />Count:  6022<br />interaction(District, sep = \"/\"): Matale","Date: 2021-08-08<br />Count:  6067<br />interaction(District, sep = \"/\"): Matale","Date: 2021-08-09<br />Count:  6160<br />interaction(District, sep = \"/\"): Matale","Date: 2021-08-10<br />Count:  6169<br />interaction(District, sep = \"/\"): Matale","Date: 2021-08-11<br />Count:  6206<br />interaction(District, sep = \"/\"): Matale","Date: 2021-08-12<br />Count:  6215<br />interaction(District, sep = \"/\"): Matale","Date: 2021-08-13<br />Count:  6241<br />interaction(District, sep = \"/\"): Matale","Date: 2021-08-14<br />Count:  6285<br />interaction(District, sep = \"/\"): Matale","Date: 2021-08-15<br />Count:  6412<br />interaction(District, sep = \"/\"): Matale","Date: 2021-08-16<br />Count:  6437<br />interaction(District, sep = \"/\"): Matale","Date: 2021-08-17<br />Count:  6447<br />interaction(District, sep = \"/\"): Matale","Date: 2021-08-18<br />Count:  6720<br />interaction(District, sep = \"/\"): Matale","Date: 2021-08-19<br />Count:  6830<br />interaction(District, sep = \"/\"): Matale","Date: 2021-08-20<br />Count:  7659<br />interaction(District, sep = \"/\"): Matale","Date: 2021-08-21<br />Count:  7729<br />interaction(District, sep = \"/\"): Matale","Date: 2021-08-22<br />Count:  7847<br />interaction(District, sep = \"/\"): Matale","Date: 2021-08-23<br />Count:  7903<br />interaction(District, sep = \"/\"): Matale","Date: 2021-08-24<br />Count:  7914<br />interaction(District, sep = \"/\"): Matale","Date: 2021-08-25<br />Count:  8081<br />interaction(District, sep = \"/\"): Matale","Date: 2021-08-26<br />Count:  8234<br />interaction(District, sep = \"/\"): Matale","Date: 2021-08-27<br />Count:  8269<br />interaction(District, sep = \"/\"): Matale","Date: 2021-08-28<br />Count:  8320<br />interaction(District, sep = \"/\"): Matale","Date: 2021-08-29<br />Count:  8381<br />interaction(District, sep = \"/\"): Matale","Date: 2021-08-30<br />Count:  9001<br />interaction(District, sep = \"/\"): Matale","Date: 2021-08-31<br />Count:  9092<br />interaction(District, sep = \"/\"): Matale","Date: 2021-09-01<br />Count:  9146<br />interaction(District, sep = \"/\"): Matale"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(0,172,252,1)","dash":"solid"},"hoveron":"points","name":"Matale","legendgroup":"Matale","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[18840,18841,18842,18843,18844,18845,18846,18847,18848,18849,18850,18851,18852,18853,18854,18855,18856,18857,18858,18859,18860,18861,18862,18863,18864,18865,18866,18867,18868,18869,18870,18871],"y":[7778,7853,7864,7923,7967,7996,8108,8173,8188,8256,8284,8334,8386,8457,8570,8631,8756,8908,8942,9058,9113,9181,9316,9353,9520,9728,9761,9873,9939,10085,10185,10235],"text":["Date: 2021-08-01<br />Count:  7778<br />interaction(District, sep = \"/\"): Matara","Date: 2021-08-02<br />Count:  7853<br />interaction(District, sep = \"/\"): Matara","Date: 2021-08-03<br />Count:  7864<br />interaction(District, sep = \"/\"): Matara","Date: 2021-08-04<br />Count:  7923<br />interaction(District, sep = \"/\"): Matara","Date: 2021-08-05<br />Count:  7967<br />interaction(District, sep = \"/\"): Matara","Date: 2021-08-06<br />Count:  7996<br />interaction(District, sep = \"/\"): Matara","Date: 2021-08-07<br />Count:  8108<br />interaction(District, sep = \"/\"): Matara","Date: 2021-08-08<br />Count:  8173<br />interaction(District, sep = \"/\"): Matara","Date: 2021-08-09<br />Count:  8188<br />interaction(District, sep = \"/\"): Matara","Date: 2021-08-10<br />Count:  8256<br />interaction(District, sep = \"/\"): Matara","Date: 2021-08-11<br />Count:  8284<br />interaction(District, sep = \"/\"): Matara","Date: 2021-08-12<br />Count:  8334<br />interaction(District, sep = \"/\"): Matara","Date: 2021-08-13<br />Count:  8386<br />interaction(District, sep = \"/\"): Matara","Date: 2021-08-14<br />Count:  8457<br />interaction(District, sep = \"/\"): Matara","Date: 2021-08-15<br />Count:  8570<br />interaction(District, sep = \"/\"): Matara","Date: 2021-08-16<br />Count:  8631<br />interaction(District, sep = \"/\"): Matara","Date: 2021-08-17<br />Count:  8756<br />interaction(District, sep = \"/\"): Matara","Date: 2021-08-18<br />Count:  8908<br />interaction(District, sep = \"/\"): Matara","Date: 2021-08-19<br />Count:  8942<br />interaction(District, sep = \"/\"): Matara","Date: 2021-08-20<br />Count:  9058<br />interaction(District, sep = \"/\"): Matara","Date: 2021-08-21<br />Count:  9113<br />interaction(District, sep = \"/\"): Matara","Date: 2021-08-22<br />Count:  9181<br />interaction(District, sep = \"/\"): Matara","Date: 2021-08-23<br />Count:  9316<br />interaction(District, sep = \"/\"): Matara","Date: 2021-08-24<br />Count:  9353<br />interaction(District, sep = \"/\"): Matara","Date: 2021-08-25<br />Count:  9520<br />interaction(District, sep = \"/\"): Matara","Date: 2021-08-26<br />Count:  9728<br />interaction(District, sep = \"/\"): Matara","Date: 2021-08-27<br />Count:  9761<br />interaction(District, sep = \"/\"): Matara","Date: 2021-08-28<br />Count:  9873<br />interaction(District, sep = \"/\"): Matara","Date: 2021-08-29<br />Count:  9939<br />interaction(District, sep = \"/\"): Matara","Date: 2021-08-30<br />Count: 10085<br />interaction(District, sep = \"/\"): Matara","Date: 2021-08-31<br />Count: 10185<br />interaction(District, sep = \"/\"): Matara","Date: 2021-09-01<br />Count: 10235<br />interaction(District, sep = \"/\"): Matara"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(66,160,255,1)","dash":"solid"},"hoveron":"points","name":"Matara","legendgroup":"Matara","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[18840,18841,18842,18843,18844,18845,18846,18847,18848,18849,18850,18851,18852,18853,18854,18855,18856,18857,18858,18859,18860,18861,18862,18863,18864,18865,18866,18867,18868,18869,18870,18871],"y":[3569,3592,3678,3687,3724,3767,3772,3788,3793,3814,3917,3964,4022,4097,4216,4263,4297,4365,4499,4635,4651,4686,4701,4738,4821,5042,5350,5599,5720,6327,6537,6842],"text":["Date: 2021-08-01<br />Count:  3569<br />interaction(District, sep = \"/\"): Monaragala","Date: 2021-08-02<br />Count:  3592<br />interaction(District, sep = \"/\"): Monaragala","Date: 2021-08-03<br />Count:  3678<br />interaction(District, sep = \"/\"): Monaragala","Date: 2021-08-04<br />Count:  3687<br />interaction(District, sep = \"/\"): Monaragala","Date: 2021-08-05<br />Count:  3724<br />interaction(District, sep = \"/\"): Monaragala","Date: 2021-08-06<br />Count:  3767<br />interaction(District, sep = \"/\"): Monaragala","Date: 2021-08-07<br />Count:  3772<br />interaction(District, sep = \"/\"): Monaragala","Date: 2021-08-08<br />Count:  3788<br />interaction(District, sep = \"/\"): Monaragala","Date: 2021-08-09<br />Count:  3793<br />interaction(District, sep = \"/\"): Monaragala","Date: 2021-08-10<br />Count:  3814<br />interaction(District, sep = \"/\"): Monaragala","Date: 2021-08-11<br />Count:  3917<br />interaction(District, sep = \"/\"): Monaragala","Date: 2021-08-12<br />Count:  3964<br />interaction(District, sep = \"/\"): Monaragala","Date: 2021-08-13<br />Count:  4022<br />interaction(District, sep = \"/\"): Monaragala","Date: 2021-08-14<br />Count:  4097<br />interaction(District, sep = \"/\"): Monaragala","Date: 2021-08-15<br />Count:  4216<br />interaction(District, sep = \"/\"): Monaragala","Date: 2021-08-16<br />Count:  4263<br />interaction(District, sep = \"/\"): Monaragala","Date: 2021-08-17<br />Count:  4297<br />interaction(District, sep = \"/\"): Monaragala","Date: 2021-08-18<br />Count:  4365<br />interaction(District, sep = \"/\"): Monaragala","Date: 2021-08-19<br />Count:  4499<br />interaction(District, sep = \"/\"): Monaragala","Date: 2021-08-20<br />Count:  4635<br />interaction(District, sep = \"/\"): Monaragala","Date: 2021-08-21<br />Count:  4651<br />interaction(District, sep = \"/\"): Monaragala","Date: 2021-08-22<br />Count:  4686<br />interaction(District, sep = \"/\"): Monaragala","Date: 2021-08-23<br />Count:  4701<br />interaction(District, sep = \"/\"): Monaragala","Date: 2021-08-24<br />Count:  4738<br />interaction(District, sep = \"/\"): Monaragala","Date: 2021-08-25<br />Count:  4821<br />interaction(District, sep = \"/\"): Monaragala","Date: 2021-08-26<br />Count:  5042<br />interaction(District, sep = \"/\"): Monaragala","Date: 2021-08-27<br />Count:  5350<br />interaction(District, sep = \"/\"): Monaragala","Date: 2021-08-28<br />Count:  5599<br />interaction(District, sep = \"/\"): Monaragala","Date: 2021-08-29<br />Count:  5720<br />interaction(District, sep = \"/\"): Monaragala","Date: 2021-08-30<br />Count:  6327<br />interaction(District, sep = \"/\"): Monaragala","Date: 2021-08-31<br />Count:  6537<br />interaction(District, sep = \"/\"): Monaragala","Date: 2021-09-01<br />Count:  6842<br />interaction(District, sep = \"/\"): Monaragala"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(139,147,255,1)","dash":"solid"},"hoveron":"points","name":"Monaragala","legendgroup":"Monaragala","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[18840,18841,18842,18843,18844,18845,18846,18847,18848,18849,18850,18851,18852,18853,18854,18855,18856,18857,18858,18859,18860,18861,18862,18863,18864,18865,18866,18867,18868,18869,18870,18871],"y":[1116,1129,1132,1133,1137,1137,1139,1140,1148,1151,1151,1163,1169,1175,1178,1182,1199,1203,1205,1212,1218,1224,1230,1230,1234,1262,1269,1273,1286,1326,1383,1397],"text":["Date: 2021-08-01<br />Count:  1116<br />interaction(District, sep = \"/\"): Mullaitivu","Date: 2021-08-02<br />Count:  1129<br />interaction(District, sep = \"/\"): Mullaitivu","Date: 2021-08-03<br />Count:  1132<br />interaction(District, sep = \"/\"): Mullaitivu","Date: 2021-08-04<br />Count:  1133<br />interaction(District, sep = \"/\"): Mullaitivu","Date: 2021-08-05<br />Count:  1137<br />interaction(District, sep = \"/\"): Mullaitivu","Date: 2021-08-06<br />Count:  1137<br />interaction(District, sep = \"/\"): Mullaitivu","Date: 2021-08-07<br />Count:  1139<br />interaction(District, sep = \"/\"): Mullaitivu","Date: 2021-08-08<br />Count:  1140<br />interaction(District, sep = \"/\"): Mullaitivu","Date: 2021-08-09<br />Count:  1148<br />interaction(District, sep = \"/\"): Mullaitivu","Date: 2021-08-10<br />Count:  1151<br />interaction(District, sep = \"/\"): Mullaitivu","Date: 2021-08-11<br />Count:  1151<br />interaction(District, sep = \"/\"): Mullaitivu","Date: 2021-08-12<br />Count:  1163<br />interaction(District, sep = \"/\"): Mullaitivu","Date: 2021-08-13<br />Count:  1169<br />interaction(District, sep = \"/\"): Mullaitivu","Date: 2021-08-14<br />Count:  1175<br />interaction(District, sep = \"/\"): Mullaitivu","Date: 2021-08-15<br />Count:  1178<br />interaction(District, sep = \"/\"): Mullaitivu","Date: 2021-08-16<br />Count:  1182<br />interaction(District, sep = \"/\"): Mullaitivu","Date: 2021-08-17<br />Count:  1199<br />interaction(District, sep = \"/\"): Mullaitivu","Date: 2021-08-18<br />Count:  1203<br />interaction(District, sep = \"/\"): Mullaitivu","Date: 2021-08-19<br />Count:  1205<br />interaction(District, sep = \"/\"): Mullaitivu","Date: 2021-08-20<br />Count:  1212<br />interaction(District, sep = \"/\"): Mullaitivu","Date: 2021-08-21<br />Count:  1218<br />interaction(District, sep = \"/\"): Mullaitivu","Date: 2021-08-22<br />Count:  1224<br />interaction(District, sep = \"/\"): Mullaitivu","Date: 2021-08-23<br />Count:  1230<br />interaction(District, sep = \"/\"): Mullaitivu","Date: 2021-08-24<br />Count:  1230<br />interaction(District, sep = \"/\"): Mullaitivu","Date: 2021-08-25<br />Count:  1234<br />interaction(District, sep = \"/\"): Mullaitivu","Date: 2021-08-26<br />Count:  1262<br />interaction(District, sep = \"/\"): Mullaitivu","Date: 2021-08-27<br />Count:  1269<br />interaction(District, sep = \"/\"): Mullaitivu","Date: 2021-08-28<br />Count:  1273<br />interaction(District, sep = \"/\"): Mullaitivu","Date: 2021-08-29<br />Count:  1286<br />interaction(District, sep = \"/\"): Mullaitivu","Date: 2021-08-30<br />Count:  1326<br />interaction(District, sep = \"/\"): Mullaitivu","Date: 2021-08-31<br />Count:  1383<br />interaction(District, sep = \"/\"): Mullaitivu","Date: 2021-09-01<br />Count:  1397<br />interaction(District, sep = \"/\"): Mullaitivu"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(182,132,255,1)","dash":"solid"},"hoveron":"points","name":"Mullaitivu","legendgroup":"Mullaitivu","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[18840,18841,18842,18843,18844,18845,18846,18847,18848,18849,18850,18851,18852,18853,18854,18855,18856,18857,18858,18859,18860,18861,18862,18863,18864,18865,18866,18867,18868,18869,18870,18871],"y":[7917,7947,8009,8098,8121,8138,8176,8224,8371,8475,8561,8605,8610,8614,8646,8837,8837,8949,9074,9160,9237,9387,9638,9828,9902,9942,10011,10183,10368,10514,10686,10697],"text":["Date: 2021-08-01<br />Count:  7917<br />interaction(District, sep = \"/\"): Nuwara Eliya","Date: 2021-08-02<br />Count:  7947<br />interaction(District, sep = \"/\"): Nuwara Eliya","Date: 2021-08-03<br />Count:  8009<br />interaction(District, sep = \"/\"): Nuwara Eliya","Date: 2021-08-04<br />Count:  8098<br />interaction(District, sep = \"/\"): Nuwara Eliya","Date: 2021-08-05<br />Count:  8121<br />interaction(District, sep = \"/\"): Nuwara Eliya","Date: 2021-08-06<br />Count:  8138<br />interaction(District, sep = \"/\"): Nuwara Eliya","Date: 2021-08-07<br />Count:  8176<br />interaction(District, sep = \"/\"): Nuwara Eliya","Date: 2021-08-08<br />Count:  8224<br />interaction(District, sep = \"/\"): Nuwara Eliya","Date: 2021-08-09<br />Count:  8371<br />interaction(District, sep = \"/\"): Nuwara Eliya","Date: 2021-08-10<br />Count:  8475<br />interaction(District, sep = \"/\"): Nuwara Eliya","Date: 2021-08-11<br />Count:  8561<br />interaction(District, sep = \"/\"): Nuwara Eliya","Date: 2021-08-12<br />Count:  8605<br />interaction(District, sep = \"/\"): Nuwara Eliya","Date: 2021-08-13<br />Count:  8610<br />interaction(District, sep = \"/\"): Nuwara Eliya","Date: 2021-08-14<br />Count:  8614<br />interaction(District, sep = \"/\"): Nuwara Eliya","Date: 2021-08-15<br />Count:  8646<br />interaction(District, sep = \"/\"): Nuwara Eliya","Date: 2021-08-16<br />Count:  8837<br />interaction(District, sep = \"/\"): Nuwara Eliya","Date: 2021-08-17<br />Count:  8837<br />interaction(District, sep = \"/\"): Nuwara Eliya","Date: 2021-08-18<br />Count:  8949<br />interaction(District, sep = \"/\"): Nuwara Eliya","Date: 2021-08-19<br />Count:  9074<br />interaction(District, sep = \"/\"): Nuwara Eliya","Date: 2021-08-20<br />Count:  9160<br />interaction(District, sep = \"/\"): Nuwara Eliya","Date: 2021-08-21<br />Count:  9237<br />interaction(District, sep = \"/\"): Nuwara Eliya","Date: 2021-08-22<br />Count:  9387<br />interaction(District, sep = \"/\"): Nuwara Eliya","Date: 2021-08-23<br />Count:  9638<br />interaction(District, sep = \"/\"): Nuwara Eliya","Date: 2021-08-24<br />Count:  9828<br />interaction(District, sep = \"/\"): Nuwara Eliya","Date: 2021-08-25<br />Count:  9902<br />interaction(District, sep = \"/\"): Nuwara Eliya","Date: 2021-08-26<br />Count:  9942<br />interaction(District, sep = \"/\"): Nuwara Eliya","Date: 2021-08-27<br />Count: 10011<br />interaction(District, sep = \"/\"): Nuwara Eliya","Date: 2021-08-28<br />Count: 10183<br />interaction(District, sep = \"/\"): Nuwara Eliya","Date: 2021-08-29<br />Count: 10368<br />interaction(District, sep = \"/\"): Nuwara Eliya","Date: 2021-08-30<br />Count: 10514<br />interaction(District, sep = \"/\"): Nuwara Eliya","Date: 2021-08-31<br />Count: 10686<br />interaction(District, sep = \"/\"): Nuwara Eliya","Date: 2021-09-01<br />Count: 10697<br />interaction(District, sep = \"/\"): Nuwara Eliya"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(213,117,254,1)","dash":"solid"},"hoveron":"points","name":"Nuwara Eliya","legendgroup":"Nuwara Eliya","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[18840,18841,18842,18843,18844,18845,18846,18847,18848,18849,18850,18851,18852,18853,18854,18855,18856,18857,18858,18859,18860,18861,18862,18863,18864,18865,18866,18867,18868,18869,18870,18871],"y":[2833,2848,2852,2858,2896,2902,2913,2915,2928,3038,3077,3104,3110,3113,3194,3241,3292,3326,3390,3394,3551,3593,3623,3626,3763,3805,3817,3842,3904,3969,3994,4058],"text":["Date: 2021-08-01<br />Count:  2833<br />interaction(District, sep = \"/\"): Polonnaruwa","Date: 2021-08-02<br />Count:  2848<br />interaction(District, sep = \"/\"): Polonnaruwa","Date: 2021-08-03<br />Count:  2852<br />interaction(District, sep = \"/\"): Polonnaruwa","Date: 2021-08-04<br />Count:  2858<br />interaction(District, sep = \"/\"): Polonnaruwa","Date: 2021-08-05<br />Count:  2896<br />interaction(District, sep = \"/\"): Polonnaruwa","Date: 2021-08-06<br />Count:  2902<br />interaction(District, sep = \"/\"): Polonnaruwa","Date: 2021-08-07<br />Count:  2913<br />interaction(District, sep = \"/\"): Polonnaruwa","Date: 2021-08-08<br />Count:  2915<br />interaction(District, sep = \"/\"): Polonnaruwa","Date: 2021-08-09<br />Count:  2928<br />interaction(District, sep = \"/\"): Polonnaruwa","Date: 2021-08-10<br />Count:  3038<br />interaction(District, sep = \"/\"): Polonnaruwa","Date: 2021-08-11<br />Count:  3077<br />interaction(District, sep = \"/\"): Polonnaruwa","Date: 2021-08-12<br />Count:  3104<br />interaction(District, sep = \"/\"): Polonnaruwa","Date: 2021-08-13<br />Count:  3110<br />interaction(District, sep = \"/\"): Polonnaruwa","Date: 2021-08-14<br />Count:  3113<br />interaction(District, sep = \"/\"): Polonnaruwa","Date: 2021-08-15<br />Count:  3194<br />interaction(District, sep = \"/\"): Polonnaruwa","Date: 2021-08-16<br />Count:  3241<br />interaction(District, sep = \"/\"): Polonnaruwa","Date: 2021-08-17<br />Count:  3292<br />interaction(District, sep = \"/\"): Polonnaruwa","Date: 2021-08-18<br />Count:  3326<br />interaction(District, sep = \"/\"): Polonnaruwa","Date: 2021-08-19<br />Count:  3390<br />interaction(District, sep = \"/\"): Polonnaruwa","Date: 2021-08-20<br />Count:  3394<br />interaction(District, sep = \"/\"): Polonnaruwa","Date: 2021-08-21<br />Count:  3551<br />interaction(District, sep = \"/\"): Polonnaruwa","Date: 2021-08-22<br />Count:  3593<br />interaction(District, sep = \"/\"): Polonnaruwa","Date: 2021-08-23<br />Count:  3623<br />interaction(District, sep = \"/\"): Polonnaruwa","Date: 2021-08-24<br />Count:  3626<br />interaction(District, sep = \"/\"): Polonnaruwa","Date: 2021-08-25<br />Count:  3763<br />interaction(District, sep = \"/\"): Polonnaruwa","Date: 2021-08-26<br />Count:  3805<br />interaction(District, sep = \"/\"): Polonnaruwa","Date: 2021-08-27<br />Count:  3817<br />interaction(District, sep = \"/\"): Polonnaruwa","Date: 2021-08-28<br />Count:  3842<br />interaction(District, sep = \"/\"): Polonnaruwa","Date: 2021-08-29<br />Count:  3904<br />interaction(District, sep = \"/\"): Polonnaruwa","Date: 2021-08-30<br />Count:  3969<br />interaction(District, sep = \"/\"): Polonnaruwa","Date: 2021-08-31<br />Count:  3994<br />interaction(District, sep = \"/\"): Polonnaruwa","Date: 2021-09-01<br />Count:  4058<br />interaction(District, sep = \"/\"): Polonnaruwa"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(235,105,240,1)","dash":"solid"},"hoveron":"points","name":"Polonnaruwa","legendgroup":"Polonnaruwa","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[18840,18841,18842,18843,18844,18845,18846,18847,18848,18849,18850,18851,18852,18853,18854,18855,18856,18857,18858,18859,18860,18861,18862,18863,18864,18865,18866,18867,18868,18869,18870,18871],"y":[5549,5575,5622,5663,5740,5803,5898,5976,6036,6124,6261,6361,6501,6520,6701,6793,6827,7053,7143,7278,7443,7514,7558,7629,7801,7943,8035,8119,8218,8475,8492,8654],"text":["Date: 2021-08-01<br />Count:  5549<br />interaction(District, sep = \"/\"): Puttalam","Date: 2021-08-02<br />Count:  5575<br />interaction(District, sep = \"/\"): Puttalam","Date: 2021-08-03<br />Count:  5622<br />interaction(District, sep = \"/\"): Puttalam","Date: 2021-08-04<br />Count:  5663<br />interaction(District, sep = \"/\"): Puttalam","Date: 2021-08-05<br />Count:  5740<br />interaction(District, sep = \"/\"): Puttalam","Date: 2021-08-06<br />Count:  5803<br />interaction(District, sep = \"/\"): Puttalam","Date: 2021-08-07<br />Count:  5898<br />interaction(District, sep = \"/\"): Puttalam","Date: 2021-08-08<br />Count:  5976<br />interaction(District, sep = \"/\"): Puttalam","Date: 2021-08-09<br />Count:  6036<br />interaction(District, sep = \"/\"): Puttalam","Date: 2021-08-10<br />Count:  6124<br />interaction(District, sep = \"/\"): Puttalam","Date: 2021-08-11<br />Count:  6261<br />interaction(District, sep = \"/\"): Puttalam","Date: 2021-08-12<br />Count:  6361<br />interaction(District, sep = \"/\"): Puttalam","Date: 2021-08-13<br />Count:  6501<br />interaction(District, sep = \"/\"): Puttalam","Date: 2021-08-14<br />Count:  6520<br />interaction(District, sep = \"/\"): Puttalam","Date: 2021-08-15<br />Count:  6701<br />interaction(District, sep = \"/\"): Puttalam","Date: 2021-08-16<br />Count:  6793<br />interaction(District, sep = \"/\"): Puttalam","Date: 2021-08-17<br />Count:  6827<br />interaction(District, sep = \"/\"): Puttalam","Date: 2021-08-18<br />Count:  7053<br />interaction(District, sep = \"/\"): Puttalam","Date: 2021-08-19<br />Count:  7143<br />interaction(District, sep = \"/\"): Puttalam","Date: 2021-08-20<br />Count:  7278<br />interaction(District, sep = \"/\"): Puttalam","Date: 2021-08-21<br />Count:  7443<br />interaction(District, sep = \"/\"): Puttalam","Date: 2021-08-22<br />Count:  7514<br />interaction(District, sep = \"/\"): Puttalam","Date: 2021-08-23<br />Count:  7558<br />interaction(District, sep = \"/\"): Puttalam","Date: 2021-08-24<br />Count:  7629<br />interaction(District, sep = \"/\"): Puttalam","Date: 2021-08-25<br />Count:  7801<br />interaction(District, sep = \"/\"): Puttalam","Date: 2021-08-26<br />Count:  7943<br />interaction(District, sep = \"/\"): Puttalam","Date: 2021-08-27<br />Count:  8035<br />interaction(District, sep = \"/\"): Puttalam","Date: 2021-08-28<br />Count:  8119<br />interaction(District, sep = \"/\"): Puttalam","Date: 2021-08-29<br />Count:  8218<br />interaction(District, sep = \"/\"): Puttalam","Date: 2021-08-30<br />Count:  8475<br />interaction(District, sep = \"/\"): Puttalam","Date: 2021-08-31<br />Count:  8492<br />interaction(District, sep = \"/\"): Puttalam","Date: 2021-09-01<br />Count:  8654<br />interaction(District, sep = \"/\"): Puttalam"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(249,98,221,1)","dash":"solid"},"hoveron":"points","name":"Puttalam","legendgroup":"Puttalam","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[18840,18841,18842,18843,18844,18845,18846,18847,18848,18849,18850,18851,18852,18853,18854,18855,18856,18857,18858,18859,18860,18861,18862,18863,18864,18865,18866,18867,18868,18869,18870,18871],"y":[12267,12313,12363,12383,12483,12523,12599,12604,12711,12737,12765,12797,12883,12900,13039,13053,13070,13114,13161,13211,13279,13409,13446,13501,13584,13719,13834,13902,13966,14232,14606,14794],"text":["Date: 2021-08-01<br />Count: 12267<br />interaction(District, sep = \"/\"): Ratnapura","Date: 2021-08-02<br />Count: 12313<br />interaction(District, sep = \"/\"): Ratnapura","Date: 2021-08-03<br />Count: 12363<br />interaction(District, sep = \"/\"): Ratnapura","Date: 2021-08-04<br />Count: 12383<br />interaction(District, sep = \"/\"): Ratnapura","Date: 2021-08-05<br />Count: 12483<br />interaction(District, sep = \"/\"): Ratnapura","Date: 2021-08-06<br />Count: 12523<br />interaction(District, sep = \"/\"): Ratnapura","Date: 2021-08-07<br />Count: 12599<br />interaction(District, sep = \"/\"): Ratnapura","Date: 2021-08-08<br />Count: 12604<br />interaction(District, sep = \"/\"): Ratnapura","Date: 2021-08-09<br />Count: 12711<br />interaction(District, sep = \"/\"): Ratnapura","Date: 2021-08-10<br />Count: 12737<br />interaction(District, sep = \"/\"): Ratnapura","Date: 2021-08-11<br />Count: 12765<br />interaction(District, sep = \"/\"): Ratnapura","Date: 2021-08-12<br />Count: 12797<br />interaction(District, sep = \"/\"): Ratnapura","Date: 2021-08-13<br />Count: 12883<br />interaction(District, sep = \"/\"): Ratnapura","Date: 2021-08-14<br />Count: 12900<br />interaction(District, sep = \"/\"): Ratnapura","Date: 2021-08-15<br />Count: 13039<br />interaction(District, sep = \"/\"): Ratnapura","Date: 2021-08-16<br />Count: 13053<br />interaction(District, sep = \"/\"): Ratnapura","Date: 2021-08-17<br />Count: 13070<br />interaction(District, sep = \"/\"): Ratnapura","Date: 2021-08-18<br />Count: 13114<br />interaction(District, sep = \"/\"): Ratnapura","Date: 2021-08-19<br />Count: 13161<br />interaction(District, sep = \"/\"): Ratnapura","Date: 2021-08-20<br />Count: 13211<br />interaction(District, sep = \"/\"): Ratnapura","Date: 2021-08-21<br />Count: 13279<br />interaction(District, sep = \"/\"): Ratnapura","Date: 2021-08-22<br />Count: 13409<br />interaction(District, sep = \"/\"): Ratnapura","Date: 2021-08-23<br />Count: 13446<br />interaction(District, sep = \"/\"): Ratnapura","Date: 2021-08-24<br />Count: 13501<br />interaction(District, sep = \"/\"): Ratnapura","Date: 2021-08-25<br />Count: 13584<br />interaction(District, sep = \"/\"): Ratnapura","Date: 2021-08-26<br />Count: 13719<br />interaction(District, sep = \"/\"): Ratnapura","Date: 2021-08-27<br />Count: 13834<br />interaction(District, sep = \"/\"): Ratnapura","Date: 2021-08-28<br />Count: 13902<br />interaction(District, sep = \"/\"): Ratnapura","Date: 2021-08-29<br />Count: 13966<br />interaction(District, sep = \"/\"): Ratnapura","Date: 2021-08-30<br />Count: 14232<br />interaction(District, sep = \"/\"): Ratnapura","Date: 2021-08-31<br />Count: 14606<br />interaction(District, sep = \"/\"): Ratnapura","Date: 2021-09-01<br />Count: 14794<br />interaction(District, sep = \"/\"): Ratnapura"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(255,97,198,1)","dash":"solid"},"hoveron":"points","name":"Ratnapura","legendgroup":"Ratnapura","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[18840,18841,18842,18843,18844,18845,18846,18847,18848,18849,18850,18851,18852,18853,18854,18855,18856,18857,18858,18859,18860,18861,18862,18863,18864,18865,18866,18867,18868,18869,18870,18871],"y":[3308,3319,3335,3340,3344,3356,3356,3361,3362,3382,3383,3387,3408,3409,3412,3414,3441,3446,3468,3468,3479,3488,3502,3502,3548,3561,3570,3580,3660,3700,3720,3742],"text":["Date: 2021-08-01<br />Count:  3308<br />interaction(District, sep = \"/\"): Trincomalee","Date: 2021-08-02<br />Count:  3319<br />interaction(District, sep = \"/\"): Trincomalee","Date: 2021-08-03<br />Count:  3335<br />interaction(District, sep = \"/\"): Trincomalee","Date: 2021-08-04<br />Count:  3340<br />interaction(District, sep = \"/\"): Trincomalee","Date: 2021-08-05<br />Count:  3344<br />interaction(District, sep = \"/\"): Trincomalee","Date: 2021-08-06<br />Count:  3356<br />interaction(District, sep = \"/\"): Trincomalee","Date: 2021-08-07<br />Count:  3356<br />interaction(District, sep = \"/\"): Trincomalee","Date: 2021-08-08<br />Count:  3361<br />interaction(District, sep = \"/\"): Trincomalee","Date: 2021-08-09<br />Count:  3362<br />interaction(District, sep = \"/\"): Trincomalee","Date: 2021-08-10<br />Count:  3382<br />interaction(District, sep = \"/\"): Trincomalee","Date: 2021-08-11<br />Count:  3383<br />interaction(District, sep = \"/\"): Trincomalee","Date: 2021-08-12<br />Count:  3387<br />interaction(District, sep = \"/\"): Trincomalee","Date: 2021-08-13<br />Count:  3408<br />interaction(District, sep = \"/\"): Trincomalee","Date: 2021-08-14<br />Count:  3409<br />interaction(District, sep = \"/\"): Trincomalee","Date: 2021-08-15<br />Count:  3412<br />interaction(District, sep = \"/\"): Trincomalee","Date: 2021-08-16<br />Count:  3414<br />interaction(District, sep = \"/\"): Trincomalee","Date: 2021-08-17<br />Count:  3441<br />interaction(District, sep = \"/\"): Trincomalee","Date: 2021-08-18<br />Count:  3446<br />interaction(District, sep = \"/\"): Trincomalee","Date: 2021-08-19<br />Count:  3468<br />interaction(District, sep = \"/\"): Trincomalee","Date: 2021-08-20<br />Count:  3468<br />interaction(District, sep = \"/\"): Trincomalee","Date: 2021-08-21<br />Count:  3479<br />interaction(District, sep = \"/\"): Trincomalee","Date: 2021-08-22<br />Count:  3488<br />interaction(District, sep = \"/\"): Trincomalee","Date: 2021-08-23<br />Count:  3502<br />interaction(District, sep = \"/\"): Trincomalee","Date: 2021-08-24<br />Count:  3502<br />interaction(District, sep = \"/\"): Trincomalee","Date: 2021-08-25<br />Count:  3548<br />interaction(District, sep = \"/\"): Trincomalee","Date: 2021-08-26<br />Count:  3561<br />interaction(District, sep = \"/\"): Trincomalee","Date: 2021-08-27<br />Count:  3570<br />interaction(District, sep = \"/\"): Trincomalee","Date: 2021-08-28<br />Count:  3580<br />interaction(District, sep = \"/\"): Trincomalee","Date: 2021-08-29<br />Count:  3660<br />interaction(District, sep = \"/\"): Trincomalee","Date: 2021-08-30<br />Count:  3700<br />interaction(District, sep = \"/\"): Trincomalee","Date: 2021-08-31<br />Count:  3720<br />interaction(District, sep = \"/\"): Trincomalee","Date: 2021-09-01<br />Count:  3742<br />interaction(District, sep = \"/\"): Trincomalee"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(255,101,172,1)","dash":"solid"},"hoveron":"points","name":"Trincomalee","legendgroup":"Trincomalee","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[18840,18841,18842,18843,18844,18845,18846,18847,18848,18849,18850,18851,18852,18853,18854,18855,18856,18857,18858,18859,18860,18861,18862,18863,18864,18865,18866,18867,18868,18869,18870,18871],"y":[1725,1726,1743,1757,1767,1798,1802,1815,1818,1856,1894,1907,1924,1977,2001,2024,2032,2073,2130,2160,2180,2224,2253,2253,2273,2278,2286,2300,2321,2704,2718,2723],"text":["Date: 2021-08-01<br />Count:  1725<br />interaction(District, sep = \"/\"): Vavuniya","Date: 2021-08-02<br />Count:  1726<br />interaction(District, sep = \"/\"): Vavuniya","Date: 2021-08-03<br />Count:  1743<br />interaction(District, sep = \"/\"): Vavuniya","Date: 2021-08-04<br />Count:  1757<br />interaction(District, sep = \"/\"): Vavuniya","Date: 2021-08-05<br />Count:  1767<br />interaction(District, sep = \"/\"): Vavuniya","Date: 2021-08-06<br />Count:  1798<br />interaction(District, sep = \"/\"): Vavuniya","Date: 2021-08-07<br />Count:  1802<br />interaction(District, sep = \"/\"): Vavuniya","Date: 2021-08-08<br />Count:  1815<br />interaction(District, sep = \"/\"): Vavuniya","Date: 2021-08-09<br />Count:  1818<br />interaction(District, sep = \"/\"): Vavuniya","Date: 2021-08-10<br />Count:  1856<br />interaction(District, sep = \"/\"): Vavuniya","Date: 2021-08-11<br />Count:  1894<br />interaction(District, sep = \"/\"): Vavuniya","Date: 2021-08-12<br />Count:  1907<br />interaction(District, sep = \"/\"): Vavuniya","Date: 2021-08-13<br />Count:  1924<br />interaction(District, sep = \"/\"): Vavuniya","Date: 2021-08-14<br />Count:  1977<br />interaction(District, sep = \"/\"): Vavuniya","Date: 2021-08-15<br />Count:  2001<br />interaction(District, sep = \"/\"): Vavuniya","Date: 2021-08-16<br />Count:  2024<br />interaction(District, sep = \"/\"): Vavuniya","Date: 2021-08-17<br />Count:  2032<br />interaction(District, sep = \"/\"): Vavuniya","Date: 2021-08-18<br />Count:  2073<br />interaction(District, sep = \"/\"): Vavuniya","Date: 2021-08-19<br />Count:  2130<br />interaction(District, sep = \"/\"): Vavuniya","Date: 2021-08-20<br />Count:  2160<br />interaction(District, sep = \"/\"): Vavuniya","Date: 2021-08-21<br />Count:  2180<br />interaction(District, sep = \"/\"): Vavuniya","Date: 2021-08-22<br />Count:  2224<br />interaction(District, sep = \"/\"): Vavuniya","Date: 2021-08-23<br />Count:  2253<br />interaction(District, sep = \"/\"): Vavuniya","Date: 2021-08-24<br />Count:  2253<br />interaction(District, sep = \"/\"): Vavuniya","Date: 2021-08-25<br />Count:  2273<br />interaction(District, sep = \"/\"): Vavuniya","Date: 2021-08-26<br />Count:  2278<br />interaction(District, sep = \"/\"): Vavuniya","Date: 2021-08-27<br />Count:  2286<br />interaction(District, sep = \"/\"): Vavuniya","Date: 2021-08-28<br />Count:  2300<br />interaction(District, sep = \"/\"): Vavuniya","Date: 2021-08-29<br />Count:  2321<br />interaction(District, sep = \"/\"): Vavuniya","Date: 2021-08-30<br />Count:  2704<br />interaction(District, sep = \"/\"): Vavuniya","Date: 2021-08-31<br />Count:  2718<br />interaction(District, sep = \"/\"): Vavuniya","Date: 2021-09-01<br />Count:  2723<br />interaction(District, sep = \"/\"): Vavuniya"],"type":"scatter","mode":"lines","line":{"width":1.88976377952756,"color":"rgba(255,108,145,1)","dash":"solid"},"hoveron":"points","name":"Vavuniya","legendgroup":"Vavuniya","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":31.6555772994129,"r":7.30593607305936,"b":45.6099151989563,"l":60.6392694063927},"plot_bgcolor":"rgba(235,235,235,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[18838.45,18872.55],"tickmode":"array","ticktext":["Aug 02","Aug 09","Aug 16","Aug 23","Aug 30"],"tickvals":[18841,18848,18855,18862,18869],"categoryorder":"array","categoryarray":["Aug 02","Aug 09","Aug 16","Aug 23","Aug 30"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"y","title":{"text":"Date [1D]","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-3790.2,104146.2],"tickmode":"array","ticktext":["0","25000","50000","75000","100000"],"tickvals":[4.54747350886464e-13,25000,50000,75000,100000],"categoryorder":"array","categoryarray":["0","25000","50000","75000","100000"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"x","title":{"text":"Count","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.88976377952756,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.689497716895},"y":0.938132733408324},"annotations":[{"text":"District","x":1.02,"y":1,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"left","yanchor":"bottom","legendTitle":true}],"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","showSendToCloud":false},"source":"A","attrs":{"c45406cdcda":{"x":{},"y":{},"colour":{},"type":"scatter"}},"cur_data":"c45406cdcda","visdat":{"c45406cdcda":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+
+---
+
+
+```r
+library(coronavirus)
+head(coronavirus)
+```
+
+```
+##         date province country     lat      long      type cases
+## 1 2020-01-22  Alberta  Canada 53.9333 -116.5765 confirmed     0
+## 2 2020-01-23  Alberta  Canada 53.9333 -116.5765 confirmed     0
+## 3 2020-01-24  Alberta  Canada 53.9333 -116.5765 confirmed     0
+## 4 2020-01-25  Alberta  Canada 53.9333 -116.5765 confirmed     0
+## 5 2020-01-26  Alberta  Canada 53.9333 -116.5765 confirmed     0
+## 6 2020-01-27  Alberta  Canada 53.9333 -116.5765 confirmed     0
+```
+
+---
+
+.pull-left[
+
+```r
+covidsl &lt;- coronavirus %&gt;%
+  filter(country == "Sri Lanka") %&gt;%
+  select(date, type, cases)
+
+head(covidsl)
+```
+
+```
+##         date      type cases
+## 1 2020-01-22 confirmed     0
+## 2 2020-01-23 confirmed     0
+## 3 2020-01-24 confirmed     0
+## 4 2020-01-25 confirmed     0
+## 5 2020-01-26 confirmed     0
+## 6 2020-01-27 confirmed     1
+```
+
+]
+
+--
+.pull-right[
+
+
+```r
+covidsl &lt;- covidsl %&gt;%
+* as_tsibble(index = date,
+*            key = type )
+
+head(covidsl)
+```
+
+```
+## # A tsibble: 6 x 3 [1D]
+## # Key:       type [1]
+##   date       type      cases
+##   &lt;date&gt;     &lt;chr&gt;     &lt;int&gt;
+## 1 2020-01-22 confirmed     0
+## 2 2020-01-23 confirmed     0
+## 3 2020-01-24 confirmed     0
+## 4 2020-01-25 confirmed     0
+## 5 2020-01-26 confirmed     0
+## 6 2020-01-27 confirmed     1
+```
+
+]
+
+---
+
+
+```r
+p &lt;- covidsl %&gt;% autoplot(cases)
+p
+```
+
+&lt;img src="10_TS_graphics_files/figure-html/unnamed-chunk-29-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+```r
+library(gganimate)
+p +
+  transition_reveal(along = date)
+```
+
+&lt;img src="10_TS_graphics_files/figure-html/unnamed-chunk-30-1.gif" style="display: block; margin: auto;" /&gt;
+
+---
+class: inverse, middle, center
+
+<i class="fab  fa-github "></i><i class="fab  fa-twitter "></i>
+pridiltal and thiyangt
+
+# Acknowledgements:
+
+This work was supported in part by RETINA research lab funded by the OWSD, a program unit of United Nations Educational, Scientific and Cultural Organization (UNESCO).
+
+## Key References 
+
+- Forecasting: Principles and Practice (3rd ed), Rob J Hyndman and George Athanasopoulos https://otexts.com/fpp3/
+
+
+All rights reserved by Thiyanga S. Talagala and Priyanga D Talagala
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"slideNumberFormat": "%current%"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
