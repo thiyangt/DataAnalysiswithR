@@ -7,4 +7,4 @@ tags: ["interesting"]
 comments: false
 ---
 
-👷Slides: [Click here](/slides/10stmodelling/SLAAS-stmodelling.html)
+👷 TBA
