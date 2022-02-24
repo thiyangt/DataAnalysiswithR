@@ -283,14 +283,6 @@ library(viridis)
 &lt;img src="11_maps_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto;" /&gt;
 ]
 ---
-Join (merge) data with `dplyr` in R
-
-&lt;img src="fig/2_dplyr-joins.png" width="45%" style="display: block; margin: auto;" /&gt;
-
-[Source: https://data-lessons.github.io/gapminder-R/12-joins.html](https://data-lessons.github.io/gapminder-R/12-joins.html)
-
-[Learn more: https://rpubs.com/williamsurles/293454](https://rpubs.com/williamsurles/293454)
----
 Distribution of Population by Districts
 
 .pull-left[
@@ -302,8 +294,135 @@ ggplot(sf_sl_3) +
 ```
 ]..pull-right[
 
-&lt;img src="11_maps_files/figure-html/unnamed-chunk-23-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="11_maps_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;
 ]
+---
+Join (merge) data with `dplyr` in R
+
+&lt;img src="fig/2_dplyr-joins.png" width="45%" style="display: block; margin: auto;" /&gt;
+
+[Source: https://data-lessons.github.io/gapminder-R/12-joins.html](https://data-lessons.github.io/gapminder-R/12-joins.html)
+
+[Learn more: https://rpubs.com/williamsurles/293454](https://rpubs.com/williamsurles/293454)
+---
+
+
+```r
+DISTRICT &lt;- c("Ampara", "Anuradhapura", "Badulla", 
+              "Batticaloa", "Colombo", "Galle", "Gampaha",
+              "Hambantota", "Jaffna", "Kalutara", "Kandy",
+              "Kegalle", "Kilinochchi", "Kurunegala",
+              "Mannar", "Matale", "Matara", "Monaragala",
+              "Mullaitivu", "Nuwara eliya", "Polonnaruwa", 
+              "Puttalam", "Ratnapura", "Trincomalee", 
+              "Vavuniya"   )
+
+covidcount&lt;- c(13867, 14351, 14290, 9824, 132418, 42314, 111221, 18631,
+              12222, 56672, 21369, 13225, 9597, 30507, 2523, 15211, 20905,
+              14723, 2192, 12240, 5197, 14901, 22650, 4364, 3644)
+
+newdate &lt;- tibble(DISTRICT, covidcount )
+```
+
+---
+## Convert case of a string
+
+.pull-left[
+
+
+```r
+head(district)
+```
+
+```
+## Simple feature collection with 6 features and 3 fields
+## Geometry type: MULTIPOLYGON
+## Dimension:     XY
+## Bounding box:  xmin: 391095.2 ymin: 445857.8 xmax: 621918.1 ymax: 712393.4
+## Projected CRS: SLD99 / Sri Lanka Grid 1999
+## # A tibble: 6 × 4
+##                                              geometry DISTRICT Status population
+##                                    &lt;MULTIPOLYGON [m]&gt; &lt;chr&gt;    &lt;chr&gt;       &lt;dbl&gt;
+## 1 (((392952.6 594064.2, 392985.8 593971.5, 392986.2 … [UNKNOW… &lt;NA&gt;           NA
+## 2 (((551311.8 581603.6, 551324.5 581599.7, 551334.5 … AMPARA   Distr…     736000
+## 3 (((501928.5 712099.6, 501970.4 712098.8, 502020 71… ANURADH… Distr…     943000
+## 4 (((522825 568220.9, 522872.6 568217.7, 522926.1 56… BADULLA  Distr…     886000
+## 5 (((609877 559315.9, 609857.5 559313, 609845.2 5593… BATTICA… Distr…     579000
+## 6 (((400911.5 497888.4, 401032.5 497869.3, 401035.2 … COLOMBO  Distr…    2455000
+```
+].pull-right[
+
+
+```r
+head(newdate)
+```
+
+```
+## # A tibble: 6 × 2
+##   DISTRICT     covidcount
+##   &lt;chr&gt;             &lt;dbl&gt;
+## 1 Ampara            13867
+## 2 Anuradhapura      14351
+## 3 Badulla           14290
+## 4 Batticaloa         9824
+## 5 Colombo          132418
+## 6 Galle             42314
+```
+]
+
+
+---
+
+.pull-left[
+
+
+```r
+head(district)
+```
+
+```
+## Simple feature collection with 6 features and 3 fields
+## Geometry type: MULTIPOLYGON
+## Dimension:     XY
+## Bounding box:  xmin: 391095.2 ymin: 445857.8 xmax: 621918.1 ymax: 712393.4
+## Projected CRS: SLD99 / Sri Lanka Grid 1999
+## # A tibble: 6 × 4
+##                                              geometry DISTRICT Status population
+##                                    &lt;MULTIPOLYGON [m]&gt; &lt;chr&gt;    &lt;chr&gt;       &lt;dbl&gt;
+## 1 (((392952.6 594064.2, 392985.8 593971.5, 392986.2 … [UNKNOW… &lt;NA&gt;           NA
+## 2 (((551311.8 581603.6, 551324.5 581599.7, 551334.5 … AMPARA   Distr…     736000
+## 3 (((501928.5 712099.6, 501970.4 712098.8, 502020 71… ANURADH… Distr…     943000
+## 4 (((522825 568220.9, 522872.6 568217.7, 522926.1 56… BADULLA  Distr…     886000
+## 5 (((609877 559315.9, 609857.5 559313, 609845.2 5593… BATTICA… Distr…     579000
+## 6 (((400911.5 497888.4, 401032.5 497869.3, 401035.2 … COLOMBO  Distr…    2455000
+```
+
+]
+.pull-right[
+
+
+```r
+newdate &lt;- newdate %&gt;%
+  mutate(DISTRICT = stringr::str_to_upper(DISTRICT, locale = "en"))
+
+head(newdate)
+```
+
+```
+## # A tibble: 6 × 2
+##   DISTRICT     covidcount
+##   &lt;chr&gt;             &lt;dbl&gt;
+## 1 AMPARA            13867
+## 2 ANURADHAPURA      14351
+## 3 BADULLA           14290
+## 4 BATTICALOA         9824
+## 5 COLOMBO          132418
+## 6 GALLE             42314
+```
+
+]
+
+
 ---
 class: inverse, middle, center
 
