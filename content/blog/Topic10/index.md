@@ -7,4 +7,4 @@ tags: ["interesting"]
 comments: false
 ---
 
-👷 TBA
+👷 [Click here: Introduction to statistical modelling in R](/slides/10stmodelling/IASSL-stmodelling.html)

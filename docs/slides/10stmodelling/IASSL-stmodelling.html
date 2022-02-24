@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Introduction to statistical modelling in R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. Priyanga D. Talagala, University of Moratuwa" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/rladies.css" rel="stylesheet" />
+    <link href="libs/remark-css/rladies-fonts.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/fontawesome-all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Introduction to statistical modelling in R
+## <span style="color:#06c280">IASSL Workshop</span>
+### <span style="color:#06c280">Dr. Priyanga D. Talagala, University of Moratuwa</span>
+### <span style="color:#06c280">25/02/2022</span> </br></br><img src="fig/42_broom.png" width="201" />
+
+---
+
+
+background-image:url('fig/tidyworkflow1.png')
+background-position: 50% 80%
+background-size: 85%
+class: top, center
+# Tidy Workflow
+
+
+
+
+
+&lt;style type="text/css"&gt;
+/* custom.css */
+.left-code {
+  color: #777;
+  width: 38%;
+  height: 92%;
+  float: left;
+}
+.right-plot {
+  width: 60%;
+  float: right;
+  padding-left: 1%;
+}
+.plot-callout {
+  height: 225px;
+  width: 450px;
+  bottom: 5%;
+  right: 5%;
+  position: absolute;
+  padding: 0px;
+  z-index: 100;
+}
+.plot-callout img {
+  width: 100%;
+  border: 4px solid #23373B;
+}
+&lt;/style&gt;
+
+
+
+
+
+
+---
+
+background-image:url('fig/tidyworkflow1a.png')
+background-position: 50% 80%
+background-size: 85%
+class: top, center
+# Tidy Workflow
+---
+
+background-image:url('fig/tidyworkflow1b.png')
+background-position: 50% 80%
+background-size: 85%
+class: top, center
+# Tidy Workflow
+---
+class: inverse, center, middle
+
+# What is the purpose of a model?
+--
+
+# How can I fit models in R?
+
+---
+class: inverse, center, middle
+
+# What is a Model?
+
+---
+
+
+.pull-left[
+### What is a Model?
+
+&lt;img src="fig/1_model1.jpeg" width="50%" style="display: block; margin: auto;" /&gt;
+
+&lt;img src="fig/1_model2.jpeg" width="1280" style="display: block; margin: auto;" /&gt;
+
+
+
+].pull-right[
+
+&lt;img src="fig/1_model3.jpeg" width="1280" style="display: block; margin: auto;" /&gt;
+
+&lt;img src="fig/1_model4.jpeg" width="60%" style="display: block; margin: auto;" /&gt;
+
+
+
+]
+
+
+---
+
+class: inverse, center, middle
+
+# What is a Model?
+--
+
+## An &lt;span style="color:#06c280"&gt;Approximation&lt;/span&gt; of reality
+--
+
+## ... with a &lt;span style="color:#06c280"&gt;purpose&lt;/span&gt;
+
+---
+
+.pull-left[
+
+&lt;img src="IASSL-stmodelling_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+].pull-right[
+
+&lt;img src="IASSL-stmodelling_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+
+]
+---
+class: inverse, center, middle
+
+# What is the purpose of  a statistical Model?
+
+
+---
+## What is the purpose of  a statistical Model?
+
+- Separate **signal** from **noise**
+
+- Understand **trends** and **patterns**
+
+- Identify which variables are **related** to a response variable
+
+  - Quantify this relationship
+
+- Make **predictions** about future observations
+
+- Understand underlying **unexplained variability** in the patterns
+
+- **Compare results** against other statistical models
+---
+background-image:url('fig/2_box.jpeg')
+background-position: 50% 80%
+background-size: 85%
+class: top, center, inverse
+
+---
+
+.pull-left[
+
+
+```r
+set.seed(4343)
+data &lt;- tibble(x = rnorm(1000,0,10),
+               y = -(3*x^2) + 
+                 rnorm(100, 0, 45))
+data1 &lt;- data %&gt;% 
+  filter(x&lt;=-4)
+
+model1 &lt;- lm(y ~x, data = data1)
+summary(model1)
+```
+
+```
+## 
+## Call:
+## lm(formula = y ~ x, data = data1)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1862.39   -74.65    18.06    91.52   230.87 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  485.289     18.955   25.60   &lt;2e-16 ***
+## x             84.220      1.674   50.31   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 152.5 on 339 degrees of freedom
+## Multiple R-squared:  0.8819,	Adjusted R-squared:  0.8815 
+## F-statistic:  2531 on 1 and 339 DF,  p-value: &lt; 2.2e-16
+```
+].pull-right[
+
+
+&lt;img src="IASSL-stmodelling_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+
+.pull-left[
+
+
+```r
+set.seed(4343)
+data &lt;- tibble(x = rnorm(1000,0,10),
+               y = -(3*x^2) + rnorm(100, 0, 45))
+data1 &lt;- data %&gt;% filter(x&lt;=-4)
+model1 &lt;- lm(y ~x, data = data1)
+summary(model1)
+```
+
+```
+## 
+## Call:
+## lm(formula = y ~ x, data = data1)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1862.39   -74.65    18.06    91.52   230.87 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  485.289     18.955   25.60   &lt;2e-16 ***
+## x             84.220      1.674   50.31   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 152.5 on 339 degrees of freedom
+## Multiple R-squared:  0.8819,	Adjusted R-squared:  0.8815 
+## F-statistic:  2531 on 1 and 339 DF,  p-value: &lt; 2.2e-16
+```
+].pull-right[
+
+
+&lt;img src="IASSL-stmodelling_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+
+---
+.pull-left[
+
+
+```r
+set.seed(4343)
+data &lt;- tibble(x = rnorm(1000,0,10),
+               y = -(3*x^2) + rnorm(100, 0, 45))
+model2 &lt;- lm(y ~x, data = data)
+summary(model2)
+```
+
+```
+## 
+## Call:
+## lm(formula = y ~ x, data = data)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -4651.7   -91.9   142.2   248.3   413.9 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -282.646     13.470 -20.983  &lt; 2e-16 ***
+## x             -4.497      1.366  -3.292  0.00103 ** 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 425.7 on 998 degrees of freedom
+## Multiple R-squared:  0.01074,	Adjusted R-squared:  0.009753 
+## F-statistic: 10.84 on 1 and 998 DF,  p-value: 0.001029
+```
+].pull-right[
+
+&lt;img src="IASSL-stmodelling_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+.pull-left[
+
+
+```r
+set.seed(4343)
+data &lt;- tibble(x = rnorm(1000,0,10),
+               y = -(3*x^2) + rnorm(100, 0, 45))
+model2 &lt;- lm(y ~ poly(x,2), data = data)
+summary(model2)
+```
+
+```
+## 
+## Call:
+## lm(formula = y ~ poly(x, 2), data = data)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -131.035  -36.163   -0.415   39.876  123.578 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   -284.295      1.676 -169.58   &lt;2e-16 ***
+## poly(x, 2)1  -1401.415     53.015  -26.43   &lt;2e-16 ***
+## poly(x, 2)2 -13342.884     53.015 -251.68   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 53.02 on 997 degrees of freedom
+## Multiple R-squared:  0.9847,	Adjusted R-squared:  0.9846 
+## F-statistic: 3.202e+04 on 2 and 997 DF,  p-value: &lt; 2.2e-16
+```
+].pull-right[
+
+&lt;img src="IASSL-stmodelling_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+&lt;img src="IASSL-stmodelling_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+class: inverse, center, middle
+
+# Modelling in R
+
+---
+
+
+.pull-left[
+# Modelling in R
+
+**Explore data** using ggplot before modelling
+
+
+```
+ggplot(...) +
+ geom_point(...) +
+ geom_smooth(...)
+
+```
+
+
+```r
+ggplot(data, aes(x,y))+
+  geom_point() +
+  geom_smooth(method = "lm", 
+*             formula = y ~ x,
+              col = "blue", se = FALSE) +
+  geom_smooth(method = "lm", 
+*             formula = y ~ poly(x,2),
+              col = "red", se = FALSE) + 
+  theme(aspect.ratio = 1) 
+```
+
+]
+.pull-right[
+
+
+&lt;img src="IASSL-stmodelling_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+---
+
+.pull-left[
+- The linear model function
+
+ `lm(y ~ x, data)`
+ 
+ 
+- Assign the linear model to be an **object**
+
+ `model &lt;- lm(y ~ x, data)`
+ 
+
+```r
+model1 &lt;- lm(
+* body_mass_g ~ flipper_length_mm,
+  data = penguins)
+```
+
+].pull-right[
+
+
+&lt;img src="IASSL-stmodelling_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+
+
+---
+
+
+.left-code[
+- The linear model function
+
+ `lm(y ~ x, data)`
+ 
+ 
+- Assign the linear model to be an **object**
+
+
+`model &lt;- lm(y ~ x,`
+`            data)`
+
+ 
+
+```r
+model1 &lt;- lm(
+  body_mass_g ~ flipper_length_mm, 
+  data = penguins)
+*summary(model1)
+```
+
+]
+
+.right-plot[
+
+
+```
+
+Call:
+lm(formula = flipper_length_mm ~ body_mass_g, data = penguins)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-23.7626  -4.9138   0.9891   5.1166  16.6392 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 1.367e+02  1.997e+00   68.47   &lt;2e-16 ***
+body_mass_g 1.528e-02  4.668e-04   32.72   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 6.913 on 340 degrees of freedom
+  (2 observations deleted due to missingness)
+Multiple R-squared:  0.759,	Adjusted R-squared:  0.7583 
+F-statistic:  1071 on 1 and 340 DF,  p-value: &lt; 2.2e-16
+```
+]
+
+
+&lt;!-- residuals Chapter 12 Fitting Regression Models in R _ Biology 723_ Statistical Computing for Biologists.pdf--&gt;
+
+
+&lt;!--- The data structure returned by `lm()` is a list-like object with multiple fields:--&gt;
+--
+
+.left-code[
+
+
+```r
+typeof(model1)
+```
+
+```
+## [1] "list"
+```
+]
+
+&lt;!--  carries lots of useful information it isn???t a particularly ???tidy??? way to access the data. --&gt;
+
+&lt;!--
+- The R package Broom converts statistical analysis objects from R into **tidy data frames**, so that they can more easily be combined, reshaped and otherwise processed with tools like `dplyr`, `tidyr` and `ggplot2`. 
+--&gt;
+
+---
+class: inverse, middle, center
+
+# broom 
+
+## let's tidy up a bit
+
+&lt;img src="fig/42_broom.png" width="30%" style="display: block; margin: auto;" /&gt;
+
+---
+## `Broom` Toolkit
+
+- The `broom` package takes the **messy output** of built-in functions in R, such as `lm`,  `t.test`, and turns them into tidy **tibbles**.
+
+- This package provides three methods that do three distinct kinds of tidying.
+
+     - `tidy` 
+     - `augment`
+     - `glance`
+
+---
+
+## `broom::tidy`
+
+- Returns the statistical findings of the model 
+
+- This includes coefficients and p-values for each term in a regression
+
+ 
+
+```r
+library(broom)
+
+model1 &lt;- lm( body_mass_g ~ flipper_length_mm, data = penguins)
+
+*tidy(model1)
+```
+
+
+
+```
+# A tibble: 2 × 5
+  term              estimate std.error statistic   p.value
+  &lt;chr&gt;                &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+1 (Intercept)        -5781.     306.       -18.9 5.59e- 55
+2 flipper_length_mm     49.7      1.52      32.7 4.37e-107
+```
+
+
+---
+## `broom::augment`
+
+&lt;!--
+https://cran.r-project.org/web/packages/broom/vignettes/broom.html
+
+Instead of viewing the coefficients, you might be interested in the fitted values and residuals for each of the original points in the regression. For this, use augment, which augments the original data with information from the model:
+--&gt;
+
+-  Add columns to the original data that was modeled.
+
+- This includes predictions, residuals, and cluster assignments.
+
+ 
+
+```r
+library(broom)
+
+model1 &lt;- lm( body_mass_g ~ flipper_length_mm, data = penguins)
+
+*augment(model1)
+```
+
+
+
+```
+# A tibble: 342 × 9
+   .rownames body_mass_g flipper_length_… .fitted  .resid    .hat .sigma .cooksd
+   &lt;chr&gt;           &lt;int&gt;            &lt;int&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
+ 1 1                3750              181   3212.  538.   0.00881   394. 8.34e-3
+ 2 2                3800              186   3461.  339.   0.00622   394. 2.33e-3
+ 3 3                3250              195   3908. -658.   0.00344   393. 4.83e-3
+ 4 5                3450              193   3808. -358.   0.00385   394. 1.60e-3
+ 5 6                3650              190   3659.   -9.43 0.00469   395. 1.35e-6
+ 6 7                3625              181   3212.  413.   0.00881   394. 4.91e-3
+ 7 8                4675              195   3908.  767.   0.00344   393. 6.56e-3
+ 8 9                3475              193   3808. -333.   0.00385   394. 1.39e-3
+ 9 10               4250              190   3659.  591.   0.00469   394. 5.31e-3
+10 11               3300              186   3461. -161.   0.00622   395. 5.23e-4
+# … with 332 more rows, and 1 more variable: .std.resid &lt;dbl&gt;
+```
+
+
+&lt;!--
+augment creates a data frame that combines the original data with related information from the model
+fit.
+
+Now, in addition to the proportionBlack and ageInYears variables of the original data, we have columns like .fitted (value of Y predicted by the model for the corresponding value of X), .resid (difference between the actual Y and the predicted value), and a variety of other information for evalulating model uncertainty.
+
+One thing we can do with this ???augmented??? data frame is to use it to better visualize and explore the model. For example, if we wanted to generate a figure highlighting the deviations from the model using vertical lines emanating from the regression line, we could do something like this:
+
+--&gt;
+---
+
+## Plotting Augmented Data
+&lt;!--One thing we can do with this ???augmented??? data frame is to use it to better visualize and explore the model. For example, if we wanted to generate a figure highlighting the deviations from the model using vertical lines emanating from the regression line, we could do something like this
+
+--&gt;
+
+
+.pull-left[
+
+
+```r
+model1 &lt;- lm(
+  body_mass_g ~ flipper_length_mm, 
+  data = penguins)
+
+*mod1_arg &lt;- augment(model1)
+
+mod1_arg %&gt;%
+  ggplot( aes(flipper_length_mm, .resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0, 
+             color = "red",
+             linetype='dashed') +
+  labs(y = "Residuals",
+       title = "Residual plot")
+```
+
+]
+
+.pull-right[
+
+&lt;img src="IASSL-stmodelling_files/figure-html/unnamed-chunk-28-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+---
+## Plotting Augmented Data: qq-plots
+&lt;!--
+From our residuals plot of the lions data set, there may be some indication of greater variance of residuals for larger values of the predictor variable.
+Let???s check how normal the residuals look using a diagnostic plot called a QQ-plot (quantile-quantile plot). A qq-plot is a graphical method for comparing distributions by plotting the respective quantiles against each other. Typically we plot sample quantiles against theoretical quantiles; for example to compare the sample quantiles to the theoretical expectation of normality. In the example below we construct the QQ-plot using ???standardized residuals??? from the regression which are just z-scores for the residuals.--&gt;
+
+
+.pull-left[
+
+
+```r
+model1 &lt;- lm(
+  body_mass_g ~ flipper_length_mm, 
+  data = penguins)
+
+mod1_arg &lt;- augment(model1) 
+
+mod1_arg %&gt;%
+* ggplot(aes(sample = .std.resid)) +
+* geom_qq() +
+* geom_qq_line(color="firebrick")
+```
+
+]
+
+.pull-right[
+
+&lt;img src="IASSL-stmodelling_files/figure-html/unnamed-chunk-30-1.png" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+&lt;!-- Based on the QQ-plot, the residuals seem to diverge somewhat from a normal distirbution, as there???s noticeable curvature in the QQ-plot. When we test for the normality of the residuals using Shapiro- Wilk???s test for normality, we fail to reject the null hypothesis of normality at a significance threshold of
+:--&gt;
+
+---
+## `broom::glance`
+
+&lt;!--
+https://cran.r-project.org/web/packages/broom/vignettes/broom.html
+
+Finally, several summary statistics are computed for the entire regression, such as R^2 and the F-statistic. These can be accessed with the glance function:
+--&gt;
+
+-  Returns a concise one-row summary of the model.
+
+- This typically contains values such as `\(R^2\)`, adjusted `\(R^2\)`, and residual standard error that are computed once for the entire model.
+
+ 
+
+```r
+library(broom)
+
+model1 &lt;- lm( body_mass_g ~ flipper_length_mm, data = penguins)
+
+*glance(model1)
+```
+
+
+
+```
+# A tibble: 1 × 12
+  r.squared adj.r.squared sigma statistic   p.value    df logLik   AIC   BIC
+      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1     0.759         0.758  394.     1071. 4.37e-107     1 -2528. 5063. 5074.
+# … with 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;
+```
+
+---
+# Multiple regression
+
+Multiple regression is also possible using the same function
+
+## `lm(y ~ x, data)`
+ 
+--
+ 
+## `lm(y ~ x1 + x2, data)`
+
+--
+
+## `lm(y ~ x1 * x2, data)`
+
+---
+
+
+Similarly, **transformations** are also quite easy to apply
+
+## `lm(log(y) ~ x, data)`
+
+--
+
+
+## `lm(y ~ log(x), data)`
+
+--
+
+
+## `lm(y ~ poly(x, 2), data)`
+
+---
+##  What about all the other kinds of model?
+
+.pull-left[
+### Analysis of Variance 
+
+## `lm(y ~ x, data)`
+
+X is **categorical**
+
+].pull-right[
+
+### Linear Regression
+## `lm(y ~ x, data)`
+
+X is **numerical**
+]
+
+---
+
+### Common statistical tests are linear models (or: how to teach stats): https://lindeloev.github.io/tests-as-linear/
+
+
+
+&lt;img src="fig/3_lm.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+
+
+
+---
+
+# Other kinds of models
+
+- **Not all** tests are linear models
+
+- For **non-normal** distributions of residuals, we have **generalised linear model**
+
+## `glm(y ~ x, data, family = "")`
+
+
+```
+glm(y ~ x, data, family = "binomial")
+
+glm(y ~ x, data, family = "poisson")
+
+glm(y ~ x, data, family = "Gamma")
+```
+
+---
+## CRAN Task Views
+
+- The CRAN task view provides an overview of the packages available for **various research fields** and **methodologies**
+
+https://cran.r-project.org/web/views/
+
+&lt;img src="fig/4_ctv.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+# Key points
+
+
+- **Know your data** - explore it before jumping into a formal model.
+
+- If exploration brings up something interesting or unexpected, try to **incorporate this** into the model.
+
+- Always consider the **trade-off** between something which is over-simplified and something which is over-complicated.
+
+---
+class: inverse, middle, center
+
+
+<i class="fab  fa-github "></i><i class="fab  fa-twitter "></i>
+pridiltal and thiyangt
+
+
+
+This work was supported in part by RETINA research lab funded by the OWSD, a program unit of United Nations Educational, Scientific and Cultural Organization (UNESCO).
+
+
+All rights reserved by Thiyanga S. Talagala and Priyanga D. Talagala
+
+
+
+&lt;!--https://www.r-bloggers.com/2020/07/basic-data-analysis-with-palmerpenguins/ --&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"slideNumberFormat": "%current%"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
