@@ -37,15 +37,17 @@ library(patchwork)
 library(xaringanthemer)
 style_mono_accent(
    base_color = "#025859",
-   link_color = "#ffea00",
-   title_slide_background_color = "#025b5c",
-  inverse_background_color = "#048d8f",
+   link_color = "#4049ad",
+   title_slide_background_color = "#4049ad",
+  inverse_background_color = "#4049ad",
   header_font_google = google_font("Josefin Sans"),
   text_font_google   = google_font("Montserrat", "300", "300i"),
   code_font_google   = google_font("Fira Mono"),
   title_slide_text_color = "#ffea00",
   inverse_header_color = "#ffea00",
-   header_background_text_color = "#ffea00"
+  header_background_text_color = "#ffea00",
+  base_font_size = "20px",
+  text_font_size = "1.2rem",
   )
 ```
 
@@ -232,10 +234,11 @@ labels <- data$species
 data2 <- c(7,12,28,3,41)
 ```
 
-#### R Base Graphics 
+
 
 .pull-left[
-```{r  fig.height=4}
+R Base Graphics 
+```{r  fig.height=3.5}
 pie(data$Count,labels, radius = 1, main = "pie(data$Count,labels, radius = 1)")
 ```
 
@@ -246,7 +249,7 @@ plot(data2,type = "o", main = "plot(data2,type = ''o'')")
 ]
 .pull-right[
 
-```{r  fig.height=4}
+```{r  fig.height=3.5}
 barplot(data$Count, names.arg = labels, main = "barplot(data$Count, names.arg = labels)")
 ```
 
@@ -1465,18 +1468,28 @@ https://stackoverflow.com/questions/59664377/gganimate-plot-not-showing-and-savi
 And then, I installed the png and gifski packages and restart the R-Studio. It's working. I think, you can try this.-->
 ---
 
-```{r echo=TRUE, fig.height=3, cache=FALSE, eval=FALSE}
-p <- ggplot(penguins, aes(flipper_length_mm, body_mass_g , color = species)) +
-  geom_point() + scale_color_viridis_d() +
-  labs(title = "Measurements of penguins {closest_state}")+
+.pull-left[
+```{r echo=TRUE, fig.height=2, cache=FALSE, eval=FALSE}
+p <- ggplot(penguins, 
+            aes(flipper_length_mm,
+                body_mass_g , 
+                color = species)) +
+  geom_point() + 
+  scale_color_viridis_d() +
+  labs(
+    title = "Measurements of penguins
+    {closest_state}") +
   transition_states(states = year) + #<<
   enter_grow() + #<<
   exit_fade() #<<
+
 p
 
 ```
-
+].pull-right[
 ![](fig/39_gganim.gif)
+
+]
 
 ---
 

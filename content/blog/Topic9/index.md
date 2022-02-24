@@ -7,6 +7,10 @@ tags: ["ggplot2"]
 comments: false
 ---
 
+## Resourses
+
 Slides: 
 
-[Data visualization with R](/slides/9ggplot/9_Data_visualization.html)
+[Data visualization with R- Click here](/slides/9ggplot/9_Data_visualization.html)
+
+[Tidy Time Series Graphics with R- Click here](/slides/9ggplot/10_TS_graphics.html)

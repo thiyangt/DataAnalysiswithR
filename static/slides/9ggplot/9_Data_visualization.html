@@ -182,9 +182,10 @@ class: inverse, middle, center
 
 
 
-#### R Base Graphics 
+
 
 .pull-left[
+R Base Graphics 
 &lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
 
 &lt;img src="9_Data_visualization_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
@@ -1196,18 +1197,28 @@ https://stackoverflow.com/questions/59664377/gganimate-plot-not-showing-and-savi
 And then, I installed the png and gifski packages and restart the R-Studio. It's working. I think, you can try this.--&gt;
 ---
 
+.pull-left[
 
 ```r
-p &lt;- ggplot(penguins, aes(flipper_length_mm, body_mass_g , color = species)) +
-  geom_point() + scale_color_viridis_d() +
-  labs(title = "Measurements of penguins {closest_state}")+
+p &lt;- ggplot(penguins, 
+            aes(flipper_length_mm,
+                body_mass_g , 
+                color = species)) +
+  geom_point() + 
+  scale_color_viridis_d() +
+  labs(
+    title = "Measurements of penguins
+    {closest_state}") +
 * transition_states(states = year) +
 * enter_grow() +
 * exit_fade()
+
 p
 ```
-
+].pull-right[
 ![](fig/39_gganim.gif)
+
+]
 
 ---
 
