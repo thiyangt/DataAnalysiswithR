@@ -292,14 +292,10 @@ vic_elec %>%
   theme(text = element_text(size=14)) #<<
 ```
 ---
-
+.pull-left[
 ```{r echo=TRUE}
 # install.packages("devtools")
 # devtools::install_github("thiyangt/covid19srilanka")
-```
-
-.pull-left[
-```{r echo=TRUE}
 library(covid19srilanka)
 district.wise.cases
 ```

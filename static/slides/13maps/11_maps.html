@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Displaying Geo-Spatial Data with R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. Priyanga D. Talagala, University of Moratuwa" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/rladies.css" rel="stylesheet" />
+    <link href="libs/remark-css/rladies-fonts.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/fontawesome-all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# <span style="color:#e8b22a">Displaying Geo-Spatial Data with R</span>
+## IASSL Workshop
+### Dr. Priyanga D. Talagala, University of Moratuwa
+### <span style="color:#3be3dd"> 21-25, February, 2022</span>
+
+---
+
+
+
+
+
+### Main packages required
+
+
+```r
+# Data manipulation and plotting functions
+library(tidyverse)
+
+# sf: objects with simple features
+library("sf")
+
+# Provides a map of countries of the entire world
+library("rnaturalearth")
+library("rnaturalearthdata")
+```
+
+The combination of ggplot2 and sf therefore enables to programmatically create maps.
+
+&lt;!--https://r-spatial.org/r/2018/10/25/ggplot2-sf.html--&gt;
+
+---
+
+
+```r
+world &lt;- ne_countries(scale = "medium", returnclass = "sf")
+class(world)
+```
+
+```
+## [1] "sf"         "data.frame"
+```
+
+```r
+colnames(world)
+```
+
+```
+##  [1] "scalerank"  "featurecla" "labelrank"  "sovereignt" "sov_a3"    
+##  [6] "adm0_dif"   "level"      "type"       "admin"      "adm0_a3"   
+## [11] "geou_dif"   "geounit"    "gu_a3"      "su_dif"     "subunit"   
+## [16] "su_a3"      "brk_diff"   "name"       "name_long"  "brk_a3"    
+## [21] "brk_name"   "brk_group"  "abbrev"     "postal"     "formal_en" 
+## [26] "formal_fr"  "note_adm0"  "note_brk"   "name_sort"  "name_alt"  
+## [31] "mapcolor7"  "mapcolor8"  "mapcolor9"  "mapcolor13" "pop_est"   
+## [36] "gdp_md_est" "pop_year"   "lastcensus" "gdp_year"   "economy"   
+## [41] "income_grp" "wikipedia"  "fips_10"    "iso_a2"     "iso_a3"    
+## [46] "iso_n3"     "un_a3"      "wb_a2"      "wb_a3"      "woe_id"    
+## [51] "adm0_a3_is" "adm0_a3_us" "adm0_a3_un" "adm0_a3_wb" "continent" 
+## [56] "region_un"  "subregion"  "region_wb"  "name_len"   "long_len"  
+## [61] "abbrev_len" "tiny"       "homepart"   "geometry"
+```
+
+---
+
+
+```r
+world %&gt;%
+  filter(admin == "Sri Lanka")
+```
+
+```
+## Simple feature collection with 1 feature and 63 fields
+## Geometry type: MULTIPOLYGON
+## Dimension:     XY
+## Bounding box:  xmin: 79.70781 ymin: 5.949365 xmax: 81.87695 ymax: 9.812695
+## CRS:           +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0
+##   scalerank      featurecla labelrank sovereignt sov_a3 adm0_dif level
+## 1         1 Admin-0 country         3  Sri Lanka    LKA        0     2
+##                type     admin adm0_a3 geou_dif   geounit gu_a3 su_dif   subunit
+## 1 Sovereign country Sri Lanka     LKA        0 Sri Lanka   LKA      0 Sri Lanka
+##   su_a3 brk_diff      name name_long brk_a3  brk_name brk_group abbrev postal
+## 1   LKA        0 Sri Lanka Sri Lanka    LKA Sri Lanka      &lt;NA&gt; Sri L.     LK
+##                                    formal_en formal_fr note_adm0 note_brk
+## 1 Democratic Socialist Republic of Sri Lanka      &lt;NA&gt;      &lt;NA&gt;     &lt;NA&gt;
+##   name_sort name_alt mapcolor7 mapcolor8 mapcolor9 mapcolor13  pop_est
+## 1 Sri Lanka     &lt;NA&gt;         3         5         4          9 21324791
+##   gdp_md_est pop_year lastcensus gdp_year              economy
+## 1      91870       NA       2001       NA 6. Developing region
+##               income_grp wikipedia fips_10 iso_a2 iso_a3 iso_n3 un_a3 wb_a2
+## 1 4. Lower middle income        NA    &lt;NA&gt;     LK    LKA    144   144    LK
+##   wb_a3 woe_id adm0_a3_is adm0_a3_us adm0_a3_un adm0_a3_wb continent region_un
+## 1   LKA     NA        LKA        LKA         NA         NA      Asia      Asia
+##       subregion  region_wb name_len long_len abbrev_len tiny homepart
+## 1 Southern Asia South Asia        9        9          6   NA        1
+##                         geometry
+## 1 MULTIPOLYGON (((79.8748 9.0...
+```
+
+---
+Creating a base map of the world using ggplot2
+
+
+```r
+ggplot(data = world) + 
+* geom_sf()
+```
+
+&lt;img src="11_maps_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+---
+
+```r
+ggplot(data = world) +
+    geom_sf() +
+    xlab("Longitude") + ylab("Latitude") +
+    ggtitle("World map", 
+*           subtitle = paste0("(",
+*                 length(unique(world$NAME)), " countries)"))
+```
+
+&lt;img src="11_maps_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+Shows the population of each country using  the population (which is stored in the variable POP_EST of the world object)
+
+
+```r
+ggplot(data = world) +
+*   geom_sf(aes(fill = pop_est)) +
+*   scale_fill_viridis_c(option = "plasma")
+```
+
+&lt;img src="11_maps_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+Shows the population of each country using the square root of the population (which is stored in the variable POP_EST of the world object)
+
+
+```r
+ggplot(data = world) +
+    geom_sf(aes(fill = pop_est)) +
+*   scale_fill_viridis_c(option = "plasma", trans = "sqrt")
+```
+
+&lt;img src="11_maps_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+---
+
+## `ceylon` package
+
+The goal of ceylon is to provide data to plot maps of Sri Lanka.
+
+https://github.com/thiyangt/ceylon
+
+
+```r
+# install.packages("devtools")
+# devtools::install_github("thiyangt/ceylon")
+library(ceylon)
+```
+
+&lt;img src="fig/1_ceylon.png" width="20%" style="display: block; margin: auto;" /&gt;
+---
+
+Country level
+
+.pull-left[
+
+```r
+data(sf_sl_0)
+ggplot(sf_sl_0) +
+  geom_sf()
+```
+].pull-right[
+
+&lt;img src="11_maps_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /&gt;
+
+]
+---
+Provinces of Sri Lanka
+
+
+```r
+data(province)
+province
+```
+
+```
+## Simple feature collection with 9 features and 3 fields
+## Geometry type: MULTIPOLYGON
+## Dimension:     XY
+## Bounding box:  xmin: 362203.3 ymin: 380301.9 xmax: 621918.1 ymax: 813560.9
+## Projected CRS: SLD99 / Sri Lanka Grid 1999
+## # A tibble: 9 × 4
+##                                              geometry PROVINCE Status population
+## *                                  &lt;MULTIPOLYGON [m]&gt; &lt;chr&gt;    &lt;chr&gt;       &lt;dbl&gt;
+## 1 (((498211.2 611042.6, 498401.7 610897.1, 498415.9 … CENTRAL  Provi…    2781000
+## 2 (((609877 559315.9, 609857.5 559313, 609845.2 5593… EASTERN  Provi…    1746000
+## 3 (((501928.5 712099.6, 501970.4 712098.8, 502020 71… NORTH C… Provi…    1386000
+## 4 (((393087.5 629959, 393098.1 629956.7, 393103.2 62… NORTH W… Provi…    2563000
+## 5 (((405858.7 700083.7, 405855.3 700082, 405851.5 70… NORTHERN Provi…    1152000
+## 6 (((432117.3 521875.5, 432083.5 521852.9, 432041.7 … SABARAG… Provi…    2070000
+## 7 (((481925.5 381353.7, 481922.9 381350.3, 481919 38… SOUTHERN Provi…    2669000
+## 8 (((522825 568220.9, 522872.6 568217.7, 522926.1 56… UVA      Provi…    1387000
+## 9 (((411888.2 438189.4, 411886.4 438182.3, 411881.7 … WESTERN  Provi…    6165000
+```
+---
+Provinces of Sri Lanka
+
+.pull-left[
+
+```r
+ggplot(province) + 
+  geom_sf()
+```
+]..pull-right[
+
+&lt;img src="11_maps_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /&gt;
+]
+---
+
+Provinces of Sri Lanka
+
+.pull-left[
+
+```r
+ggplot(province) + 
+* geom_sf(mapping = aes(fill = PROVINCE),
+*         show.legend = TRUE)
+```
+]..pull-right[
+
+&lt;img src="11_maps_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+
+---
+Distribution of Population by Provinces
+ 
+.pull-left[
+
+```r
+ggplot(province) + 
+  geom_sf(mapping = aes(fill = population),
+          show.legend = TRUE)
+```
+]..pull-right[
+
+&lt;img src="11_maps_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
+]
+---
+Distribution of Population by Districts
+
+.pull-left[
+
+```r
+library(viridis)
+*data(district)
+*ggplot(district) +
+  geom_sf(aes(fill = population),
+          show.legend = TRUE) + 
+  scale_fill_viridis()
+```
+]..pull-right[
+
+&lt;img src="11_maps_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto;" /&gt;
+]
+---
+Join (merge) data with `dplyr` in R
+
+&lt;img src="fig/2_dplyr-joins.png" width="45%" style="display: block; margin: auto;" /&gt;
+
+https://data-lessons.github.io/gapminder-R/12-joins.html
+
+https://rpubs.com/williamsurles/293454
+---
+Distribution of Population by Districts
+
+.pull-left[
+
+```r
+data(sf_sl_3)
+ggplot(sf_sl_3) + 
+  geom_sf()
+```
+]..pull-right[
+
+&lt;img src="11_maps_files/figure-html/unnamed-chunk-23-1.png" style="display: block; margin: auto;" /&gt;
+]
+---
+class: inverse, middle, center
+
+<i class="fab  fa-github "></i><i class="fab  fa-twitter "></i>
+pridiltal and thiyangt
+
+# Acknowledgements:
+
+This work was supported in part by RETINA research lab funded by the OWSD, a program unit of United Nations Educational, Scientific and Cultural Organization (UNESCO).
+
+
+All rights reserved by Thiyanga S. Talagala and Priyanga D Talagala
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"slideNumberFormat": "%current%"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
