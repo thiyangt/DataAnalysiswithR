@@ -13,4 +13,4 @@ Slides:
 
 [Click here: Data visualization with R](/slides/9ggplot/9_Data_visualization.html)
 
-[Click here: Tidy Time Series Graphics with R](/slides/10tsplot/10_TS_graphics.html)
+[Click here: Tidy Time Series Graphics with R](/slides/12tsplot/10_TS_graphics.html)
