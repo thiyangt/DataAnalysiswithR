@@ -10,4 +10,10 @@ comments: false
 
 ## Resourses
 
+### IASSL Workshop
+
 Slides: [Click here](/slides/7dataimport_export/7_import_export_iassl.html)
+
+### SLAAS Workshop
+
+Slides: [Click here](/slides/7dataimport_export/7_import_export.html)

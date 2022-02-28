@@ -7,4 +7,13 @@ tags: ["interesting"]
 comments: false
 ---
 
+### IASSL Workshop
+
 👷 [Click here: Introduction to statistical modelling in R](/slides/10stmodelling/IASSL-stmodelling.html)
+
+### SLAAS Workshop
+
+👷 [Click here: Introduction to statistical modelling in R](/slides/10stmodelling/SLAAS-stmodelling.html)
+
+
+

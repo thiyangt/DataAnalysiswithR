@@ -10,4 +10,10 @@ comments: false
 
 ## Resourses
 
+### IASSL Workshop
+
 Slides: [Click here](/slides/5Basics_of_Rprogramming/5_basics_IASSL.html)
+
+### SLAAS Workshop
+
+Slides: [Click here](/slides/5Basics_of_Rprogramming/5_basics.html)

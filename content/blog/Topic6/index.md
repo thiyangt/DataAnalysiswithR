@@ -9,4 +9,10 @@ comments: false
 
 ## Resourses
 
+### IASSL WOrkshop
+
 Slides: [Click here](/slides/rmarkdown/rmarkdownRladies_tst_IASSL.html)
+
+### SLAAS Workshop
+
+Slides: [Click here](/slides/rmarkdown/rmarkdownRladies_tst.html)

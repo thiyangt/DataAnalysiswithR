@@ -9,4 +9,11 @@ comments: false
 
 ## Resourses
 
+### IASSL Workshop
+
 Slides: [Click here](/slides/datawrangling/datawrangling_iassl.html)
+
+### SLAAS Workshop
+
+Slides: [Click here](/slides/datawrangling/datawrangling.html)
+

@@ -9,4 +9,9 @@ comments: false
 
 ## Resourses
 
+### IASSL Workshop
 Slides: [Click here](/slides/4Introduction_to_R_and_RStudio/1_intro_R_IASSL.html)
+
+### SLAAS Workshop
+
+Slides: [Click here](/slides/4Introduction_to_R_and_RStudio/1_intro_R.html)
